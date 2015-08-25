@@ -4,33 +4,103 @@
 /**  shape pusher directive styling     **/
 /******************************************/
 
-[shapepusher] .item {
-	padding: 				0.5em;
+div[shapepusher]{
+	position: 				absolute;
+	margin: 				0;
+	padding: 				0;
+	left:					16em;
+	top:					0;
+	right:					0;
+	bottom:					0;
+}
 
-	font-size: 				0.8em;
-	line-height: 			100%;
+/* if debugView is hidden on small screens display full width */
+@media screen and (max-width: 1300px) {
+	div[shapepusher]{
+		left:					0;
+    }
+}
+
+div[shapepusher] .position_container{
+	position: 				absolute;
+
+	margin: 				0;
+	padding: 				0;
+
+	left:					0;
+	top:					0;
+	right:					0;
+	bottom:					0;
+}
+
+div[shapepusher] .svg_container{
+	position: 				absolute;
+
+	margin: 				0;
+	padding: 				0;
+
+	left:					1em;
+	top:					1em;
+	right:					1em;
+	bottom:					1em;
 
 	border-color:			rgb(0, 0, 0);
+	border-color:			rgba(0, 0, 0, 0.1);
 	border-width: 			0.5em;
 	border-style: 			solid;
 	border-radius: 			1em;
 }
 
-[shapepusher] pre {
-	margin: 				0;
-	padding: 				0;
+[shapepusher] svg {
+	width: 					100%;
+	height: 				100%;
+
+	background-color: 		rgb(0, 0, 0);
+	background-color: 		rgba(0, 0, 0, 0.1);
 }
 
-[shapepusher] .item:hover,
-[shapepusher] .item.selected.active:hover,
-[shapepusher] .item.selected:hover {
-	border-color:			rgb(255, 240, 0);
+/******************************************/
+
+svg text {
+	color:					rgb(0, 0, 0);
+	/*font-size:				0.01em;*/
+	font-size:				10em;
+	line-height:			100%;
+	font-family:			OverlockRegular, Verdana;
+	/*text-align:				center;*/
+	text-anchor:			middle;
+	/*dy:						"0.35em";*/
+	text-shadow:			none;
 }
 
-[shapepusher] .item.selected {
-	border-color:			rgb(255, 180, 0);
+[shapepusher] .item {
+	/*border-color:			rgb(0, 0, 0);
+	border-width: 			0.5em;
+	border-style: 			solid;
+	border-radius: 			1em;*/
+	cursor: 				pointer;
 }
 
-[shapepusher] .item.selected.active {
-	border-color:			rgb(255, 220, 0);
+[shapepusher] .item rect {
+	/*width: 1;
+	height: 1;*/
+	fill: 					rgb(255, 0, 0);
+	/*fill: 					rgba(255, 0, 0, 0.5);*/
+
+	stroke: 				rgb(0, 0, 0);
+	stroke-width: 			50;
+}
+
+[shapepusher] .item:hover rect,
+[shapepusher] .item.selected.active:hover rect,
+[shapepusher] .item.selected:hover rect{
+	stroke:					rgb(255, 240, 0);
+}
+
+[shapepusher] .item.selected rect{
+	stroke:					rgb(255, 180, 0);
+}
+
+[shapepusher] .item.selected.active rect{
+	stroke:					rgb(255, 220, 0);
 }

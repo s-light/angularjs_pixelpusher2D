@@ -64,6 +64,7 @@ function($parse, $timeout, $filter) { return {
         data: '=',
         itemActive: '=',
         selected: '=',
+        itemSize: '=',
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/myDirectivesShapePusher.html',
@@ -81,6 +82,8 @@ function($parse, $timeout, $filter) { return {
         // console.log("element", element);
         // console.log("attrs", attrs);
         // console.log("ctrl", ctrl);
+
+        // console.log("itemSize", scope.itemSize);
 
 
         // shapepusher_data: {
@@ -121,9 +124,9 @@ function($parse, $timeout, $filter) { return {
         // };
 
         scope.toggleSelection = function(item) {
-            console.group("toggleSelection");
-            console.log("item", item);
-            console.log("scope.itemActive", scope.itemActive);
+            // console.group("toggleSelection");
+            // console.log("item", item);
+            // console.log("scope.itemActive", scope.itemActive);
             // toggle with 1 & 0
             if (item.selected) {
                 // currently selected
@@ -146,11 +149,12 @@ function($parse, $timeout, $filter) { return {
                 scope.itemActive = item;
 
             }
-            console.log("item", item);
-            console.log("scope.itemActive", scope.itemActive);
-            console.groupEnd();
+            // console.log("item", item);
+            // console.log("scope.itemActive", scope.itemActive);
+            // console.groupEnd();
         };
 
+        // currentTranslate
 
         // watch example/info http://stackoverflow.com/a/15113029/574981
         // watch deep

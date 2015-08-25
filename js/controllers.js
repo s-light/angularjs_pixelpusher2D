@@ -68,8 +68,9 @@ mainControllers.controller('MainController',[
             },
             shapepusher_data: {
                 world: {
-                    width: 10,
-                    height: 8,
+                    // in mm
+                    width: 10000,
+                    height: 5000,
                     grid: {
                         visible: true,
                         numbers: true,
@@ -79,22 +80,26 @@ mainControllers.controller('MainController',[
                     {
                         id: 'a1',
                         position: {
-                            x: 1,
-                            y: 1,
+                            x: 1000,
+                            y: 1000,
                         },
+                        // size: {
+                        //     width: 1000,
+                        //     height: 1000,
+                        // },
                     },
                     {
                         id: 'a2',
                         position: {
-                            x: 1,
-                            y: 2,
+                            x: 1000,
+                            y: 2000,
                         },
                     },
                     {
                         id: 'a3',
                         position: {
-                            x: 2,
-                            y: 2,
+                            x: 2000,
+                            y: 2000,
                         },
                     },
                 ],
