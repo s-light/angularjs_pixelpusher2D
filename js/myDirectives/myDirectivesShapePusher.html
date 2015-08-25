@@ -1,0 +1,15 @@
+<ul class="items">
+    <li
+        class="item"
+        ng-repeat="
+            (itemID, itemData) in data.items
+            track by itemData.id"
+        ng-class="{
+            'selected': itemData.selected,
+            'active': itemData == itemActive,
+        }"
+        ng-click="toggleSelection(itemData)"
+    >
+        <pre>{{itemData  | angular2json}}</pre>
+    </li>
+</ul>

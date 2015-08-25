@@ -1,5 +1,5 @@
-# angularjs_pixelpusher2D
-simple angular.js directive for 2D box layoutthings...
+# angularjs_shapepusher2D
+simple angular.js directive for 2D box layout things...
 
 similar to a very striped down graphic editor.
 

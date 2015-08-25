@@ -1,0 +1,36 @@
+@charset "utf-8";
+
+/******************************************/
+/**  shape pusher directive styling     **/
+/******************************************/
+
+[shapepusher] .item {
+	padding: 				0.5em;
+
+	font-size: 				0.8em;
+	line-height: 			100%;
+
+	border-color:			rgb(0, 0, 0);
+	border-width: 			0.5em;
+	border-style: 			solid;
+	border-radius: 			1em;
+}
+
+[shapepusher] pre {
+	margin: 				0;
+	padding: 				0;
+}
+
+[shapepusher] .item:hover,
+[shapepusher] .item.selected.active:hover,
+[shapepusher] .item.selected:hover {
+	border-color:			rgb(255, 240, 0);
+}
+
+[shapepusher] .item.selected {
+	border-color:			rgb(255, 180, 0);
+}
+
+[shapepusher] .item.selected.active {
+	border-color:			rgb(255, 220, 0);
+}

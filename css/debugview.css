@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+/******************************************/
+/**  DebugView                           **/
+/******************************************/
+
+div.debugView {
+	display:block;
+	position:absolute;
+	top:0;
+	float:left;
+	clear:both;
+	font-size: 1em;
+    line-height: 110%;
+	margin: 0;
+	padding: 1em;
+	/*height:24em;*/
+	/*height:30em;*/
+	max-height: 93%;
+	max-width: 30%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.debugView pre {
+	padding: 0;
+	margin: 0;
+}
+
+/* hide debugView on small screens*/
+@media screen and (max-width: 1300px) {
+	div.debugView {
+		display:none;
+    }
+}

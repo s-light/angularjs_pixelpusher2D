@@ -1,0 +1,46 @@
+@charset "utf-8";
+
+/******************************************/
+/**  shaper pusher directive styling     **/
+/******************************************/
+
+/***** overlay icons *****/
+.position-icon-overlay {
+    position: 					absolute;
+	bottom: 					-0.5em;
+	left:						1.5em;
+
+	font-size: 					0.5em;
+	text-shadow: 				0 0 2px rgb(0, 0, 0);
+}
+
+.status-online {
+    color: 						rgb(0, 255, 0);
+}
+
+.status-offline {
+    color: 						rgb(200, 10, 0);
+}
+
+.position-icon-overlay-text {
+    position: 					absolute;
+	bottom: 					-0.2em;
+	left:						1.2em;
+	font-size: 					0.7em;
+}
+
+.blueocean .position-icon-overlay-text {
+	text-shadow: 				0 0 1px rgb(0, 0, 0),
+								0 0 1px rgb(0, 0, 0),
+								0 0 1px rgb(0, 0, 0),
+								0 0 3px rgb(0, 0, 0),
+								0 0 3px rgb(0, 0, 0),
+								0 0 4px rgb(0, 0, 0);
+}
+.sunlight .position-icon-overlay-text {
+	text-shadow: 				0 0 1px rgb(255, 255, 255),
+								0 0 1px rgb(255, 255, 255),
+								0 0 1px rgb(255, 255, 255),
+								0 0 3px rgb(255, 255, 255),
+								0 0 2px rgb(255, 255, 255);
+}

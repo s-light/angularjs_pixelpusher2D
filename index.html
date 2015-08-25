@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html ng-app="mainApp">
+<head>
+    <title>ShapePusher Example</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="img/logo/logo.ico" />
+	<link rel="shortcut icon" type="image/png" href="img/logo/logo_500x500.png" />
+	<link rel="shortcut icon" type="image/svg" href="img/logo/logo.svg" />
+
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="css/debugview.css">
+    <link rel="stylesheet" type="text/css" href="css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="css/myDirectivesShapePusher.css">
+    <link rel="stylesheet" type="text/css" href="css/icons.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/symbols.css"> -->
+
+    <script type="text/javascript" charset="UTF-8" src="js/polyfill.js"></script>
+
+    <script type="text/javascript" charset="UTF-8" src="js/angular.js"></script>
+    <!--<script type="text/javascript" charset="UTF-8" src="js/angular-resource.js"></script>-->
+    <!--<script type="text/javascript" charset="UTF-8" src="js/angular-route.js"></script>-->
+
+    <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/controllers.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/myFilters.js"></script>
+    <!--<script type="text/javascript" charset="UTF-8" src="js/myDirectives/myDirectivesTextFileButton.js"></script>-->
+    <script type="text/javascript" charset="UTF-8" src="js/myDirectives/myDirectivesShapePusher.js"></script>
+
+
+	<!-- **********
+		IPAD specific metas:
+		https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+	-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width = device-width, height = device-height, initial-scale = 1.0, user-scalable = no">
+	<!-- ********** -->
+</head>
+<body
+    class="blueocean"
+    ng-class="viewStyle.list[data.settings.viewStyle].class"
+    ng-controller="MainController"
+>
+    <div id="MainController" class="app" >
+        <div class="debugView">
+            <div>
+                <label>style:</label>
+                <select
+                    ng-model="data.settings.viewStyle"
+                    title="switch style"
+                    ng-options="
+                        vStyleName as vStyle.name for (
+                            vStyleName,
+                            vStyle
+                        ) in viewStyle.list
+                    "
+                >
+                    <option value="">-- choose style --</option>
+                </select>
+                <br>
+                <button
+                    class="button small inline"
+                    title="load some data"
+                    ng-click="loadData()"
+                >
+                    loadData
+                </button>
+                <br>
+                <label>world.width</label>
+                <input
+                    type="number"
+                    inputmode="numeric"
+                    title="width"
+                    min="0.5"
+                    max="100"
+                    step="0.5"
+                    ng-model="data.shapepusher_data.world.width"
+                    ng-model-options="{
+                        updateOn: 'default blur',
+                        debounce: {'default': 500, 'blur': 0}
+                    }"
+                ><br>
+                <label>world.height</label>
+                <input
+                    type="number"
+                    inputmode="numeric"
+                    title="height"
+                    min="0.5"
+                    max="100"
+                    step="0.5"
+                    ng-model="data.shapepusher_data.world.height"
+                    ng-model-options="{
+                        updateOn: 'default blur',
+                        debounce: {'default': 500, 'blur': 0}
+                    }"
+                ><br>
+                <label>
+                    <input
+                        type="checkbox"
+                        ng-model="data.shapepusher_data.world.grid.visible"
+                    >
+                    world.grid.visible
+                </label>
+                <br>
+            </div>
+            <!--******************************************-->
+            <div  class="toggle">
+                <h3 class="caption">internals:</h3>
+    			<pre
+                    class="text_small"
+                    style="
+                        text-align: left;
+                        overflow:visible;
+                        margin-right: 1em;
+                    "
+                >
+******************************
+itemActive: {{itemActive | angular2json}}
+shapepusher_data: {{data.shapepusher_data | angular2json}}
+******************************
+			    </pre>
+            </div>
+		</div><!-- debugView end -->
+
+        <div
+            shapepusher
+            data="data.shapepusher_data"
+            itemActive="itemActive"
+        >
+        </div>
+
+    </div>
+</body>
+</html>
