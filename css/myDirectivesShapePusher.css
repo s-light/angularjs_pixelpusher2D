@@ -106,11 +106,30 @@ svg text {
 }
 
 /******************************************/
+/* grid style */
 
 [shapepusher] .grid line {
 	fill: 					none;
 
-	stroke: 				rgb(0, 0, 0);
-	stroke: 				rgba(0, 0, 0, 0.5);;
+	stroke: 				rgba(0, 0, 0, 0.5);
 	stroke-width: 			10;
+}
+
+[shapepusher] .grid:not(.visible) line {
+	stroke: 				none;
+}
+
+[shapepusher] .grid text {
+	fill: 				rgba(0, 0, 0, 0.5);
+	font-size: 			8em;
+}
+
+[shapepusher] .grid:not(.numbers) text {
+	fill: 				transparent;
+}
+
+[shapepusher] .grid .xArray text {
+	transform: 				rotate(90deg)
+							translate(0, -2.2em);
+	transform-origin: 		50% 50% 0;
 }

@@ -103,6 +103,13 @@ mainControllers.controller('MainController',[
                             y: 2000,
                         },
                     },
+                    {
+                        id: 'a4',
+                        position: {
+                            x: 3000,
+                            y: 2000,
+                        },
+                    },
                 ],
             },
         };

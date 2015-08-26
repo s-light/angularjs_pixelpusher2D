@@ -38,27 +38,56 @@
             zoomAndPan="magnify"
             ng-attr-view_box="0 0 {{data.world.width}} {{data.world.height}}"
         >
-            <g id="grid1" class="grid">
-                <line
+            <g
+                id="grid1"
+                class="grid"
+                ng-class="{
+                    'visible': data.world.grid.visible,
+                    'numbers': data.world.grid.numbers,
+                }"
+            >
+                <g
+                    class="xArray"
                     ng-repeat="
                         xPos in data.world.grid.xArray
                         track by xPos
                     "
-                    ng-attr-x1="{{xPos}}"
-                    y1="0"
-                    ng-attr-x2="{{xPos}}"
-                    y2="100%"
-                />
-                <line
+                >
+                    <line
+                        ng-attr-x1="{{xPos}}"
+                        y1="0"
+                        ng-attr-x2="{{xPos}}"
+                        y2="100%"
+                    />
+                    <text
+                        ng-attr-x="{{xPos}}"
+                        ng-attr-y="{{(data.world.grid.stepSize/2)}}"
+                    >
+                        {{xPos}}
+                    </text>
+                </g>
+
+                <g
+                    class="yArray"
                     ng-repeat="
                         yPos in data.world.grid.yArray
                         track by yPos
                     "
-                    x1="0"
-                    ng-attr-y1="{{yPos}}"
-                    x2="100%"
-                    ng-attr-y2="{{yPos}}"
-                />
+                >
+                    <line
+                        x1="0"
+                        ng-attr-y1="{{yPos}}"
+                        x2="100%"
+                        ng-attr-y2="{{yPos}}"
+                    />
+                    <text
+                        ng-attr-x="{{(data.world.grid.stepSize/2)}}"
+                        ng-attr-y="{{yPos}}"
+                    >
+                        {{yPos}}
+                    </text>
+                </g>
+
             </g>
 
             <!--
@@ -76,7 +105,7 @@
                 ng-attr-width="{{itemSize.width}}"
                 ng-attr-height="{{itemSize.height}}"
             -->
-            <rect
+            <!-- <rect
                 x="500"
                 y="500"
                 width="500"
@@ -89,7 +118,7 @@
                 y="500"
             >
                 Hallo Welt :-) '{{itemSize.height}}'
-            </text>
+            </text> -->
 
             <svg
                 class="item"
