@@ -30,6 +30,8 @@
     grid:
         {{data.world.grid.xArray  | angular2json}}
         {{data.world.grid.yArray  | angular2json}} <br/> -->
+    <!-- move:
+        <pre>{{box_select_data | angular2json}}</pre> -->
     <div
         class="svg_container"
     >
@@ -149,7 +151,14 @@
                     {{itemData.id}}
                 </text>
             </svg>
-
+            <rect
+                id="box_select"
+                class="box_select"
+                x="1000"
+                y="500"
+                width="500"
+                height="500"
+            />
         </svg>
     </div>
 </div>

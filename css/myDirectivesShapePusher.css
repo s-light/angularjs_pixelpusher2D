@@ -105,6 +105,22 @@ svg text {
 	stroke:					rgb(255, 220, 0);
 }
 
+/* box select*/
+[shapepusher] .box_select {
+	fill:					rgba(255, 220, 0, 0.3);
+	stroke:					rgb(255, 220, 0);
+	stroke-width:			50;
+	stroke-linejoin: 		round;
+	stroke-linecap: 		round;
+	/*stroke-dasharray:		none;*/
+	stroke-dasharray:		100 100;
+}
+
+[shapepusher] .box_select:not(.active) {
+	stroke:					none;
+	fill:					none;
+}
+
 /******************************************/
 /* grid style */
 

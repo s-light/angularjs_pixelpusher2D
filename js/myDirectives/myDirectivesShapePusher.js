@@ -56,7 +56,8 @@ myDirectivesShapePusher.directive('shapepusher', [
     '$parse',
     '$timeout',
     '$filter',
-function($parse, $timeout, $filter) { return {
+    '$document',
+function($parse, $timeout, $filter, $document) { return {
     restrict: 'A',
     // require: 'ngModel',
     // transclude: true,
@@ -154,30 +155,131 @@ function($parse, $timeout, $filter) { return {
             // console.groupEnd();
         };
 
-        // currentTranslate
+        /** box select **/
+
+        // var svg_base = document.getElementsByTagName("svg")[0];
+        // var box_select = document.getElementsByTagName("svg")[0].getElementById("box_select");box_select.classList.add('active');
+
+        // var svg_base = element[0].querySelector("svg");
+        var svg_base_jql = element.find("svg");
+        var svg_base = svg_base_jql[0];
+        // console.log("svg_base", svg_base);
+        var box_select = svg_base.getElementById("box_select");
+        // console.log("box_select", box_select);
+
+        var box_select_data = {
+            active: false,
+            // x1: 1000,
+            // y1: 500,
+            // x2: 500,
+            // y2: 500,
+            point1: svg_base.createSVGPoint(),
+            point2: svg_base.createSVGPoint(),
+        };
+
         // getIntersectionList
         // getEnclosureList(in SVGRect rect, in SVGElement referenceElement)
+
+        function box_select_set_position_size(point1, point2) {
+            // switch between positiv and negative orientations..
+            if (point1.x < point2.x) {
+                box_select.x.baseVal.value = point1.x;
+                box_select.width.baseVal.value = point2.x - point1.x;
+            } else {
+                box_select.x.baseVal.value = point2.x;
+                box_select.width.baseVal.value = point1.x - point2.x;
+            }
+
+            if (point1.y < point2.y) {
+                box_select.y.baseVal.value = point1.y;
+                box_select.height.baseVal.value = point2.y - point1.y;
+            } else {
+                box_select.y.baseVal.value = point2.y;
+                box_select.height.baseVal.value = point1.y - point2.y;
+            }
+        }
+
+        // based on
+        //
+        svg_base_jql.on('mousedown', function(event) {
+            // Prevent default dragging of selected content
+            event.preventDefault();
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
+            // console.log("event", event);
+            // console.log("event.pageX", event.pageX);
+            // console.log("event.screenX", event.screenX);
+            // console.log("event.clientX", event.clientX);
+            // console.log("event.offsetX", event.offsetX);
+
+            // console.log("event.movementX", event.movementX);
+            // console.log("scope", scope);
+
+            // create svg point with screen coordinates
+            // tipp with getScreenCTM found at
+            // http://stackoverflow.com/a/22185664/574981
+            var point_raw = svg_base.createSVGPoint();
+            point_raw.x = event.clientX;
+            point_raw.y = event.clientY;
+
+            // get transform matrix
+            var screen2SVG = svg_base.getScreenCTM().inverse();
+
+            // transform
+            box_select_data.point1 = point_raw.matrixTransform(screen2SVG);
+            // for init set point2 to same values
+            box_select_data.point2 = box_select_data.point1;
+            // console.log("box_select_data", box_select_data);
+
+            // set position
+            box_select_set_position_size(
+                box_select_data.point1,
+                box_select_data.point2
+            );
+
+            // set box_select active
+            box_select_data.active = true;
+            // box_select.addClass('active');
+            box_select.classList.add('active');
+
+            $document.on('mousemove', mousemove);
+            $document.on('mouseup', mouseup);
+        });
+
+        function mousemove(event) {
+            // create svg point with screen coordinates
+            var point_raw = svg_base.createSVGPoint();
+            point_raw.x = event.clientX;
+            point_raw.y = event.clientY;
+            // get transform matrix
+            var screen2SVG = svg_base.getScreenCTM().inverse();
+            // transform
+            box_select_data.point2 = point_raw.matrixTransform(screen2SVG);
+            // set size
+            box_select_set_position_size(
+                box_select_data.point1,
+                box_select_data.point2
+            );
+        }
+
+        function mouseup() {
+            $document.off('mousemove', mousemove);
+            $document.off('mouseup', mouseup);
+            box_select_data.active = false;
+            box_select.classList.remove('active')
+        }
+
+
+
+        /** handle zoom / pan **/
+
+        // currentTranslate
         // var el = document.getElementsByTagName("svg")[0];
 
-        // range methode:
-        // http://stackoverflow.com/a/27401425/574981
-
-        // watch example/info http://stackoverflow.com/a/15113029/574981
-        // watch deep
-        scope.$watch(
-            function(){
-                return scope.data.items;
-            },
-            function() {
-                // console.log("Taglist watch fired.");
-                // scope.selected = $filter('filter')(scope.data.items, {selected:'true'});
-                scope.selected = $filter('filter')(scope.data.items, {selected:'1'});
-            },
-            true
-        );
 
 
-        /** GRID FUNCTIONS **/
+
+        /** handle grid **/
 
         // range function by Mathieu Rodic
         // http://stackoverflow.com/questions/11873570/angularjs-for-loop-with-numbers-ranges
@@ -283,6 +385,22 @@ function($parse, $timeout, $filter) { return {
                 updateGridXArray();
                 updateGridYArray();
             }
+        );
+
+        /** update selected list **/
+
+        // watch example/info http://stackoverflow.com/a/15113029/574981
+        // watch deep
+        scope.$watch(
+            function(){
+                return scope.data.items;
+            },
+            function() {
+                // console.log("Taglist watch fired.");
+                // scope.selected = $filter('filter')(scope.data.items, {selected:'true'});
+                scope.selected = $filter('filter')(scope.data.items, {selected:'1'});
+            },
+            true
         );
 
     }
