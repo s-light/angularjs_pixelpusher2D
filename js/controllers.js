@@ -100,7 +100,7 @@ mainControllers.controller('MainController',[
                         id: 'a3',
                         position: {
                             x: 2000,
-                            y: 2000,
+                            y: 2500,
                         },
                     },
                     {
@@ -110,7 +110,19 @@ mainControllers.controller('MainController',[
                             y: 2000,
                         },
                     },
+                    {
+                        id: 'a5',
+                        position: {
+                            x: 6000,
+                            y: 3000,
+                        },
+                    },
                 ],
+            },
+            shapepusher_settings: {
+                select: {
+                    forceItemEnclosure: false,
+                }
             },
         };
 

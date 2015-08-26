@@ -66,6 +66,7 @@ function($parse, $timeout, $filter, $document) { return {
         itemActive: '=',
         selected: '=',
         itemSize: '=',
+        settings: '=',
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/myDirectivesShapePusher.html',
@@ -124,6 +125,30 @@ function($parse, $timeout, $filter, $document) { return {
         //     active:false,
         // };
 
+        // default settings
+        if (!scope.settings) {
+            scope.settings = {
+                select: {
+                    forceItemEnclosure: false,
+                }
+            };
+        }
+
+        function itemDeselect(item) {
+            item.selected = 0;
+            // item.selected = false;
+            if (scope.itemActive == item) {
+                // remove active
+                scope.itemActive = null;
+            }
+        }
+
+        function itemSelect(item) {
+            item.selected = 1;
+            // item.selected = true;
+            scope.itemActive = item;
+        }
+
         scope.toggleSelection = function(item) {
             // console.group("toggleSelection");
             // console.log("item", item);
@@ -131,29 +156,21 @@ function($parse, $timeout, $filter, $document) { return {
             // toggle with 1 & 0
             if (item.selected) {
                 // currently selected
-
                 if (scope.itemActive != item) {
                     // set last selected item as active
                     scope.itemActive = item;
                 } else {
-                    item.selected = 0;
-                    // item.selected = false;
-                    // remove active
-                    scope.itemActive = null;
+                    itemDeselect(item);
                 }
-
             } else {
                 // currently unselected
-
-                item.selected = 1;
-                // item.selected = true;
-                scope.itemActive = item;
-
+                itemSelect(item);
             }
             // console.log("item", item);
             // console.log("scope.itemActive", scope.itemActive);
             // console.groupEnd();
         };
+
 
         /** box select **/
 
@@ -169,34 +186,200 @@ function($parse, $timeout, $filter, $document) { return {
 
         var box_select_data = {
             active: false,
-            // x1: 1000,
-            // y1: 500,
-            // x2: 500,
-            // y2: 500,
-            point1: svg_base.createSVGPoint(),
-            point2: svg_base.createSVGPoint(),
+            start: {
+                p1: svg_base.createSVGPoint(),
+                p2: svg_base.createSVGPoint(),
+            },
+            current: {
+                p1: svg_base.createSVGPoint(),
+                p2: svg_base.createSVGPoint(),
+            },
         };
 
         // getIntersectionList
         // getEnclosureList(in SVGRect rect, in SVGElement referenceElement)
+        // this functions are not implemented in firefox :-(
 
-        function box_select_set_position_size(point1, point2) {
+        function itemGetPoints(item) {
+            var result_points = {
+                p1: svg_base.createSVGPoint(),
+                p2: svg_base.createSVGPoint(),
+            };
+            // var el = svg_base.getElementById("a1");
+            var element = svg_base.getElementById(item.id);
+            result_points.p1.x = element.x.baseVal.value;
+            result_points.p1.y = element.y.baseVal.value;
+            result_points.p2.x =
+                result_points.p1.x + element.width.baseVal.value;
+            result_points.p2.y =
+                result_points.p1.y + element.height.baseVal.value;
+            return result_points;
+        }
+
+        function checkForIntersection(itemPs, rectPs) {
+            var result = false;
+            // check if item area is in points area
+            // see helper_intersection.svg
+            // x-axis
+            var x_axis = false;
+            // rect is bigger as item
+            if (
+                (rectPs.p1.x <= itemPs.p1.x) &&
+                (rectPs.p2.x >= itemPs.p1.x)
+            ) {
+                x_axis = true;
+            }
+            if (
+                (rectPs.p1.x <= itemPs.p2.x) &&
+                (rectPs.p2.x >= itemPs.p2.x)
+            ) {
+                x_axis = true;
+            }
+            // rect is smaller as item
+            if (
+                (itemPs.p1.x <= rectPs.p1.x) &&
+                (itemPs.p2.x >= rectPs.p1.x)
+            ) {
+                x_axis = true;
+            }
+            if (
+                (itemPs.p1.x <= rectPs.p2.x) &&
+                (itemPs.p2.x >= rectPs.p2.x)
+            ) {
+                x_axis = true;
+            }
+            // y-axis
+            var y_axis = false;
+            // rect is bigger as item
+            if (
+                (rectPs.p1.y <= itemPs.p1.y) &&
+                (rectPs.p2.y >= itemPs.p1.y)
+            ) {
+                y_axis = true;
+            }
+            if (
+                (rectPs.p1.y <= itemPs.p2.y) &&
+                (rectPs.p2.y >= itemPs.p2.y)
+            ) {
+                y_axis = true;
+            }
+            // rect is smaller as item
+            if (
+                (itemPs.p1.y <= rectPs.p1.y) &&
+                (itemPs.p2.y >= rectPs.p1.y)
+            ) {
+                y_axis = true;
+            }
+            if (
+                (itemPs.p1.y <= rectPs.p2.y) &&
+                (itemPs.p2.y >= rectPs.p2.y)
+            ) {
+                y_axis = true;
+            }
+            // combine x+y
+            if (x_axis && y_axis) {
+                result = true;
+            }
+            return result;
+        }
+
+        function checkForEnclosure(itemPs, rectPs) {
+            var result = false;
+            // check if item area is in points area
+            // see helper_intersection.svg
+            // x-axis
+            var x_axis = false;
+            if (
+                (
+                    (rectPs.p1.x <= itemPs.p1.x) &&
+                    (rectPs.p2.x >= itemPs.p1.x)
+                ) && (
+                    (rectPs.p1.x <= itemPs.p2.x) &&
+                    (rectPs.p2.x >= itemPs.p2.x)
+                )
+            ) {
+                x_axis = true;
+            }
+            // y-axis
+            var y_axis = false;
+            if (
+                (
+                    (rectPs.p1.y <= itemPs.p1.y) &&
+                    (rectPs.p2.y >= itemPs.p1.y)
+                ) && (
+                    (rectPs.p1.y <= itemPs.p2.y) &&
+                    (rectPs.p2.y >= itemPs.p2.y)
+                )
+            ) {
+                y_axis = true;
+            }
+            // combine x+y
+            if (x_axis && y_axis) {
+                result = true;
+            }
+            return result;
+        }
+
+        function selectCoverdItem(item, rectPs) {
+            // get coverd area of item
+            var itemPs = itemGetPoints(item);
+            // check
+            var itemInArea = false;
+            if(scope.settings.select.forceItemEnclosure){
+                itemInArea = checkForEnclosure(itemPs, rectPs);
+            } else {
+                itemInArea = checkForIntersection(itemPs, rectPs);
+            }
+            if (itemInArea) {
+                // select
+                itemSelect(item);
+            } else {
+                // deselect
+                itemDeselect(item);
+            }
+            scope.$apply();
+        }
+
+        function selectCoverdItems(rectPs) {
+            scope.data.items.forEach(function(item, index, items){
+                selectCoverdItem(item, rectPs);
+            });
+        }
+
+        function remap_pointsObj(points) {
+            return remap_points(points.p1, points.p2);
+        }
+
+        function remap_points(p1, p2) {
             // switch between positiv and negative orientations..
-            if (point1.x < point2.x) {
-                box_select.x.baseVal.value = point1.x;
-                box_select.width.baseVal.value = point2.x - point1.x;
+            var result = {
+                p1: svg_base.createSVGPoint(),
+                p2: svg_base.createSVGPoint(),
+            };
+            if (p1.x < p2.x) {
+                result.p1.x = p1.x;
+                result.p2.x = p2.x;
             } else {
-                box_select.x.baseVal.value = point2.x;
-                box_select.width.baseVal.value = point1.x - point2.x;
+                result.p1.x = p2.x;
+                result.p2.x = p1.x;
             }
+            if (p1.y < p2.y) {
+                result.p1.y = p1.y;
+                result.p2.y = p2.y;
+            } else {
+                result.p1.y = p2.y;
+                result.p2.y = p1.y;
+            }
+            return result;
+        }
 
-            if (point1.y < point2.y) {
-                box_select.y.baseVal.value = point1.y;
-                box_select.height.baseVal.value = point2.y - point1.y;
-            } else {
-                box_select.y.baseVal.value = point2.y;
-                box_select.height.baseVal.value = point1.y - point2.y;
-            }
+        function box_select_set_position_size(points) {
+            box_select.x.baseVal.value = points.p1.x;
+            box_select.width.baseVal.value =
+                points.p2.x - points.p1.x;
+            box_select.y.baseVal.value = points.p1.y;
+            box_select.height.baseVal.value =
+                points.p2.y - points.p1.y;
         }
 
         // based on
@@ -226,16 +409,13 @@ function($parse, $timeout, $filter, $document) { return {
             var screen2SVG = svg_base.getScreenCTM().inverse();
 
             // transform
-            box_select_data.point1 = point_raw.matrixTransform(screen2SVG);
-            // for init set point2 to same values
-            box_select_data.point2 = box_select_data.point1;
+            box_select_data.start.p1 = point_raw.matrixTransform(screen2SVG);
+            // for init set p2 to same values
+            box_select_data.start.p2 = box_select_data.start.p1;
             // console.log("box_select_data", box_select_data);
 
             // set position
-            box_select_set_position_size(
-                box_select_data.point1,
-                box_select_data.point2
-            );
+            box_select_set_position_size(box_select_data.start);
 
             // set box_select active
             box_select_data.active = true;
@@ -248,18 +428,21 @@ function($parse, $timeout, $filter, $document) { return {
 
         function mousemove(event) {
             // create svg point with screen coordinates
-            var point_raw = svg_base.createSVGPoint();
-            point_raw.x = event.clientX;
-            point_raw.y = event.clientY;
+            var point_current_raw = svg_base.createSVGPoint();
+            point_current_raw.x = event.clientX;
+            point_current_raw.y = event.clientY;
             // get transform matrix
             var screen2SVG = svg_base.getScreenCTM().inverse();
             // transform
-            box_select_data.point2 = point_raw.matrixTransform(screen2SVG);
-            // set size
-            box_select_set_position_size(
-                box_select_data.point1,
-                box_select_data.point2
+            var point_current = point_current_raw.matrixTransform(screen2SVG);
+            box_select_data.current = remap_points(
+                box_select_data.start.p1,
+                point_current
             );
+            // set size
+            box_select_set_position_size(box_select_data.current);
+            // update selection
+            selectCoverdItems(box_select_data.current)
         }
 
         function mouseup() {

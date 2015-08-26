@@ -129,6 +129,14 @@
                     world.grid.numbers
                 </label>
                 <br>
+                <label>
+                    <input
+                        type="checkbox"
+                        ng-model="data.shapepusher_settings.select.forceItemEnclosure"
+                    >
+                    select.forceItemEnclosure
+                </label>
+                <br>
             </div>
             <!--******************************************-->
             <div  class="toggle">
@@ -157,6 +165,7 @@ shapepusher_data: {{data.shapepusher_data | angular2json}}
                 width:500,
                 height:500,
             })"
+            settings="data.shapepusher_settings"
         >
         </div>
 
