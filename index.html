@@ -76,7 +76,7 @@
                     type="number"
                     inputmode="numeric"
                     title="width"
-                    min="1"
+                    min="500"
                     max="100000"
                     step="500"
                     ng-model="data.shapepusher_data.world.width"
@@ -90,10 +90,24 @@
                     type="number"
                     inputmode="numeric"
                     title="height"
-                    min="1"
+                    min="500"
                     max="100000"
                     step="500"
                     ng-model="data.shapepusher_data.world.height"
+                    ng-model-options="{
+                        updateOn: 'default blur',
+                        debounce: {'default': 500, 'blur': 0}
+                    }"
+                ><br>
+                <label>grid.stepSize</label>
+                <input
+                    type="number"
+                    inputmode="numeric"
+                    title="stepSize"
+                    min="250"
+                    max="100000"
+                    step="250"
+                    ng-model="data.shapepusher_data.world.grid.stepSize"
                     ng-model-options="{
                         updateOn: 'default blur',
                         debounce: {'default': 500, 'blur': 0}

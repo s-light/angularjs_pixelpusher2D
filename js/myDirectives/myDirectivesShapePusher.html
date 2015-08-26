@@ -26,6 +26,10 @@
         </div>
     </div>
     <hr/> -->
+    <!-- world:{{data.world.width}} {{data.world.height}} <br/>
+    grid:
+        {{data.world.grid.xArray  | angular2json}}
+        {{data.world.grid.yArray  | angular2json}} <br/> -->
     <div
         class="svg_container"
     >
@@ -34,23 +38,28 @@
             zoomAndPan="magnify"
             ng-attr-view_box="0 0 {{data.world.width}} {{data.world.height}}"
         >
-            <!-- <text
-                class="item"
-                ng-repeat="
-                    (itemID, itemData) in data.items
-                    track by itemData.id"
-                ng-class="{
-                    'selected': itemData.selected,
-                    'active': itemData == itemActive,
-                }"
-                ng-click="toggleSelection(itemData)"
-                ng-attr-x="itemData.position.x"
-                ng-attr-y="itemData.position.y"
-                id="itemData.id"
-            >
-                <pre>{{itemData  | angular2json}}</pre>
-                {{itemData.id}}
-            </text> -->
+            <g id="grid1" class="grid">
+                <line
+                    ng-repeat="
+                        xPos in data.world.grid.xArray
+                        track by xPos
+                    "
+                    ng-attr-x1="{{xPos}}"
+                    y1="0"
+                    ng-attr-x2="{{xPos}}"
+                    y2="100%"
+                />
+                <line
+                    ng-repeat="
+                        yPos in data.world.grid.yArray
+                        track by yPos
+                    "
+                    x1="0"
+                    ng-attr-y1="{{yPos}}"
+                    x2="100%"
+                    ng-attr-y2="{{yPos}}"
+                />
+            </g>
 
             <!--
                 svg filter effects:
@@ -86,7 +95,8 @@
                 class="item"
                 ng-repeat="
                     (itemID, itemData) in data.items
-                    track by itemData.id"
+                    track by itemData.id
+                "
                 ng-class="{
                     'selected': itemData.selected,
                     'active': itemData == itemActive,
@@ -103,8 +113,8 @@
                     height="100%"
                 />
                 <text
-                    x="{{itemSize.width/2}}"
-                    y="{{itemSize.height/2}}"
+                    x="50%"
+                    y="50%"
                     dy="0.35em"
                 >
                     {{itemData.id}}

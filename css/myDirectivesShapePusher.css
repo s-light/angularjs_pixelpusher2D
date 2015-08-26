@@ -104,3 +104,13 @@ svg text {
 [shapepusher] .item.selected.active rect{
 	stroke:					rgb(255, 220, 0);
 }
+
+/******************************************/
+
+[shapepusher] .grid line {
+	fill: 					none;
+
+	stroke: 				rgb(0, 0, 0);
+	stroke: 				rgba(0, 0, 0, 0.5);;
+	stroke-width: 			10;
+}

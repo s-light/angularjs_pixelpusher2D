@@ -74,6 +74,7 @@ mainControllers.controller('MainController',[
                     grid: {
                         visible: true,
                         numbers: true,
+                        stepSize: 1000,
                     }
                 },
                 items: [

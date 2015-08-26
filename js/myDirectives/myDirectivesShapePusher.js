@@ -155,6 +155,12 @@ function($parse, $timeout, $filter) { return {
         };
 
         // currentTranslate
+        // getIntersectionList
+        // getEnclosureList(in SVGRect rect, in SVGElement referenceElement)
+        // var el = document.getElementsByTagName("svg")[0];
+
+        // range methode:
+        // http://stackoverflow.com/a/27401425/574981
 
         // watch example/info http://stackoverflow.com/a/15113029/574981
         // watch deep
@@ -164,10 +170,119 @@ function($parse, $timeout, $filter) { return {
             },
             function() {
                 // console.log("Taglist watch fired.");
-                // scope.selected = $filter('filter')(scope.sourcelist, {selected:'true'});
-                scope.selected = $filter('filter')(scope.sourcelist, {selected:'1'});
+                // scope.selected = $filter('filter')(scope.data.items, {selected:'true'});
+                scope.selected = $filter('filter')(scope.data.items, {selected:'1'});
             },
             true
+        );
+
+
+        /** GRID FUNCTIONS **/
+
+        // range function by Mathieu Rodic
+        // http://stackoverflow.com/questions/11873570/angularjs-for-loop-with-numbers-ranges
+        function range(min, max, step) {
+            // parameters validation for method overloading
+            if (max === undefined) {
+                max = min;
+                min = 0;
+            }
+            step = Math.abs(step) || 1;
+            if (min > max) {
+                step = -step;
+            }
+            // building the array
+            var output = [];
+            for (var value=min; value<max; value+=step) {
+                output.push(value);
+            }
+            // returning the generated array
+            return output;
+        };
+
+        function numberToMultipleOf(value, base){
+            var result = 0;
+            var times = Math.floor(value/base);
+            result = times * base;
+            // while (result < value) {
+                // result = result + base;
+            // }
+            return result;
+        }
+
+        // update grid
+        function updateRange(range_array, newLength, stepSize) {
+            newLength = numberToMultipleOf(newLength, stepSize)
+            var newCount = (newLength / stepSize)-1;
+            if (!range_array){
+                range_array = [0];
+            }
+            // update array
+            if (range_array.length > newCount) {
+                // pop elements from end.
+                while (range_array.length > newCount) {
+                    range_array.pop();
+                }
+            } else {
+                // push elements to end.
+                while (range_array.length <= newCount) {
+                    var indexNew = range_array[range_array.length-1]+1;
+                    range_array.push(indexNew);
+                }
+            }
+            // console.log("range_array", range_array);
+            return range_array;
+        }
+
+        function updateGridXArray() {
+            // scope.data.world.grid.xArray = updateRange(
+            //     scope.data.world.grid.xArray,
+            //     scope.data.world.width,
+            //     scope.data.world.grid.stepSize
+            // );
+            scope.data.world.grid.xArray = range(
+                0,
+                scope.data.world.width,
+                scope.data.world.grid.stepSize
+            );
+            // console.log("scope.data.world.grid.xArray", scope.data.world.grid.xArray);
+        }
+
+        function updateGridYArray() {
+            // scope.data.world.grid.yArray = updateRange(
+            //     scope.data.world.grid.yArray,
+            //     scope.data.world.height,
+            //     scope.data.world.grid.stepSize
+            // );
+            scope.data.world.grid.yArray = range(
+                0,
+                scope.data.world.height,
+                scope.data.world.grid.stepSize
+            );
+        }
+
+        // x axis
+        scope.$watch(
+            function() {
+                return scope.data.world.width;
+            },
+            updateGridXArray
+        );
+        // y axis
+        scope.$watch(
+            function(){
+                return scope.data.world.height;
+            },
+            updateGridYArray
+        );
+        scope.$watch(
+            function() {
+                return scope.data.world.grid.stepSize;
+            },
+            function() {
+                updateGridXArray();
+                updateGridYArray();
+            }
         );
 
     }
