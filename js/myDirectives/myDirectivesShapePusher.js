@@ -135,18 +135,22 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function itemDeselect(item) {
-            item.selected = 0;
-            // item.selected = false;
-            if (scope.itemActive == item) {
-                // remove active
-                scope.itemActive = null;
+            if (item.selected != 0) {
+                item.selected = 0;
+                // item.selected = false;
+                if (scope.itemActive == item) {
+                    // remove active
+                    scope.itemActive = null;
+                }
             }
         }
 
         function itemSelect(item) {
-            item.selected = 1;
-            // item.selected = true;
-            scope.itemActive = item;
+            if (item.selected != 1) {
+                item.selected = 1;
+                // item.selected = true;
+                scope.itemActive = item;
+            }
         }
 
         scope.toggleSelection = function(item) {
