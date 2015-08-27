@@ -73,10 +73,6 @@ mainControllers.controller('MainController',[
                         x: 1000,
                         y: 1000,
                     },
-                    // size: {
-                    //     width: 1000,
-                    //     height: 1000,
-                    // },
                 },
                 {
                     id: 'a2',

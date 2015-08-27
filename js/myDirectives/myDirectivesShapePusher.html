@@ -7,18 +7,20 @@
         <pre>{{items | angular2json}}</pre>
         settings:
         <pre>{{settings | angular2json}}</pre> -->
+        <!-- ng-class="{
+            'visible': settings.grid.visible,
+            'numbers': settings.grid.numbers,
+        }" -->
     <div class="svg_container">
         <svg
             zoomAndPan="magnify"
             ng-attr-view_box="0 0 {{settings.world.width}} {{settings.world.height}}"
         >
             <g
+                ng-if="settings.grid.visible"
                 id="grid1"
                 class="grid"
-                ng-class="{
-                    'visible': settings.grid.visible,
-                    'numbers': settings.grid.numbers,
-                }"
+                ng-class="{'numbers': settings.grid.numbers}"
             >
                 <g
                     class="xArray"

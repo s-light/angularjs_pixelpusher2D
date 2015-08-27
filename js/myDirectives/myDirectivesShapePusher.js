@@ -126,13 +126,97 @@ function($parse, $timeout, $filter, $document) { return {
         // };
 
         // default settings
-        if (!scope.settings) {
-            scope.settings = {
-                select: {
-                    forceItemEnclosure: false,
-                }
-            };
+
+        var items_default = [
+            {
+                id: 'a1',
+                position: {
+                    x: 1000,
+                    y: 1000,
+                },
+                // size: {
+                //     width: 1000,
+                //     height: 1000,
+                // },
+            },
+        ];
+
+        var settings_default = {
+            world: {
+                // in mm
+                width: 10000,
+                height: 5000,
+            },
+            item: {
+                width: 500,
+                height: 500,
+            },
+            grid: {
+                visible: true,
+                numbers: true,
+                stepSize: 1000,
+            },
+            gridSnap: {
+                visible: true,
+                stepSize: 250,
+            },
+            select: {
+                forceItemEnclosure: false,
+                snapItem: false,
+            }
+        };
+
+        function handle_defaults() {
+            var messages = [];
+
+            if (!scope.items) {
+                scope.items = items_default;
+                messages.push("no items found");
+            }
+
+            if (!scope.settings) {
+                scope.settings = settings_default;
+                messages.push("no settings found");
+            } else {
+                angular.merge(scope.settings, settings_default);
+
+                // // check for every possible setting:
+                // angular.forEach(settings_default, function(value, key) {
+                //     console.log("key", key);
+                //     console.log("value", value);
+                //     if (!scope.settings.hasOwnProperty(key)) {
+                //     // if (!scope.settings[key])
+                //         scope.settings[key] = value;
+                //         this.push(key);
+                //     } else {
+                //         // key is there so check subparts
+                //         angular.forEach(scope.settings[key], function(value2, key2) {
+                //             if (!scope.settings[key].hasOwnProperty(key2)) {
+                //             // if (!scope.settings[key][key2])
+                //                 scope.settings[key][key2] = value2;
+                //                 this.push(key2);
+                //             } else {
+                //                 // key is there
+                //                 // so nothing to do.
+                //             }
+                //         }, this);
+                //     }
+                // }, messages);
+            }
+            if (messages.length > 0) {
+                console.group("shapepusher  handle_defaults:");
+                console.log("fall back to default values for:");
+                messages.forEach(function(element, index, array){
+                    console.log("    " + element);
+                });
+                console.groupEnd();
+            }
         }
+        // setup default values if they are not user specified:
+        handle_defaults();
+
+
+
 
 
         /** special elements **/

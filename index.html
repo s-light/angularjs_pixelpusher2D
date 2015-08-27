@@ -71,87 +71,118 @@
                     loadData
                 </button>
                 <br>
-                <label>world.width</label>
-                <input
-                    type="number"
-                    inputmode="numeric"
-                    title="width"
-                    min="500"
-                    max="100000"
-                    step="500"
-                    ng-model="data.shapepusher_settings.world.width"
-                    ng-model-options="{
-                        updateOn: 'default blur',
-                        debounce: {'default': 500, 'blur': 0}
-                    }"
-                ><br>
-                <label>world.height</label>
-                <input
-                    type="number"
-                    inputmode="numeric"
-                    title="height"
-                    min="500"
-                    max="100000"
-                    step="500"
-                    ng-model="data.shapepusher_settings.world.height"
-                    ng-model-options="{
-                        updateOn: 'default blur',
-                        debounce: {'default': 500, 'blur': 0}
-                    }"
-                ><br>
-                <label>grid.stepSize</label>
-                <input
-                    type="number"
-                    inputmode="numeric"
-                    title="stepSize"
-                    min="250"
-                    max="100000"
-                    step="250"
-                    ng-model="data.shapepusher_settings.grid.stepSize"
-                    ng-model-options="{
-                        updateOn: 'default blur',
-                        debounce: {'default': 500, 'blur': 0}
-                    }"
-                ><br>
-                <label>
+                <section>
+                    <label>world:</label><br>
+                    <label>width</label>
                     <input
-                        type="checkbox"
-                        ng-model="data.shapepusher_settings.grid.visible"
-                    >
-                    world.grid.visible
-                </label>
-                <br>
-                <label>
+                        type="number"
+                        inputmode="numeric"
+                        title="width"
+                        min="500"
+                        max="100000"
+                        step="500"
+                        ng-model="data.shapepusher_settings.world.width"
+                        ng-model-options="{
+                            updateOn: 'default blur',
+                            debounce: {'default': 500, 'blur': 0}
+                        }"
+                    ><br>
+                    <label>height</label>
                     <input
-                        type="checkbox"
-                        ng-model="data.shapepusher_settings.grid.numbers"
-                    >
-                    world.grid.numbers
-                </label>
-                <br>
-                <label>
+                        type="number"
+                        inputmode="numeric"
+                        title="height"
+                        min="500"
+                        max="100000"
+                        step="500"
+                        ng-model="data.shapepusher_settings.world.height"
+                        ng-model-options="{
+                            updateOn: 'default blur',
+                            debounce: {'default': 500, 'blur': 0}
+                        }"
+                    ><br>
+                </section>
+                <section>
+                    <label>grid:</label><br>
+                    <label>stepSize</label>
                     <input
-                        type="checkbox"
-                        ng-model="data.shapepusher_settings.select.forceItemEnclosure"
-                    >
-                    select.forceItemEnclosure
-                </label>
+                        type="number"
+                        inputmode="numeric"
+                        title="stepSize"
+                        min="250"
+                        max="100000"
+                        step="250"
+                        ng-model="data.shapepusher_settings.grid.stepSize"
+                        ng-model-options="{
+                            updateOn: 'default blur',
+                            debounce: {'default': 500, 'blur': 0}
+                        }"
+                    ><br>
+                    <label>
+                        <input
+                            type="checkbox"
+                            ng-model="data.shapepusher_settings.grid.visible"
+                        >
+                        visible
+                    </label><br>
+                    <label>
+                        <input
+                            type="checkbox"
+                            ng-model="data.shapepusher_settings.grid.numbers"
+                        >
+                        numbers
+                    </label><br>
+                </section>
+                <section>
+                    <label>gridSnap:</label><br>
+                    <label>stepSize</label>
+                    <input
+                        type="number"
+                        inputmode="numeric"
+                        title="stepSize"
+                        min="250"
+                        max="100000"
+                        step="250"
+                        ng-model="data.shapepusher_settings.gridSnap.stepSize"
+                        ng-model-options="{
+                            updateOn: 'default blur',
+                            debounce: {'default': 500, 'blur': 0}
+                        }"
+                    ><br>
+                    <label>
+                        <input
+                            type="checkbox"
+                            ng-model="data.shapepusher_settings.gridSnap.visible"
+                        >
+                        visible
+                    </label>
+                </section>
+                <section>
+                    <label>select:</label><br>
+                    <label>
+                        <input
+                            type="checkbox"
+                            ng-model="data.shapepusher_settings.select.forceItemEnclosure"
+                        >
+                        forceItemEnclosure
+                    </label><br>
+                    <label>
+                        <input
+                            type="checkbox"
+                            ng-model="data.shapepusher_settings.select.snapItem"
+                        >
+                        snapItem
+                    </label>
+                </section>
                 <br>
             </div>
             <!--******************************************-->
             <div  class="toggle">
                 <h3 class="caption">internals:</h3>
-    			<pre
-                    class="text_small"
-                    style="
-                        text-align: left;
-                        overflow:visible;
-                        margin-right: 1em;
-                    "
-                >
+    			<pre class="text_small">
 ******************************
 itemActive.id: {{itemActive.id}}
-shapepusher_items: {{data.shapepusher_items | angular2json}}
+<!-- shapepusher_items: {{data.shapepusher_items | angular2json}} -->
 shapepusher_settings: {{data.shapepusher_settings | angular2json}}
 ******************************
 			    </pre>
