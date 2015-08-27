@@ -127,6 +127,7 @@ mainControllers.controller('MainController',[
                 },
                 move: {
                     snap: false,
+                    selected: false,
                 },
             },
         };

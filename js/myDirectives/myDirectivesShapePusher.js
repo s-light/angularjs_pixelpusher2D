@@ -161,6 +161,7 @@ function($parse, $timeout, $filter, $document) { return {
             },
             move: {
                 snap: false,
+                selected: false,
             },
         };
 
