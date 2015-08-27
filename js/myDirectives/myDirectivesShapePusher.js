@@ -257,6 +257,41 @@ function($parse, $timeout, $filter, $document) { return {
             return result_p;
         }
 
+        function points_distances(p1, p2) {
+            var result = {
+                width: 0,
+                height: 0,
+            };
+            result.width = Math.abs(p1.x - p2.x);
+            result.height = Math.abs(p1.y - p2.y);
+            return result;
+        }
+
+        function points_get_distance(p1, p2) {
+            var distances = points_distances(p1, p2);
+            // get distance with trigonometry
+            // a²+b² = c²
+            var distance = Math.sqrt(
+                (distances.width * distances.width)
+                +
+                (distances.height * distances.height)
+            );
+            return distance;
+        }
+
+        function points_check_xy_higher_then(p1, p2, width, height) {
+            var result = false;
+            var distance = points_distances(p1, p2);
+            if (
+                (distance.width > width) &&
+                (distance.height > height)
+            ) {
+                result = true;
+            }
+            return result;
+        }
+
+
         function point_round2multiple(p1, stepSize) {
             var result_p = svg_base.createSVGPoint();
             // divide by stepSize
@@ -301,7 +336,8 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("item_mousedown");
             // Prevent default dragging of selected content
             event.preventDefault();
-            item_selection_toggle(item);
+            // now handled in mouseup
+            // item_selection_toggle(item);
             item_moving_mousedown(event, item);
         }
         scope.item_mousedown = item_mousedown;
@@ -353,6 +389,8 @@ function($parse, $timeout, $filter, $document) { return {
 
         var item_moving = {
             item: {},
+            moved: false,
+            p_start : {},
             click_offset: {
                 x: 0,
                 y: 0,
@@ -387,12 +425,14 @@ function($parse, $timeout, $filter, $document) { return {
             // var item = itemById(element.id);
             // we already have the reference from the calling.
             item_moving.item = item;
+            item_moving.moved = false;
 
             // get current point
             var point_current = convert_xy_2_SVG_coordinate_point(
                 event.pageX,
                 event.pageY
             );
+            item_moving.p_start = point_current;
 
             // calculate item click offset
             item_moving.click_offset.x = item.position.x - point_current.x;
@@ -405,7 +445,7 @@ function($parse, $timeout, $filter, $document) { return {
             // eventData not supported by jQlight
             // element_jql.on('mousemove', {item:item}, item_moving_mousemove);
             element_jql.on('mousemove', item_moving_mousemove);
-            element_jql.on('mouseup', item_moving_end);
+            element_jql.on('mouseup', item_mouseup);
             element_jql.on('mouseleave', item_moving_end);
             // element_jql.on('mouseout', item_moving_end);
         }
@@ -417,6 +457,15 @@ function($parse, $timeout, $filter, $document) { return {
                 event.pageX,
                 event.pageY
             );
+
+            // check if mouse moved
+            if (!item_moving.moved) {
+                var dist = points_get_distance(point_current, item_moving.p_start);
+                if (dist > 10) {
+                    item_moving.moved = true;
+                    console.log("mouse moved..");
+                }
+            }
 
             // eventData not supported by jQlight
             // var item = event.data.item;
@@ -452,8 +501,21 @@ function($parse, $timeout, $filter, $document) { return {
             element.y.baseVal.value = p_clean.y;
         }
 
-        function item_moving_end(event, item) {
+        function item_mouseup(event) {
+            // console.log("item_mouseup");
+            // check if mousemoved
+            if (!item_moving.moved) {
+                // console.log("!item_moving.moved");
+                // console.log("item_moving.item", item_moving.item);
+                item_selection_toggle(item_moving.item);
+            }
+            item_moving_end(event);
+            scope.$apply();
+        }
+
+        function item_moving_end(event) {
             // console.log("item_moving_end", event.target);
+            item_moving.p_start = {};
             item_moving.click_offset.x = 0;
             item_moving.click_offset.y = 0;
             item_moving.item = {};
@@ -464,9 +526,10 @@ function($parse, $timeout, $filter, $document) { return {
             element_jql = angular.element(element);
             // shut off events
             element_jql.off('mousemove', item_moving_mousemove);
-            element_jql.off('mouseup', item_moving_end);
+            element_jql.off('mouseup', item_mouseup);
             element_jql.on('mouseleave', item_moving_end);
             // element_jql.off('mouseout', item_moving_end);
+
         }
 
 
