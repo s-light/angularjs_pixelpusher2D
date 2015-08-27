@@ -1,27 +1,29 @@
 <div class="position_container">
-    <!-- world:{{data.world.width}} {{data.world.height}} <br/>
+    <!-- world:{{world.width}} {{world.height}} <br/>
     grid:
-        {{data.world.grid.xArray  | angular2json}}
-        {{data.world.grid.yArray  | angular2json}} <br/> -->
-    <!-- move:
-        <pre>{{box_select_data | angular2json}}</pre> -->
+        {{data.grid.xArray  | angular2json}}
+        {{data.grid.yArray  | angular2json}} <br/> -->
+        <!-- items:
+        <pre>{{items | angular2json}}</pre>
+        settings:
+        <pre>{{settings | angular2json}}</pre> -->
     <div class="svg_container">
         <svg
             zoomAndPan="magnify"
-            ng-attr-view_box="0 0 {{data.world.width}} {{data.world.height}}"
+            ng-attr-view_box="0 0 {{settings.world.width}} {{settings.world.height}}"
         >
             <g
                 id="grid1"
                 class="grid"
                 ng-class="{
-                    'visible': data.world.grid.visible,
-                    'numbers': data.world.grid.numbers,
+                    'visible': settings.grid.visible,
+                    'numbers': settings.grid.numbers,
                 }"
             >
                 <g
                     class="xArray"
                     ng-repeat="
-                        xPos in data.world.grid.xArray
+                        xPos in settings.grid.xArray
                         track by xPos
                     "
                 >
@@ -33,7 +35,7 @@
                     />
                     <text
                         ng-attr-x="{{xPos}}"
-                        ng-attr-y="{{(data.world.grid.stepSize/2)}}"
+                        ng-attr-y="{{(settings.grid.stepSize/2)}}"
                     >
                         {{xPos}}
                     </text>
@@ -42,7 +44,7 @@
                 <g
                     class="yArray"
                     ng-repeat="
-                        yPos in data.world.grid.yArray
+                        yPos in settings.grid.yArray
                         track by yPos
                     "
                 >
@@ -53,7 +55,7 @@
                         ng-attr-y2="{{yPos}}"
                     />
                     <text
-                        ng-attr-x="{{(data.world.grid.stepSize/2)}}"
+                        ng-attr-x="{{(settings.grid.stepSize/2)}}"
                         ng-attr-y="{{yPos}}"
                     >
                         {{yPos}}
@@ -80,7 +82,7 @@
             <svg
                 class="item"
                 ng-repeat="
-                    (itemID, itemData) in data.items
+                    (itemID, itemData) in items
                     track by itemData.id
                 "
                 ng-class="{
@@ -90,8 +92,8 @@
                 ng-mousedown="item_mousedown($event, itemData)"
                 ng-attr-x="{{itemData.position.x}}"
                 ng-attr-y="{{itemData.position.y}}"
-                ng-attr-width="{{itemSize.width}}"
-                ng-attr-height="{{itemSize.height}}"
+                ng-attr-width="{{settings.item.width}}"
+                ng-attr-height="{{settings.item.height}}"
                 id="{{itemData.id}}"
             >
                 <rect

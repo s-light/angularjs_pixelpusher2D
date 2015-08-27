@@ -79,7 +79,7 @@
                     min="500"
                     max="100000"
                     step="500"
-                    ng-model="data.shapepusher_data.world.width"
+                    ng-model="data.shapepusher_settings.world.width"
                     ng-model-options="{
                         updateOn: 'default blur',
                         debounce: {'default': 500, 'blur': 0}
@@ -93,7 +93,7 @@
                     min="500"
                     max="100000"
                     step="500"
-                    ng-model="data.shapepusher_data.world.height"
+                    ng-model="data.shapepusher_settings.world.height"
                     ng-model-options="{
                         updateOn: 'default blur',
                         debounce: {'default': 500, 'blur': 0}
@@ -107,7 +107,7 @@
                     min="250"
                     max="100000"
                     step="250"
-                    ng-model="data.shapepusher_data.world.grid.stepSize"
+                    ng-model="data.shapepusher_settings.grid.stepSize"
                     ng-model-options="{
                         updateOn: 'default blur',
                         debounce: {'default': 500, 'blur': 0}
@@ -116,7 +116,7 @@
                 <label>
                     <input
                         type="checkbox"
-                        ng-model="data.shapepusher_data.world.grid.visible"
+                        ng-model="data.shapepusher_settings.grid.visible"
                     >
                     world.grid.visible
                 </label>
@@ -124,7 +124,7 @@
                 <label>
                     <input
                         type="checkbox"
-                        ng-model="data.shapepusher_data.world.grid.numbers"
+                        ng-model="data.shapepusher_settings.grid.numbers"
                     >
                     world.grid.numbers
                 </label>
@@ -151,7 +151,8 @@
                 >
 ******************************
 itemActive.id: {{itemActive.id}}
-shapepusher_data: {{data.shapepusher_data | angular2json}}
+shapepusher_items: {{data.shapepusher_items | angular2json}}
+shapepusher_settings: {{data.shapepusher_settings | angular2json}}
 ******************************
 			    </pre>
             </div>
@@ -159,13 +160,9 @@ shapepusher_data: {{data.shapepusher_data | angular2json}}
 
         <div
             shapepusher
-            data="data.shapepusher_data"
-            item-active="itemActive"
-            item-size="({
-                width:500,
-                height:500,
-            })"
+            items="data.shapepusher_items"
             settings="data.shapepusher_settings"
+            item-active="itemActive"
         >
         </div>
 

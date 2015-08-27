@@ -66,62 +66,69 @@ mainControllers.controller('MainController',[
                 viewStyle: 'blueocean',
                 // viewStyle: 'sunlight',
             },
-            shapepusher_data: {
+            shapepusher_items: [
+                {
+                    id: 'a1',
+                    position: {
+                        x: 1000,
+                        y: 1000,
+                    },
+                    // size: {
+                    //     width: 1000,
+                    //     height: 1000,
+                    // },
+                },
+                {
+                    id: 'a2',
+                    position: {
+                        x: 1000,
+                        y: 2000,
+                    },
+                },
+                {
+                    id: 'a3',
+                    position: {
+                        x: 2000,
+                        y: 2500,
+                    },
+                },
+                {
+                    id: 'a4',
+                    position: {
+                        x: 3000,
+                        y: 2000,
+                    },
+                },
+                {
+                    id: 'a5',
+                    position: {
+                        x: 6000,
+                        y: 3000,
+                    },
+                },
+            ],
+            shapepusher_settings: {
                 world: {
                     // in mm
                     width: 10000,
                     height: 5000,
-                    grid: {
-                        visible: true,
-                        numbers: true,
-                        stepSize: 1000,
-                    }
                 },
-                items: [
-                    {
-                        id: 'a1',
-                        position: {
-                            x: 1000,
-                            y: 1000,
-                        },
-                        // size: {
-                        //     width: 1000,
-                        //     height: 1000,
-                        // },
-                    },
-                    {
-                        id: 'a2',
-                        position: {
-                            x: 1000,
-                            y: 2000,
-                        },
-                    },
-                    {
-                        id: 'a3',
-                        position: {
-                            x: 2000,
-                            y: 2500,
-                        },
-                    },
-                    {
-                        id: 'a4',
-                        position: {
-                            x: 3000,
-                            y: 2000,
-                        },
-                    },
-                    {
-                        id: 'a5',
-                        position: {
-                            x: 6000,
-                            y: 3000,
-                        },
-                    },
-                ],
-            },
-            shapepusher_settings: {
+                item: {
+                    width: 500,
+                    height: 500,
+                },
+                grid: {
+                    visible: true,
+                    numbers: true,
+                    stepSize: 1000,
+                },
+                gridSnap: {
+                    visible: true,
+                    stepSize: 250,
+                },
                 select: {
                     forceItemEnclosure: false,
+                    snapItem: false,
                 }
             },
         };

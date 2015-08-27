@@ -62,11 +62,10 @@ function($parse, $timeout, $filter, $document) { return {
     // require: 'ngModel',
     // transclude: true,
     scope: {
-        data: '=',
+        items: '=',
+        settings: '=',
         itemActive: '=',
         selected: '=',
-        itemSize: '=',
-        settings: '=',
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/myDirectivesShapePusher.html',
@@ -85,7 +84,8 @@ function($parse, $timeout, $filter, $document) { return {
         // console.log("attrs", attrs);
         // console.log("ctrl", ctrl);
 
-        // console.log("itemSize", scope.itemSize);
+        console.log("items", scope.items);
+        console.log("settings", scope.settings);
 
 
         // shapepusher_data: {
@@ -135,6 +135,8 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
 
+        /** special elements **/
+
         // var svg_base = document.getElementsByTagName("svg")[0];
         // var box_select = document.getElementsByTagName("svg")[0].getElementById("box_select");box_select.classList.add('active');
 
@@ -167,7 +169,7 @@ function($parse, $timeout, $filter, $document) { return {
 
 
         function itemById(id) {
-            var item = scope.data.items.find(function(element, index, array){
+            var item = scope.items.find(function(element, index, array){
                 if (element.id == id) {
                     return true;
                 } else {
@@ -338,7 +340,7 @@ function($parse, $timeout, $filter, $document) { return {
 
 
         // function item_moving_init() {
-        //     scope.data.items.forEach(function(item, index, items){
+        //     scope.items.forEach(function(item, index, items){
         //         var element = svg_base.getElementById(item.id);
         //         angular.element(element).on('mousedown', item_moving_mousedown);
         //     });
@@ -508,7 +510,7 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function selectCoverdItems(rectPs) {
-            scope.data.items.forEach(function(item, index, items){
+            scope.items.forEach(function(item, index, items){
                 selectCoverdItem(item, rectPs);
             });
         }
@@ -686,49 +688,49 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function updateGridXArray() {
-            // scope.data.world.grid.xArray = updateRange(
-            //     scope.data.world.grid.xArray,
-            //     scope.data.world.width,
-            //     scope.data.world.grid.stepSize
+            // scope.settings.grid.xArray = updateRange(
+            //     scope.settings.grid.xArray,
+            //     scope.settings.world.width,
+            //     scope.settings.grid.stepSize
             // );
-            scope.data.world.grid.xArray = range(
+            scope.settings.grid.xArray = range(
                 0,
-                scope.data.world.width,
-                scope.data.world.grid.stepSize
+                scope.settings.world.width,
+                scope.settings.grid.stepSize
             );
-            // console.log("scope.data.world.grid.xArray", scope.data.world.grid.xArray);
+            // console.log("scope.settings.grid.xArray", scope.settings.grid.xArray);
         }
 
         function updateGridYArray() {
-            // scope.data.world.grid.yArray = updateRange(
-            //     scope.data.world.grid.yArray,
-            //     scope.data.world.height,
-            //     scope.data.world.grid.stepSize
+            // scope.settings.grid.yArray = updateRange(
+            //     scope.settings.grid.yArray,
+            //     scope.settings.world.height,
+            //     scope.settings.grid.stepSize
             // );
-            scope.data.world.grid.yArray = range(
+            scope.settings.grid.yArray = range(
                 0,
-                scope.data.world.height,
-                scope.data.world.grid.stepSize
+                scope.settings.world.height,
+                scope.settings.grid.stepSize
             );
         }
 
         // x axis
         scope.$watch(
             function() {
-                return scope.data.world.width;
+                return scope.settings.world.width;
             },
             updateGridXArray
         );
         // y axis
         scope.$watch(
             function(){
-                return scope.data.world.height;
+                return scope.settings.world.height;
             },
             updateGridYArray
         );
         scope.$watch(
             function() {
-                return scope.data.world.grid.stepSize;
+                return scope.settings.grid.stepSize;
             },
             function() {
                 updateGridXArray();
@@ -742,12 +744,12 @@ function($parse, $timeout, $filter, $document) { return {
         // watch deep
         scope.$watch(
             function(){
-                return scope.data.items;
+                return scope.items;
             },
             function() {
                 // console.log("Taglist watch fired.");
-                // scope.selected = $filter('filter')(scope.data.items, {selected:'true'});
-                scope.selected = $filter('filter')(scope.data.items, {selected:'1'});
+                // scope.selected = $filter('filter')(scope.settings.items, {selected:'true'});
+                scope.selected = $filter('filter')(scope.items, {selected:'1'});
             },
             true
         );
