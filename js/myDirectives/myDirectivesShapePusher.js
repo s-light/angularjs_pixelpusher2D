@@ -350,9 +350,12 @@ function($parse, $timeout, $filter, $document) { return {
 
         /** item moving **/
 
-        var item_moving_click_offset = {
-            x: 0,
-            y: 0,
+        var item_moving = {
+            item: {},
+            click_offset: {
+                x: 0,
+                y: 0,
+            },
         };
 
         function itemSVGelement_by_event(event){
@@ -376,12 +379,13 @@ function($parse, $timeout, $filter, $document) { return {
             event.stopPropagation();
 
             // get element
-            var element = itemSVGelement_by_event(event);
+            // var element = itemSVGelement_by_event(event);
             // console.log("element", element);
 
             // get item
             // var item = itemById(element.id);
             // we already have the reference from the calling.
+            item_moving.item = item;
 
             // get current point
             var point_current = convert_xy_2_SVG_coordinate_point(
@@ -390,12 +394,13 @@ function($parse, $timeout, $filter, $document) { return {
             );
 
             // calculate item click offset
-            item_moving_click_offset.x = item.position.x - point_current.x;
-            item_moving_click_offset.y = item.position.y - point_current.y;
+            item_moving.click_offset.x = item.position.x - point_current.x;
+            item_moving.click_offset.y = item.position.y - point_current.y;
 
             // setup events
             // wrapp with jQlight
-            element_jql = angular.element(element);
+            // element_jql = angular.element(element);
+            element_jql = angular.element(svg_base);
             // eventData not supported by jQlight
             // element_jql.on('mousemove', {item:item}, item_moving_mousemove);
             element_jql.on('mousemove', item_moving_mousemove);
@@ -415,15 +420,19 @@ function($parse, $timeout, $filter, $document) { return {
             // eventData not supported by jQlight
             // var item = event.data.item;
 
+            // now the currentTarget is the main SVG
+            // var element = event.currentTarget;
             // var element = itemSVGelement_by_event(event);
-            var element = event.currentTarget;
-            // get item
-            var item = itemById(element.id);
+            var element = svg_base.getElementById(item_moving.item.id);
+            // // get item
+            // var item = itemById(element.id);
+
+            // var item = item_moving.item;
 
             // console.log("item", item);
 
             // calculate new position
-            var p_raw = points_add(item_moving_click_offset, point_current);
+            var p_raw = points_add(item_moving.click_offset, point_current);
 
             // convert to integer (strip all fractions)
             var p_clean = point_round2integer(p_raw);
@@ -435,8 +444,8 @@ function($parse, $timeout, $filter, $document) { return {
             }
 
             // set item position
-            item.position.x = p_clean.x;
-            item.position.y = p_clean.y;
+            item_moving.item.position.x = p_clean.x;
+            item_moving.item.position.y = p_clean.y;
             // scope.$apply();
             element.x.baseVal.value = p_clean.x;
             element.y.baseVal.value = p_clean.y;
@@ -444,8 +453,9 @@ function($parse, $timeout, $filter, $document) { return {
 
         function item_moving_end(event, item) {
             // console.log("item_moving_end", event.target);
-            item_moving_click_offset.x = 0;
-            item_moving_click_offset.y = 0;
+            item_moving.click_offset.x = 0;
+            item_moving.click_offset.y = 0;
+            item_moving.item = {};
             // get element
             // var element = itemSVGelement_by_event(event);
             var element = event.currentTarget;
