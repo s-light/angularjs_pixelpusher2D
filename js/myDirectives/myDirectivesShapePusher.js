@@ -40,18 +40,14 @@ var myDirectivesShapePusher = angular.module('myDirectivesShapePusher', [
 // http://stackoverflow.com/a/21103831/574981
 // var scripts = document.getElementsByTagName("script");
 // var myDTl_scriptPath = scripts[scripts.length-1].src;
-var myDTl_scriptElement = document.querySelector(
+var myDiSP_scriptElement = document.querySelector(
     "[src*=myDirectivesShapePusher]"
 );
-var myDTl_scriptPath = myDTl_scriptElement.getAttribute('src');
-var myDTl_templateURL = myDTl_scriptPath.replace('.js', '.html');
+var myDiSP_scriptPath = myDiSP_scriptElement.getAttribute('src');
+var myDiSP_templateURL = myDiSP_scriptPath.replace('.js', '.html');
+// var myDiSP_templateURL_svggrid = myDiSP_templateURL.replace('.html', '_svggrid.html');
 
 
-// capture the Enter-Key on an element and calls a function
-// loosly based on
-//      https://gist.github.com/EpokK/5884263
-//      https://docs.angularjs.org/guide/directive
-//      http://stackoverflow.com/a/26756027/574981
 myDirectivesShapePusher.directive('shapepusher', [
     '$parse',
     '$timeout',
@@ -69,13 +65,13 @@ function($parse, $timeout, $filter, $document) { return {
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/myDirectivesShapePusher.html',
-    // templateUrl: myDTl_templateURL,
+    // templateUrl: myDiSP_templateURL,
     templateUrl: function() {
         // only for development!!!!!
         // this disables the caching of the template file..
         // console.log("shapepusher");
         // console.log("myDTl_scriptPath:", myDTl_scriptPath);
-        return myDTl_templateURL + '?' + new Date();
+        return myDiSP_templateURL + '?' + new Date();
     },
     link: function(scope, element, attr, ctrl) {
         // console.log("directive date");
@@ -84,8 +80,8 @@ function($parse, $timeout, $filter, $document) { return {
         // console.log("attrs", attrs);
         // console.log("ctrl", ctrl);
 
-        console.log("items", scope.items);
-        console.log("settings", scope.settings);
+        // console.log("items", scope.items);
+        // console.log("settings", scope.settings);
 
 
         // shapepusher_data: {
@@ -162,8 +158,10 @@ function($parse, $timeout, $filter, $document) { return {
             },
             select: {
                 forceItemEnclosure: false,
-                snapItem: false,
-            }
+            },
+            move: {
+                snap: false,
+            },
         };
 
         function handle_defaults() {
@@ -251,6 +249,38 @@ function($parse, $timeout, $filter, $document) { return {
             return point_out;
         }
 
+        function points_add(p1, p2) {
+            var result_p = svg_base.createSVGPoint();
+            result_p.x = p1.x + p2.x;
+            result_p.y = p1.y + p2.y;
+            return result_p;
+        }
+
+        function point_round2multiple(p1, stepSize) {
+            var result_p = svg_base.createSVGPoint();
+            // divide by stepSize
+            var x1 = p1.x / stepSize;
+            var y1 = p1.y / stepSize;
+            // round
+            var x2 = Math.round(x1);
+            var y2 = Math.round(y1);
+            // multiply by stepSize
+            result_p.x = x2 * stepSize;
+            result_p.y = y2 * stepSize;
+            return result_p;
+        }
+
+        function point_find_nearest_snap(p1) {
+            var stepSize = scope.settings.gridSnap.stepSize;
+            return point_round2multiple(p1, stepSize);
+        }
+
+        function point_round2integer(point) {
+            var result_p = svg_base.createSVGPoint();
+            result_p.x = parseInt(point.x, 10);
+            result_p.y = parseInt(point.y, 10);
+            return result_p;
+        }
 
         function itemById(id) {
             var item = scope.items.find(function(element, index, array){
@@ -393,17 +423,23 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("item", item);
 
             // calculate new position
-            var raw_x = item_moving_click_offset.x + point_current.x;
-            var raw_y = item_moving_click_offset.y + point_current.y;
+            var p_raw = points_add(item_moving_click_offset, point_current);
+
             // convert to integer (strip all fractions)
-            var clean_x = parseInt(raw_x, 10);
-            var clean_y = parseInt(raw_y, 10);
+            var p_clean = point_round2integer(p_raw);
+
+            // check if snapping is enabled
+            if (scope.settings.move.snap) {
+                // snap
+                p_clean = point_find_nearest_snap(p_clean);
+            }
+
             // set item position
-            item.position.x = clean_x;
-            item.position.y = clean_y;
+            item.position.x = p_clean.x;
+            item.position.y = p_clean.y;
             // scope.$apply();
-            element.x.baseVal.value = clean_x;
-            element.y.baseVal.value = clean_y;
+            element.x.baseVal.value = p_clean.x;
+            element.y.baseVal.value = p_clean.y;
         }
 
         function item_moving_end(event, item) {
@@ -782,6 +818,12 @@ function($parse, $timeout, $filter, $document) { return {
                 scope.settings.world.width,
                 scope.settings.grid.stepSize
             );
+
+            scope.settings.gridSnap.xArray = range(
+                0,
+                scope.settings.world.width,
+                scope.settings.gridSnap.stepSize
+            );
             // console.log("scope.settings.grid.xArray", scope.settings.grid.xArray);
         }
 
@@ -795,6 +837,12 @@ function($parse, $timeout, $filter, $document) { return {
                 0,
                 scope.settings.world.height,
                 scope.settings.grid.stepSize
+            );
+
+            scope.settings.gridSnap.yArray = range(
+                0,
+                scope.settings.world.height,
+                scope.settings.gridSnap.stepSize
             );
         }
 
@@ -815,6 +863,15 @@ function($parse, $timeout, $filter, $document) { return {
         scope.$watch(
             function() {
                 return scope.settings.grid.stepSize;
+            },
+            function() {
+                updateGridXArray();
+                updateGridYArray();
+            }
+        );
+        scope.$watch(
+            function() {
+                return scope.settings.gridSnap.stepSize;
             },
             function() {
                 updateGridXArray();

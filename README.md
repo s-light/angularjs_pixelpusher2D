@@ -8,10 +8,10 @@ woks:
 - select single/muliple shapes
 - select with border (box selection) (inklusive forceItemEnclosure option)
 - drag and drop with mouse / touch to move the shapes on the canvas
+- on move - snap to grid
 
 
 goals:
-- on move - snap to grid
 - move all selected shapes
 - different touch friendly add/remove/toggle modes for the box selection
 - zoom in&out / drag canvas around

@@ -124,8 +124,10 @@ mainControllers.controller('MainController',[
                 },
                 select: {
                     forceItemEnclosure: false,
-                    snapItem: false,
-                }
+                },
+                move: {
+                    snap: false,
+                },
             },
         };
 
