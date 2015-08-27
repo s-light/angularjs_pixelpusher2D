@@ -77,6 +77,9 @@ div[shapepusher] .svg_container{
 	text-shadow:			none;
 }
 
+/******************************************/
+/* item */
+
 [shapepusher] .item {
 	/*border-color:			rgb(0, 0, 0);
 	border-width: 			0.5em;
@@ -95,11 +98,22 @@ div[shapepusher] .svg_container{
 	stroke-width: 			50;
 }
 
-[shapepusher] .item:hover rect,
+/*[shapepusher] .item:hover rect,
 [shapepusher] .item.selected.active:hover rect,
-[shapepusher] .item.selected:hover rect{
-	stroke:					rgb(255, 240, 0);
+[shapepusher] .item.selected:hover rect {
+	stroke:					rgba(255, 255, 0, 0.5);
+}*/
+
+[shapepusher] svg.item:hover {
+	/* similar syntax as box-shadow */
+	-webkit-filter:
+				drop-shadow( 0 0 0.1em rgb(255, 240, 0) )
+				drop-shadow( 0 0 0.5em rgba(255, 200, 0, 1) );
+            filter:
+				drop-shadow( 0 0 0.1em rgb(255, 240, 0) )
+				drop-shadow( 0 0 0.5em rgba(255, 200, 0, 1) );
 }
+
 
 [shapepusher] .item.selected rect{
 	stroke:					rgb(255, 180, 0);
@@ -109,6 +123,7 @@ div[shapepusher] .svg_container{
 	stroke:					rgb(255, 220, 0);
 }
 
+/******************************************/
 /* box select*/
 [shapepusher] .box_select {
 	fill:					rgba(255, 220, 0, 0.3);

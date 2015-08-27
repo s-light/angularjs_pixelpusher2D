@@ -1,41 +1,11 @@
 <div class="position_container">
-    <!-- <div
-        class="item_container"
-        ng-style="{
-            'width': (data.world.width*2 + 'em'),
-            'height': (data.world.height*2 + 'em')
-        }"
-    >
-        <div
-            class="item"
-            ng-repeat="
-                (itemID, itemData) in data.items
-                track by itemData.id"
-            ng-class="{
-                'selected': itemData.selected,
-                'active': itemData == itemActive,
-            }"
-            ng-click="toggleSelection(itemData)"
-            ng-style="{
-                'left': (itemData.position.x*2 + 'em'),
-                'top': (itemData.position.y*2 + 'em')
-            }"
-        >
-            <pre>{{itemData  | angular2json}}</pre>
-            {{itemData.id}}
-        </div>
-    </div>
-    <hr/> -->
     <!-- world:{{data.world.width}} {{data.world.height}} <br/>
     grid:
         {{data.world.grid.xArray  | angular2json}}
         {{data.world.grid.yArray  | angular2json}} <br/> -->
     <!-- move:
         <pre>{{box_select_data | angular2json}}</pre> -->
-    <div
-        class="svg_container"
-    >
-
+    <div class="svg_container">
         <svg
             zoomAndPan="magnify"
             ng-attr-view_box="0 0 {{data.world.width}} {{data.world.height}}"
@@ -92,21 +62,6 @@
 
             </g>
 
-            <!--
-                svg filter effects:
-
-                http://www.w3schools.com/svg/svg_feoffset.asp
-                http://stackoverflow.com/questions/6088409/svg-drop-shadow-using-css3
-            -->
-
-            <!--
-                width="500"
-                height="500"
-                ng-attr-width="{{itemData.size.width}}"
-                ng-attr-height="{{itemData.size.height}}"
-                ng-attr-width="{{itemSize.width}}"
-                ng-attr-height="{{itemSize.height}}"
-            -->
             <!-- <rect
                 x="500"
                 y="500"

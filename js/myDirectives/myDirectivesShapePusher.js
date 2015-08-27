@@ -245,6 +245,10 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("element_raw", element_raw);
             // get svg element
             var itemSVG = element_raw.parentElement;
+            // only works in some browsers:
+            // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+            // var itemSVG = element_raw.closest("svg.item");
+
             return itemSVG;
         }
 
@@ -295,7 +299,8 @@ function($parse, $timeout, $filter, $document) { return {
             // eventData not supported by jQlight
             // var item = event.data.item;
 
-            var element = itemSVGelement_by_event(event);
+            // var element = itemSVGelement_by_event(event);
+            var element = event.currentTarget;
             // get item
             var item = itemById(element.id);
 
@@ -310,7 +315,9 @@ function($parse, $timeout, $filter, $document) { return {
             // set item position
             item.position.x = clean_x;
             item.position.y = clean_y;
-            scope.$apply();
+            // scope.$apply();
+            element.x.baseVal.value = clean_x;
+            element.y.baseVal.value = clean_y;
         }
 
         function item_moving_end(event, item) {
@@ -318,7 +325,8 @@ function($parse, $timeout, $filter, $document) { return {
             item_moving_click_offset.x = 0;
             item_moving_click_offset.y = 0;
             // get element
-            var element = itemSVGelement_by_event(event);
+            // var element = itemSVGelement_by_event(event);
+            var element = event.currentTarget;
             // wrapp with jQlight
             element_jql = angular.element(element);
             // shut off events
