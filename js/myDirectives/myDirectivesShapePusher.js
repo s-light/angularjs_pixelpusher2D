@@ -134,8 +134,65 @@ function($parse, $timeout, $filter, $document) { return {
             };
         }
 
-        function itemDeselect(item) {
-            if (item.selected != 0) {
+
+        // var svg_base = document.getElementsByTagName("svg")[0];
+        // var box_select = document.getElementsByTagName("svg")[0].getElementById("box_select");box_select.classList.add('active');
+
+        // var svg_base = element[0].querySelector("svg");
+        var svg_base_jql = element.find("svg");
+        var svg_base = svg_base_jql[0];
+        // console.log("svg_base", svg_base);
+
+
+        /** helper **/
+
+        function convert_point_2_SVG_coordinate_point(point) {
+            // tipp with getScreenCTM found at
+            // http://stackoverflow.com/a/22185664/574981
+            // get transform matrix
+            var screen2SVG = svg_base.getScreenCTM().inverse();
+            // transform to svg coordinates
+            var point_out = point.matrixTransform(screen2SVG);
+            return point_out;
+        }
+
+        function convert_xy_2_SVG_coordinate_point(x, y) {
+            // create svg point
+            var point_in = svg_base.createSVGPoint();
+            point_in.x = x;
+            point_in.y = y;
+            var point_out = convert_point_2_SVG_coordinate_point(point_in);
+            return point_out;
+        }
+
+
+        function itemById(id) {
+            var item = scope.data.items.find(function(element, index, array){
+                if (element.id == id) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            return item;
+        }
+
+
+        /** item mousedown handling **/
+
+        function item_mousedown(event, item) {
+            // console.log("item_mousedown");
+            // Prevent default dragging of selected content
+            event.preventDefault();
+            item_selection_toggle(item);
+            item_moving_mousedown(event, item);
+        }
+        scope.item_mousedown = item_mousedown;
+
+        /** item select **/
+
+        function item_deselect(item) {
+            if (item.selected !== 0) {
                 item.selected = 0;
                 // item.selected = false;
                 if (scope.itemActive == item) {
@@ -145,7 +202,7 @@ function($parse, $timeout, $filter, $document) { return {
             }
         }
 
-        function itemSelect(item) {
+        function item_select(item) {
             if (item.selected != 1) {
                 item.selected = 1;
                 // item.selected = true;
@@ -153,7 +210,7 @@ function($parse, $timeout, $filter, $document) { return {
             }
         }
 
-        scope.toggleSelection = function(item) {
+        function item_selection_toggle(item) {
             // console.group("toggleSelection");
             // console.log("item", item);
             // console.log("scope.itemActive", scope.itemActive);
@@ -164,27 +221,125 @@ function($parse, $timeout, $filter, $document) { return {
                     // set last selected item as active
                     scope.itemActive = item;
                 } else {
-                    itemDeselect(item);
+                    item_deselect(item);
                 }
             } else {
                 // currently unselected
-                itemSelect(item);
+                item_select(item);
             }
             // console.log("item", item);
             // console.log("scope.itemActive", scope.itemActive);
             // console.groupEnd();
+        }
+
+        /** item moving **/
+
+        var item_moving_click_offset = {
+            x: 0,
+            y: 0,
         };
 
+        function itemSVGelement_by_event(event){
+            // get target element
+            var element_raw = event.target;
+            // console.log("element_raw", element_raw);
+            // get svg element
+            var itemSVG = element_raw.parentElement;
+            return itemSVG;
+        }
+
+        function item_moving_mousedown(event, item) {
+            // console.log("item_moving_mousedown", event.target);
+            // Prevent default dragging of selected content
+            event.preventDefault();
+            // prevent box selection to trigger
+            event.stopPropagation();
+
+            // get element
+            var element = itemSVGelement_by_event(event);
+            // console.log("element", element);
+
+            // get item
+            // var item = itemById(element.id);
+            // we already have the reference from the calling.
+
+            // get current point
+            var point_current = convert_xy_2_SVG_coordinate_point(
+                event.pageX,
+                event.pageY
+            );
+
+            // calculate item click offset
+            item_moving_click_offset.x = item.position.x - point_current.x;
+            item_moving_click_offset.y = item.position.y - point_current.y;
+
+            // setup events
+            // wrapp with jQlight
+            element_jql = angular.element(element);
+            // eventData not supported by jQlight
+            // element_jql.on('mousemove', {item:item}, item_moving_mousemove);
+            element_jql.on('mousemove', item_moving_mousemove);
+            element_jql.on('mouseup', item_moving_end);
+            element_jql.on('mouseleave', item_moving_end);
+            // element_jql.on('mouseout', item_moving_end);
+        }
+
+        function item_moving_mousemove(event) {
+            // console.log("item_moving_mousemove", event.target);
+            // get current point
+            var point_current = convert_xy_2_SVG_coordinate_point(
+                event.pageX,
+                event.pageY
+            );
+
+            // eventData not supported by jQlight
+            // var item = event.data.item;
+
+            var element = itemSVGelement_by_event(event);
+            // get item
+            var item = itemById(element.id);
+
+            // console.log("item", item);
+
+            // calculate new position
+            var raw_x = item_moving_click_offset.x + point_current.x;
+            var raw_y = item_moving_click_offset.y + point_current.y;
+            // convert to integer (strip all fractions)
+            var clean_x = parseInt(raw_x, 10);
+            var clean_y = parseInt(raw_y, 10);
+            // set item position
+            item.position.x = clean_x;
+            item.position.y = clean_y;
+            scope.$apply();
+        }
+
+        function item_moving_end(event, item) {
+            // console.log("item_moving_end", event.target);
+            item_moving_click_offset.x = 0;
+            item_moving_click_offset.y = 0;
+            // get element
+            var element = itemSVGelement_by_event(event);
+            // wrapp with jQlight
+            element_jql = angular.element(element);
+            // shut off events
+            element_jql.off('mousemove', item_moving_mousemove);
+            element_jql.off('mouseup', item_moving_end);
+            element_jql.on('mouseleave', item_moving_end);
+            // element_jql.off('mouseout', item_moving_end);
+        }
+
+
+        // function item_moving_init() {
+        //     scope.data.items.forEach(function(item, index, items){
+        //         var element = svg_base.getElementById(item.id);
+        //         angular.element(element).on('mousedown', item_moving_mousedown);
+        //     });
+        // }
+        //
+        // item_moving_init();
 
         /** box select **/
 
-        // var svg_base = document.getElementsByTagName("svg")[0];
-        // var box_select = document.getElementsByTagName("svg")[0].getElementById("box_select");box_select.classList.add('active');
-
-        // var svg_base = element[0].querySelector("svg");
-        var svg_base_jql = element.find("svg");
-        var svg_base = svg_base_jql[0];
-        // console.log("svg_base", svg_base);
         var box_select = svg_base.getElementById("box_select");
         // console.log("box_select", box_select);
 
@@ -336,10 +491,10 @@ function($parse, $timeout, $filter, $document) { return {
             }
             if (itemInArea) {
                 // select
-                itemSelect(item);
+                item_select(item);
             } else {
                 // deselect
-                itemDeselect(item);
+                item_deselect(item);
             }
             scope.$apply();
         }
@@ -403,19 +558,18 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("scope", scope);
 
             // create svg point with screen coordinates
-            // tipp with getScreenCTM found at
-            // http://stackoverflow.com/a/22185664/574981
-            var point_raw = svg_base.createSVGPoint();
-            point_raw.x = event.clientX;
-            point_raw.y = event.clientY;
+            var point_current = convert_xy_2_SVG_coordinate_point(
+                event.pageX,
+                event.pageY
+            );
 
             // get transform matrix
             var screen2SVG = svg_base.getScreenCTM().inverse();
 
             // transform
-            box_select_data.start.p1 = point_raw.matrixTransform(screen2SVG);
+            box_select_data.start.p1 = point_current;
             // for init set p2 to same values
-            box_select_data.start.p2 = box_select_data.start.p1;
+            box_select_data.start.p2 = point_current;
             // console.log("box_select_data", box_select_data);
 
             // set position
@@ -426,19 +580,19 @@ function($parse, $timeout, $filter, $document) { return {
             // box_select.addClass('active');
             box_select.classList.add('active');
 
-            $document.on('mousemove', mousemove);
-            $document.on('mouseup', mouseup);
+            $document.on('mousemove', box_select_mousemove);
+            $document.on('mouseup', box_select_mouseup);
         });
 
-        function mousemove(event) {
-            // create svg point with screen coordinates
-            var point_current_raw = svg_base.createSVGPoint();
-            point_current_raw.x = event.clientX;
-            point_current_raw.y = event.clientY;
-            // get transform matrix
-            var screen2SVG = svg_base.getScreenCTM().inverse();
-            // transform
-            var point_current = point_current_raw.matrixTransform(screen2SVG);
+        function box_select_mousemove(event) {
+            // api correct:
+            // event.clientX,
+            // event.clientY
+            // pageX -> normalized by jQlight
+            var point_current = convert_xy_2_SVG_coordinate_point(
+                event.pageX,
+                event.pageY
+            );
             box_select_data.current = remap_points(
                 box_select_data.start.p1,
                 point_current
@@ -446,14 +600,14 @@ function($parse, $timeout, $filter, $document) { return {
             // set size
             box_select_set_position_size(box_select_data.current);
             // update selection
-            selectCoverdItems(box_select_data.current)
+            selectCoverdItems(box_select_data.current);
         }
 
-        function mouseup() {
-            $document.off('mousemove', mousemove);
-            $document.off('mouseup', mouseup);
+        function box_select_mouseup() {
+            $document.off('mousemove', box_select_mousemove);
+            $document.off('mouseup', box_select_mouseup);
             box_select_data.active = false;
-            box_select.classList.remove('active')
+            box_select.classList.remove('active');
         }
 
 
@@ -487,7 +641,7 @@ function($parse, $timeout, $filter, $document) { return {
             }
             // returning the generated array
             return output;
-        };
+        }
 
         function numberToMultipleOf(value, base){
             var result = 0;
@@ -501,7 +655,7 @@ function($parse, $timeout, $filter, $document) { return {
 
         // update grid
         function updateRange(range_array, newLength, stepSize) {
-            newLength = numberToMultipleOf(newLength, stepSize)
+            newLength = numberToMultipleOf(newLength, stepSize);
             var newCount = (newLength / stepSize)-1;
             if (!range_array){
                 range_array = [0];

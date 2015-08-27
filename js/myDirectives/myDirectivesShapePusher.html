@@ -132,7 +132,7 @@
                     'selected': itemData.selected,
                     'active': itemData == itemActive,
                 }"
-                ng-click="toggleSelection(itemData)"
+                ng-mousedown="item_mousedown($event, itemData)"
                 ng-attr-x="{{itemData.position.x}}"
                 ng-attr-y="{{itemData.position.y}}"
                 ng-attr-width="{{itemSize.width}}"
