@@ -257,13 +257,21 @@ function($parse, $timeout, $filter, $document) { return {
             return result_p;
         }
 
+        function points_subtract(p1, p2) {
+            var result_p = svg_base.createSVGPoint();
+            result_p.x = p1.x - p2.x;
+            result_p.y = p1.y - p2.y;
+            return result_p;
+        }
+
         function points_distances(p1, p2) {
             var result = {
                 width: 0,
                 height: 0,
             };
-            result.width = Math.abs(p1.x - p2.x);
-            result.height = Math.abs(p1.y - p2.y);
+            var distances = points_subtract(p1, p2);
+            result.width = Math.abs(distances.x);
+            result.height = Math.abs(distances.y);
             return result;
         }
 
@@ -435,8 +443,21 @@ function($parse, $timeout, $filter, $document) { return {
             item_moving.p_start = point_current;
 
             // calculate item click offset
-            item_moving.click_offset.x = item.position.x - point_current.x;
-            item_moving.click_offset.y = item.position.y - point_current.y;
+            item_moving.click_offset = points_subtract(item.position, point_current);
+            // item_moving.click_offset.x = item.position.x - point_current.x;
+            // item_moving.click_offset.y = item.position.y - point_current.y;
+
+            if (scope.settings.move.selected) {
+                angular.forEach(selected, function(s_item, key) {
+                    if (s_item !== item_moving.item) {
+                        // item.position['click_offset']
+                        s_item.click_offset = points_subtract(
+                            s_item.position,
+                            point_current
+                        );
+                    }
+                });
+            }
 
             // setup events
             // wrapp with jQlight
@@ -463,7 +484,7 @@ function($parse, $timeout, $filter, $document) { return {
                 var dist = points_get_distance(point_current, item_moving.p_start);
                 if (dist > 10) {
                     item_moving.moved = true;
-                    console.log("mouse moved..");
+                    // console.log("mouse moved..");
                 }
             }
 
