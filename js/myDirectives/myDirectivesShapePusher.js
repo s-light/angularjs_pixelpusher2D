@@ -217,7 +217,7 @@ function($parse, $timeout, $filter, $document) { return {
 
 
 
-
+        /******************************************/
         /** special elements **/
 
         // var svg_base = document.getElementsByTagName("svg")[0];
@@ -228,7 +228,7 @@ function($parse, $timeout, $filter, $document) { return {
         var svg_base = svg_base_jql[0];
         // console.log("svg_base", svg_base);
 
-
+        /******************************************/
         /** helper **/
 
         function convert_point_2_SVG_coordinate_point(point) {
@@ -280,8 +280,7 @@ function($parse, $timeout, $filter, $document) { return {
             // get distance with trigonometry
             // a²+b² = c²
             var distance = Math.sqrt(
-                (distances.width * distances.width)
-                +
+                (distances.width * distances.width) +
                 (distances.height * distances.height)
             );
             return distance;
@@ -350,6 +349,7 @@ function($parse, $timeout, $filter, $document) { return {
         }
         scope.item_mousedown = item_mousedown;
 
+        /******************************************/
         /** item select **/
 
         function item_deselect(item) {
@@ -393,16 +393,26 @@ function($parse, $timeout, $filter, $document) { return {
             // console.groupEnd();
         }
 
+        /******************************************/
         /** item moving **/
 
         var item_moving = {
-            item: {},
-            moved: false,
             p_start : {},
-            click_offset: {
+            moved: false,
+            item: {},
+            offset: {
                 x: 0,
                 y: 0,
             },
+            selected: [
+                {
+                    item:{}, // reference to item
+                    offset:{
+                        x: 0,
+                        y: 0,
+                    }
+                }
+            ],
         };
 
         function itemSVGelement_by_event(event){
@@ -418,6 +428,58 @@ function($parse, $timeout, $filter, $document) { return {
             return itemSVG;
         }
 
+        function item_moving_selected_prepare(p_start) {
+            // clean list:
+            item_moving.selected.length = 0;
+            // fill list:
+            angular.forEach(scope.selected, function(s_item, key) {
+                // check so we don't add the draged item again.
+                if (s_item !== item_moving.item) {
+                    var si_new = {
+                        item: {}, // reference to item
+                        element: {},
+                        offset: {
+                            x: 0,
+                            y: 0,
+                        }
+                    };
+                    // set reference
+                    si_new.item = s_item;
+                    si_new.element = svg_base.getElementById(si_new.item.id);
+                    // calculate & set offset
+                    si_new.offset = points_subtract(
+                        s_item.position,
+                        p_start
+                    );
+                    // add to list
+                    item_moving.selected.push(si_new);
+                }
+            });
+        }
+
+        function item_moving_selected_update(p_current) {
+            angular.forEach(item_moving.selected, function(si_data, key) {
+                    // calculate new position
+                    var p_new = points_add(si_data.offset, p_current);
+
+                    // convert to integer (strip all fractions)
+                    var p_clean = point_round2integer(p_new);
+
+                    // check if snapping is enabled
+                    if (scope.settings.move.snap) {
+                        // snap
+                        p_clean = point_find_nearest_snap(p_clean);
+                    }
+
+                    // set item position
+                    si_data.item.position.x = p_clean.x;
+                    si_data.item.position.y = p_clean.y;
+                    // scope.$apply();
+                    si_data.element.x.baseVal.value = p_clean.x;
+                    si_data.element.y.baseVal.value = p_clean.y;
+            });
+        }
+
         function item_moving_mousedown(event, item) {
             // console.log("item_moving_mousedown", event.target);
             // Prevent default dragging of selected content
@@ -429,34 +491,30 @@ function($parse, $timeout, $filter, $document) { return {
             // var element = itemSVGelement_by_event(event);
             // console.log("element", element);
 
+            // get current point
+            var p_current = convert_xy_2_SVG_coordinate_point(
+                event.pageX,
+                event.pageY
+            );
+
+
             // get item
             // var item = itemById(element.id);
             // we already have the reference from the calling.
             item_moving.item = item;
+            item_moving.element = svg_base.getElementById(item_moving.item.id);
             item_moving.moved = false;
-
-            // get current point
-            var point_current = convert_xy_2_SVG_coordinate_point(
-                event.pageX,
-                event.pageY
-            );
-            item_moving.p_start = point_current;
+            // store start point (for later use)
+            item_moving.p_start = p_current;
 
             // calculate item click offset
-            item_moving.click_offset = points_subtract(item.position, point_current);
-            // item_moving.click_offset.x = item.position.x - point_current.x;
-            // item_moving.click_offset.y = item.position.y - point_current.y;
+            item_moving.offset = points_subtract(item.position, p_current);
+            // item_moving.offset.x = item.position.x - p_current.x;
+            // item_moving.offset.y = item.position.y - p_current.y;
 
             if (scope.settings.move.selected) {
-                angular.forEach(selected, function(s_item, key) {
-                    if (s_item !== item_moving.item) {
-                        // item.position['click_offset']
-                        s_item.click_offset = points_subtract(
-                            s_item.position,
-                            point_current
-                        );
-                    }
-                });
+                // do all the above for every selected item
+                item_moving_selected_prepare(p_current);
             }
 
             // setup events
@@ -474,14 +532,14 @@ function($parse, $timeout, $filter, $document) { return {
         function item_moving_mousemove(event) {
             // console.log("item_moving_mousemove", event.target);
             // get current point
-            var point_current = convert_xy_2_SVG_coordinate_point(
+            var p_current = convert_xy_2_SVG_coordinate_point(
                 event.pageX,
                 event.pageY
             );
 
             // check if mouse moved
             if (!item_moving.moved) {
-                var dist = points_get_distance(point_current, item_moving.p_start);
+                var dist = points_get_distance(p_current, item_moving.p_start);
                 if (dist > 10) {
                     item_moving.moved = true;
                     // console.log("mouse moved..");
@@ -494,19 +552,20 @@ function($parse, $timeout, $filter, $document) { return {
             // now the currentTarget is the main SVG
             // var element = event.currentTarget;
             // var element = itemSVGelement_by_event(event);
-            var element = svg_base.getElementById(item_moving.item.id);
-            // // get item
-            // var item = itemById(element.id);
+            // var element = svg_base.getElementById(item_moving.item.id);
 
+            // get item
+            // var item = itemById(element.id);
             // var item = item_moving.item;
 
             // console.log("item", item);
 
+
             // calculate new position
-            var p_raw = points_add(item_moving.click_offset, point_current);
+            var p_new = points_add(item_moving.offset, p_current);
 
             // convert to integer (strip all fractions)
-            var p_clean = point_round2integer(p_raw);
+            var p_clean = point_round2integer(p_new);
 
             // check if snapping is enabled
             if (scope.settings.move.snap) {
@@ -518,8 +577,13 @@ function($parse, $timeout, $filter, $document) { return {
             item_moving.item.position.x = p_clean.x;
             item_moving.item.position.y = p_clean.y;
             // scope.$apply();
-            element.x.baseVal.value = p_clean.x;
-            element.y.baseVal.value = p_clean.y;
+            item_moving.element.x.baseVal.value = p_clean.x;
+            item_moving.element.y.baseVal.value = p_clean.y;
+
+            if (scope.settings.move.selected) {
+                // do all the above for every selected item
+                item_moving_selected_update(p_current);
+            }
         }
 
         function item_mouseup(event) {
@@ -537,8 +601,8 @@ function($parse, $timeout, $filter, $document) { return {
         function item_moving_end(event) {
             // console.log("item_moving_end", event.target);
             item_moving.p_start = {};
-            item_moving.click_offset.x = 0;
-            item_moving.click_offset.y = 0;
+            item_moving.offset.x = 0;
+            item_moving.offset.y = 0;
             item_moving.item = {};
             // get element
             // var element = itemSVGelement_by_event(event);
@@ -563,6 +627,8 @@ function($parse, $timeout, $filter, $document) { return {
         //
         // item_moving_init();
 
+
+        /******************************************/
         /** box select **/
 
         var box_select = svg_base.getElementById("box_select");
@@ -766,8 +832,8 @@ function($parse, $timeout, $filter, $document) { return {
                 points.p2.y - points.p1.y;
         }
 
-        // based on
-        //
+        // inspired by
+        // https://docs.angularjs.org/guide/directive#creating-a-directive-that-adds-event-listeners
         svg_base_jql.on('mousedown', function(event) {
             // Prevent default dragging of selected content
             event.preventDefault();
@@ -783,7 +849,7 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("scope", scope);
 
             // create svg point with screen coordinates
-            var point_current = convert_xy_2_SVG_coordinate_point(
+            var p_current = convert_xy_2_SVG_coordinate_point(
                 event.pageX,
                 event.pageY
             );
@@ -792,9 +858,9 @@ function($parse, $timeout, $filter, $document) { return {
             var screen2SVG = svg_base.getScreenCTM().inverse();
 
             // transform
-            box_select_data.start.p1 = point_current;
+            box_select_data.start.p1 = p_current;
             // for init set p2 to same values
-            box_select_data.start.p2 = point_current;
+            box_select_data.start.p2 = p_current;
             // console.log("box_select_data", box_select_data);
 
             // set position
@@ -814,13 +880,13 @@ function($parse, $timeout, $filter, $document) { return {
             // event.clientX,
             // event.clientY
             // pageX -> normalized by jQlight
-            var point_current = convert_xy_2_SVG_coordinate_point(
+            var p_current = convert_xy_2_SVG_coordinate_point(
                 event.pageX,
                 event.pageY
             );
             box_select_data.current = remap_points(
                 box_select_data.start.p1,
-                point_current
+                p_current
             );
             // set size
             box_select_set_position_size(box_select_data.current);
@@ -836,7 +902,7 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
 
-
+        /******************************************/
         /** handle zoom / pan **/
 
         // currentTranslate
@@ -844,7 +910,7 @@ function($parse, $timeout, $filter, $document) { return {
 
 
 
-
+        /******************************************/
         /** handle grid **/
 
         // range function by Mathieu Rodic
@@ -941,20 +1007,21 @@ function($parse, $timeout, $filter, $document) { return {
             );
         }
 
-        // x axis
+        // world.width (x axis)
         scope.$watch(
             function() {
                 return scope.settings.world.width;
             },
             updateGridXArray
         );
-        // y axis
+        // world.height (y axis)
         scope.$watch(
             function(){
                 return scope.settings.world.height;
             },
             updateGridYArray
         );
+        // watch grid.stepSize
         scope.$watch(
             function() {
                 return scope.settings.grid.stepSize;
@@ -964,6 +1031,7 @@ function($parse, $timeout, $filter, $document) { return {
                 updateGridYArray();
             }
         );
+        // watch gridSnap.stepSize
         scope.$watch(
             function() {
                 return scope.settings.gridSnap.stepSize;
@@ -974,6 +1042,8 @@ function($parse, $timeout, $filter, $document) { return {
             }
         );
 
+
+        /******************************************/
         /** update selected list **/
 
         // watch example/info http://stackoverflow.com/a/15113029/574981
