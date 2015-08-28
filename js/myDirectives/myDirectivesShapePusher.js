@@ -337,6 +337,23 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
 
+        function get_touch_by_identifier(event, identifier) {
+            var touches = event.changedTouches;
+            var touch = null;
+            // var i = 0;
+            // while ( (i < touches.length) && (!touch) ) {
+            //
+            //     i++;
+            // }
+            for (var i = 0; (i < touches.length) && (!touch); i++) {
+                if (touches[i].identifier == identifier) {
+                    touch = touches[i];
+                }
+            }
+            return touch;
+        }
+
+
         /** item mousedown handling **/
 
         function item_mousedown(event, item) {
@@ -650,6 +667,7 @@ function($parse, $timeout, $filter, $document) { return {
                 p1: svg_base.createSVGPoint(),
                 p2: svg_base.createSVGPoint(),
             },
+            touch_id: 0,
         };
 
         // getIntersectionList
@@ -840,12 +858,17 @@ function($parse, $timeout, $filter, $document) { return {
 
         // inspired by
         // https://docs.angularjs.org/guide/directive#creating-a-directive-that-adds-event-listeners
-        svg_base_jql.on('mousedown', function(event) {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+        svg_base_jql.on('mousedown', box_select_start);
+        svg_base_jql.on('touchstart', box_select_start);
+
+        function box_select_start(event) {
             // Prevent default dragging of selected content
             event.preventDefault();
 
             // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
             // console.log("event", event);
+            // console.log("event.type", event.type);
             // console.log("event.pageX", event.pageX);
             // console.log("event.screenX", event.screenX);
             // console.log("event.clientX", event.clientX);
@@ -854,10 +877,32 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("event.movementX", event.movementX);
             // console.log("scope", scope);
 
+            // // only start if no active touch
+            // if ()
+
+            var x_raw = 0;
+            var y_raw = 0;
+            if (event.type.startsWith('touch')) {
+                // console.log("tochstart!!");
+                var touches = event.changedTouches;
+                // console.log("touches[0]", touches[0]);
+                // use first touch in list
+                var touch_id = touches[0].identifier;
+                // save identifier for later use
+                box_select_data.touch_id = touch_id;
+                // get touch by tid
+                var touch = get_touch_by_identifier(event, touch_id);
+                x_raw = touch.clientX;
+                y_raw = touch.clientY;
+            } else {
+                x_raw = event.pageX;
+                y_raw = event.pageY;
+            }
+
             // create svg point with screen coordinates
             var p_current = convert_xy_2_SVG_coordinate_point(
-                event.pageX,
-                event.pageY
+                x_raw,
+                y_raw
             );
 
             // get transform matrix
@@ -877,19 +922,52 @@ function($parse, $timeout, $filter, $document) { return {
             // box_select.addClass('active');
             box_select.classList.add('active');
 
-            $document.on('mousemove', box_select_mousemove);
-            $document.on('mouseup', box_select_mouseup);
-        });
+            // setup event listeners
+            if (event.type.startsWith('touch')) {
+                // move
+                svg_base_jql.on('touchmove', box_select_move);
+                // end
+                svg_base_jql.on('touchend', box_select_end);
+                svg_base_jql.on('touchleave', box_select_end);
+                svg_base_jql.on('touchcancle', box_select_end);
+            } else {
+                // move
+                svg_base_jql.on('mousemove', box_select_move);
+                // end
+                svg_base_jql.on('mouseup', box_select_end);
+                svg_base_jql.on('mouseleave', box_select_end);
+            }
 
-        function box_select_mousemove(event) {
-            // api correct:
-            // event.clientX,
-            // event.clientY
-            // pageX -> normalized by jQlight
+        }
+
+        function box_select_move(event) {
+            // console.log("event", event);
+
+            var x_raw = 0;
+            var y_raw = 0;
+            if (event.type.startsWith('touch')) {
+                // get touch by tid
+                var touch = get_touch_by_identifier(
+                    event,
+                    box_select_data.touch_id
+                );
+                x_raw = touch.clientX;
+                y_raw = touch.clientY;
+            } else {
+                // api correct:
+                // event.clientX,
+                // event.clientY
+                // pageX -> normalized by jQlight
+                x_raw = event.pageX;
+                y_raw = event.pageY;
+            }
+
+            // create svg point with screen coordinates
             var p_current = convert_xy_2_SVG_coordinate_point(
-                event.pageX,
-                event.pageY
+                x_raw,
+                y_raw
             );
+
             box_select_data.current = remap_points(
                 box_select_data.start.p1,
                 p_current
@@ -900,9 +978,21 @@ function($parse, $timeout, $filter, $document) { return {
             selectCoverdItems(box_select_data.current);
         }
 
-        function box_select_mouseup() {
-            $document.off('mousemove', box_select_mousemove);
-            $document.off('mouseup', box_select_mouseup);
+        function box_select_end(event) {
+            if (event.type.startsWith('touch')) {
+                // move
+                svg_base_jql.off('touchmove', box_select_move);
+                // end
+                svg_base_jql.off('touchend', box_select_end);
+                svg_base_jql.off('touchleave', box_select_end);
+                svg_base_jql.off('touchcancle', box_select_end);
+            } else {
+                // move
+                svg_base_jql.off('mousemove', box_select_move);
+                // end
+                svg_base_jql.off('mouseup', box_select_end);
+                svg_base_jql.off('mouseleave', box_select_end);
+            }
             box_select_data.active = false;
             box_select.classList.remove('active');
         }
