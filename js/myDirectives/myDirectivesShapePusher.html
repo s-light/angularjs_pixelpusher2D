@@ -112,6 +112,8 @@
                 Hallo Welt :-) '{{itemSize.height}}'
             </text> -->
 
+            <!--ng-mousedown="item_mousedown($event, itemData)"-->
+            <!--ng-touchstart="testCall($event, itemData)"-->
             <svg
                 class="item"
                 ng-repeat="
@@ -122,7 +124,8 @@
                     'selected': itemData.selected,
                     'active': itemData == itemActive,
                 }"
-                ng-mousedown="item_mousedown($event, itemData)"
+                ng-touchstart="item_moving_start($event, itemData)"
+                ng-mousedown="item_moving_start($event, itemData)"
                 ng-attr-x="{{itemData.position.x}}"
                 ng-attr-y="{{itemData.position.y}}"
                 ng-attr-width="{{settings.item.width}}"

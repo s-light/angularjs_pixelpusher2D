@@ -354,17 +354,19 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
 
-        /** item mousedown handling **/
+        /******************************************/
+        /** item mousedown / touchstart handling **/
 
-        function item_mousedown(event, item) {
-            // console.log("item_mousedown");
-            // Prevent default dragging of selected content
-            event.preventDefault();
-            // now handled in mouseup
-            // item_selection_toggle(item);
-            item_moving_mousedown(event, item);
-        }
-        scope.item_mousedown = item_mousedown;
+        // var svg_base = document.getElementsByTagName("svg")[0];
+        // var item_elements = svg_base.getElementsByClassName('item');
+
+        scope.testCall = function(event, item) {
+            console.group("testCall");
+            console.log("event", event);
+            console.log("item", item);
+            console.groupEnd();
+        };
+
 
         /******************************************/
         /** item select **/
@@ -413,24 +415,28 @@ function($parse, $timeout, $filter, $document) { return {
         /******************************************/
         /** item moving **/
 
-        var item_moving = {
-            p_start : {},
-            moved: false,
-            item: {},
-            offset: {
-                x: 0,
-                y: 0,
-            },
-            selected: [
-                {
-                    item:{}, // reference to item
-                    offset:{
-                        x: 0,
-                        y: 0,
-                    }
-                }
-            ],
-        };
+        // var item_moving_clean = {
+        //     touch_id: null,
+        //     p_start : {},
+        //     moved: false,
+        //     item: {},
+        //     offset: {
+        //         x: 0,
+        //         y: 0,
+        //     },
+        //     selected: [
+        //         {
+        //             item:{}, // reference to item
+        //             offset:{
+        //                 x: 0,
+        //                 y: 0,
+        //             }
+        //         }
+        //     ],
+        // };
+
+        var item_moving_data = {};
+
 
         function itemSVGelement_by_event(event){
             // get target element
@@ -447,11 +453,11 @@ function($parse, $timeout, $filter, $document) { return {
 
         function item_moving_selected_prepare(p_start) {
             // clean list:
-            item_moving.selected.length = 0;
+            item_moving_data.selected.length = 0;
             // fill list:
             angular.forEach(scope.selected, function(s_item, key) {
                 // check so we don't add the draged item again.
-                if (s_item !== item_moving.item) {
+                if (s_item !== item_moving_data.item) {
                     var si_new = {
                         item: {}, // reference to item
                         element: {},
@@ -469,13 +475,13 @@ function($parse, $timeout, $filter, $document) { return {
                         p_start
                     );
                     // add to list
-                    item_moving.selected.push(si_new);
+                    item_moving_data.selected.push(si_new);
                 }
             });
         }
 
         function item_moving_selected_update(p_current) {
-            angular.forEach(item_moving.selected, function(si_data, key) {
+            angular.forEach(item_moving_data.selected, function(si_data, key) {
                     // calculate new position
                     var p_new = points_add(si_data.offset, p_current);
 
@@ -497,154 +503,314 @@ function($parse, $timeout, $filter, $document) { return {
             });
         }
 
-        function item_moving_mousedown(event, item) {
-            // console.log("item_moving_mousedown", event.target);
+
+
+
+        function item_moving_add(p_start, item, identifier, master) {
+            var add_successfull = false;
+            // check so we don't add the draged item again.
+            if (!item_moving_data.hasOwnProperty(item.id)) {
+                var i_new = {
+                    item: {}, // reference to item
+                    identifier: {},
+                    element: {},
+                    offset: {
+                        x: 0,
+                        y: 0,
+                    },
+                    p_start: {},
+                    moved: false,
+                    master: null,
+                };
+                // set reference
+                i_new.item = item;
+                i_new.identifier = identifier;
+                i_new.element = svg_base.getElementById(i_new.item.id);
+                i_new.master = master;
+
+                // save p_start for later move distance calculation
+                i_new.p_start = p_start;
+
+                // calculate & set offset
+                i_new.offset = points_subtract(
+                    item.position,
+                    p_start
+                );
+
+                // add to list
+                item_moving_data[item.id] = i_new;
+                add_successfull = true;
+            } else {
+                console.log("item '" + item.id + "' already handled.");
+            }
+            return add_successfull;
+        }
+
+        function item_moving_update(p_current, identifier) {
+            angular.forEach(item_moving_data, function(i_move, id) {
+                if (i_move.identifier == identifier) {
+
+                    // check if mouse moved
+                    if (!i_move.moved) {
+                        var dist = points_get_distance(p_current, i_move.p_start);
+                        if (dist > 10) {
+                            i_move.moved = true;
+                        }
+                    }
+
+                    // check if snapping is enabled
+                    // && i_move has a master
+                    if (
+                        (scope.settings.move.snap) &&
+                        (i_move.master !== null)
+                    ) {
+                        // first calculate offset for master
+                        // calculate new position
+                        var p_master = points_add(
+                            item_moving_data[i_move.master].offset,
+                            p_current
+                        );
+                        // convert to integer (strip all fractions)
+                        var p_master = point_round2integer(p_master);
+
+                        // remove offset for snapping
+                        // so that all selected are moved relative with snapping
+                        p_current = points_subtract(
+                            p_master,
+                            item_moving_data[i_move.master].offset
+                        );
+                    }
+
+                    // calculate new position
+                    var p_new = points_add(i_move.offset, p_current);
+
+                    // convert to integer (strip all fractions)
+                    var p_clean = point_round2integer(p_new);
+
+                    // check if snapping is enabled
+                    if (
+                        (scope.settings.move.snap) &&
+                        (i_move.master === null)
+                    ) {
+                        // snap
+                        p_clean = point_find_nearest_snap(p_clean);
+                    }
+
+                    // set item position
+                    i_move.item.position.x = p_clean.x;
+                    i_move.item.position.y = p_clean.y;
+                    // scope.$apply();
+                    i_move.element.x.baseVal.value = p_clean.x;
+                    i_move.element.y.baseVal.value = p_clean.y;
+                }
+            });
+        }
+
+        function item_moving_remove(identifier, event_type) {
+            // find i_move
+            var removed_master_id = undefined;
+            angular.forEach(item_moving_data, function(i_move, id) {
+                // console.log("  i_move", i_move);
+                // console.log("  identifier", identifier);
+
+                if (i_move.identifier == identifier) {
+                    if (i_move.master === null) {
+                        // console.log("i_move found.");
+
+                        // check for toggle
+                        if (
+                            (event_type == 'mouseup') ||
+                            (event_type == 'touchend')
+                        ) {
+                            // check if mousemoved
+                            if (!i_move.moved) {
+                                // console.log("!i_move.moved");
+                                // console.log("event", event);
+                                // console.log("event_type", event_type);
+                                // console.log("i_move", i_move);
+                                // console.log("item_moving_data.item", item_moving_data.item);
+                                // console.log("toggle selection:");
+                                item_selection_toggle(i_move.item);
+                            }
+                        }
+
+                        // remember id
+                        removed_master_id = i_move.item.id;
+                        // delete self
+                        delete item_moving_data[id];
+                    }
+                }
+            });
+            // check for slaves
+            angular.forEach(item_moving_data, function(i_move, id) {
+                if (i_move.identifier == identifier) {
+                    if (i_move.master == removed_master_id) {
+                        // delete self
+                        delete item_moving_data[id];
+                    }
+                }
+            });
+        }
+
+
+
+        function item_moving_start(event, item) {
+            // console.log("item_moving_start", event);
             // Prevent default dragging of selected content
             event.preventDefault();
             // prevent box selection to trigger
             event.stopPropagation();
 
-            // get element
-            // var element = itemSVGelement_by_event(event);
-            // console.log("element", element);
+            var add_successfull = false;
+            var touch_identifier = null;
+            var x_raw = 0;
+            var y_raw = 0;
+            if (event.type.startsWith('touch')) {
+                // console.log("tochstart!!");
+                var touches = event.changedTouches;
+                // console.log("touches[0]", touches[0]);
+                // use first touch in list
+                // only on touch per item is allowed.
+                touch_identifier = touches[0].identifier;
+                x_raw = touches[0].clientX;
+                y_raw = touches[0].clientY;
+            } else {
+                // normal mouse event
+                x_raw = event.pageX;
+                y_raw = event.pageY;
+                touch_identifier = 0
+            }
 
-            // get current point
-            var p_current = convert_xy_2_SVG_coordinate_point(
-                event.pageX,
-                event.pageY
+            // create svg point with screen coordinates
+            var p_start = convert_xy_2_SVG_coordinate_point(
+                x_raw,
+                y_raw
             );
 
-
-            // get item
-            // var item = itemById(element.id);
-            // we already have the reference from the calling.
-            item_moving.item = item;
-            item_moving.element = svg_base.getElementById(item_moving.item.id);
-            item_moving.moved = false;
-            // store start point (for later use)
-            item_moving.p_start = p_current;
-
-            // calculate item click offset
-            item_moving.offset = points_subtract(item.position, p_current);
-            // item_moving.offset.x = item.position.x - p_current.x;
-            // item_moving.offset.y = item.position.y - p_current.y;
+            add_successfull = item_moving_add(
+                p_start,
+                item,
+                touch_identifier,
+                null // master
+            );
 
             if (scope.settings.move.selected) {
                 // do all the above for every selected item
-                item_moving_selected_prepare(p_current);
+                // item_moving_selected_prepare(p_current);
+                angular.forEach(scope.selected, function(s_item, key) {
+                    add_successfull = item_moving_add(
+                        p_start,
+                        s_item,
+                        touch_identifier,
+                        item.id // set master
+                    );
+                });
             }
 
-            // setup events
-            // wrapp with jQlight
-            // element_jql = angular.element(element);
-            element_jql = angular.element(svg_base);
-            // eventData not supported by jQlight
-            // element_jql.on('mousemove', {item:item}, item_moving_mousemove);
-            element_jql.on('mousemove', item_moving_mousemove);
-            element_jql.on('mouseup', item_mouseup);
-            element_jql.on('mouseleave', item_moving_end);
-            // element_jql.on('mouseout', item_moving_end);
-        }
+            // console.log("item_moving_data", item_moving_data);
 
-        function item_moving_mousemove(event) {
-            // console.log("item_moving_mousemove", event.target);
-            // get current point
-            var p_current = convert_xy_2_SVG_coordinate_point(
-                event.pageX,
-                event.pageY
-            );
-
-            // check if mouse moved
-            if (!item_moving.moved) {
-                var dist = points_get_distance(p_current, item_moving.p_start);
-                if (dist > 10) {
-                    item_moving.moved = true;
-                    // console.log("mouse moved..");
+            // if new items then add events
+            if (add_successfull) {
+                console.log("add event listener for", event.type);
+                // setup event listeners
+                if (event.type.startsWith('touch')) {
+                    // move
+                    svg_base_jql.on('touchmove', item_moving_move);
+                    // end
+                    svg_base_jql.on('touchend', item_moving_end);
+                    svg_base_jql.on('touchleave', item_moving_end);
+                    svg_base_jql.on('touchcancle', item_moving_end);
+                } else {
+                    // move
+                    svg_base_jql.on('mousemove', item_moving_move);
+                    // end
+                    svg_base_jql.on('mouseup', item_moving_end);
+                    svg_base_jql.on('mouseleave', item_moving_end);
+                    // element_jql.on('mouseout', item_moving_end);
                 }
             }
 
-            // eventData not supported by jQlight
-            // var item = event.data.item;
+        }
+        scope.item_moving_start = item_moving_start;
 
-            // now the currentTarget is the main SVG
-            // var element = event.currentTarget;
-            // var element = itemSVGelement_by_event(event);
-            // var element = svg_base.getElementById(item_moving.item.id);
+        function item_moving_move(event) {
+            // console.log("item_moving_move", event.target);
 
-            // get item
-            // var item = itemById(element.id);
-            // var item = item_moving.item;
+            // check for touch or mouse event
+            var touches = [];
+            if (event.type.startsWith('touch')) {
+                touches = event.changedTouches;
+            } else {
+                // normal mouse event
+                // add fake touch:
+                touches.push(event);
+                touches[0].identifier = 0;
+            }
 
             // console.log("item", item);
+            for (var t_index = 0; t_index < touches.length; t_index++) {
+                var touch = touches[t_index];
 
+                var p_current = convert_xy_2_SVG_coordinate_point(
+                    touch.clientX,
+                    touch.clientY
+                );
 
-            // calculate new position
-            var p_new = points_add(item_moving.offset, p_current);
-
-            // convert to integer (strip all fractions)
-            var p_clean = point_round2integer(p_new);
-
-            // check if snapping is enabled
-            if (scope.settings.move.snap) {
-                // snap
-                p_clean = point_find_nearest_snap(p_clean);
+                item_moving_update(p_current, touch.identifier);
             }
 
-            // set item position
-            item_moving.item.position.x = p_clean.x;
-            item_moving.item.position.y = p_clean.y;
-            // scope.$apply();
-            item_moving.element.x.baseVal.value = p_clean.x;
-            item_moving.element.y.baseVal.value = p_clean.y;
-
-            if (scope.settings.move.selected) {
-                // check if snapping is enabled
-                if (scope.settings.move.snap) {
-                    // remove offset for snapping
-                    // so that all selected are moved relative with snapping
-                    p_current = points_subtract(p_clean, item_moving.offset);
-                }
-                // do all the above for every selected item
-                item_moving_selected_update(p_current);
-            }
-        }
-
-        function item_mouseup(event) {
-            // console.log("item_mouseup");
-            // check if mousemoved
-            if (!item_moving.moved) {
-                // console.log("!item_moving.moved");
-                // console.log("item_moving.item", item_moving.item);
-                item_selection_toggle(item_moving.item);
-            }
-            item_moving_end(event);
-            scope.$apply();
         }
 
         function item_moving_end(event) {
-            // console.log("item_moving_end", event.target);
-            item_moving.p_start = {};
-            item_moving.offset.x = 0;
-            item_moving.offset.y = 0;
-            item_moving.item = {};
-            // get element
-            // var element = itemSVGelement_by_event(event);
-            var element = event.currentTarget;
-            // wrapp with jQlight
-            element_jql = angular.element(element);
-            // shut off events
-            element_jql.off('mousemove', item_moving_mousemove);
-            element_jql.off('mouseup', item_mouseup);
-            element_jql.on('mouseleave', item_moving_end);
-            // element_jql.off('mouseout', item_moving_end);
+            // console.log("item_moving_end");
 
+            // check for touch or mouse event
+            var touches = [];
+            if (event.type.startsWith('touch')) {
+                touches = event.changedTouches;
+            } else {
+                // normal mouse event
+                // add fake touch:
+                touches.push(event);
+                touches[0].identifier = 0;
+            }
+
+            console.log("touches", touches);
+            for (var t_index = 0; t_index < touches.length; t_index++) {
+                var touch = touches[t_index];
+
+                item_moving_remove(touch.identifier, event.type);
+            }
+
+            // console.log("item_moving_data", item_moving_data);
+
+            // only unbind event handler when no more targets in process
+            if (Object.keys(item_moving_data).length == 0) {
+                if (event.type.startsWith('touch')) {
+                    // move
+                    svg_base_jql.off('touchmove', item_moving_move);
+                    // end
+                    svg_base_jql.off('touchend', item_moving_end);
+                    svg_base_jql.off('touchleave', item_moving_end);
+                    svg_base_jql.off('touchcancle', item_moving_end);
+                } else {
+                    // move
+                    svg_base_jql.off('mousemove', item_moving_move);
+                    // end
+                    svg_base_jql.off('mouseup', item_moving_end);
+                    svg_base_jql.off('mouseleave', item_moving_end);
+                }
+            }
+
+            // make all changes visible
+            scope.$apply();
         }
 
 
         // function item_moving_init() {
         //     scope.items.forEach(function(item, index, items){
         //         var element = svg_base.getElementById(item.id);
-        //         angular.element(element).on('mousedown', item_moving_mousedown);
+        //         angular.element(element).on('mousedown', item_moving_start);
         //     });
         // }
         //
@@ -905,9 +1071,6 @@ function($parse, $timeout, $filter, $document) { return {
                 y_raw
             );
 
-            // get transform matrix
-            var screen2SVG = svg_base.getScreenCTM().inverse();
-
             // transform
             box_select_data.start.p1 = p_current;
             // for init set p2 to same values
@@ -1157,4 +1320,34 @@ function($parse, $timeout, $filter, $document) { return {
         );
 
     }
-};}]);
+};}
+]);
+
+/*
+ngTouchstart
+not official part of angularjs 1.4.4 - so manualy added here:
+code copied from
+https://github.com/angular/angular.js/blob/g3_v1_4/src/ng/directive/ngEventDirs.js
+http://stackoverflow.com/a/32238039/574981
+*/
+myDirectivesShapePusher.directive('ngTouchstart', [
+    '$parse',
+function($parse) { return {
+    restrict: 'A',
+    compile: function($element, attr) {
+        var fn = $parse(
+            attr['ngTouchstart'],
+            /* interceptorFn */ null,
+            /* expensiveChecks */ true
+        );
+        return function ngEventHandler(scope, element) {
+            element.on('touchstart', function(event) {
+                var callback = function() {
+                    fn(scope, {$event:event});
+                };
+                scope.$apply(callback);
+            });
+          };
+    }
+};}
+]);
