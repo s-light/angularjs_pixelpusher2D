@@ -466,10 +466,10 @@ function($parse, $timeout, $filter, $document) { return {
                     var p_clean = point_round2integer(p_new);
 
                     // check if snapping is enabled
-                    if (scope.settings.move.snap) {
-                        // snap
-                        p_clean = point_find_nearest_snap(p_clean);
-                    }
+                    // if (scope.settings.move.snap) {
+                    //     // snap
+                    //     p_clean = point_find_nearest_snap(p_clean);
+                    // }
 
                     // set item position
                     si_data.item.position.x = p_clean.x;
@@ -581,6 +581,12 @@ function($parse, $timeout, $filter, $document) { return {
             item_moving.element.y.baseVal.value = p_clean.y;
 
             if (scope.settings.move.selected) {
+                // check if snapping is enabled
+                if (scope.settings.move.snap) {
+                    // remove offset for snapping
+                    // so that all selected are moved relative with snapping
+                    p_current = points_subtract(p_clean, item_moving.offset);
+                }
                 // do all the above for every selected item
                 item_moving_selected_update(p_current);
             }
