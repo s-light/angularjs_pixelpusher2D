@@ -150,6 +150,11 @@ mainControllers.controller('MainController',[
                     // in mm
                     width: 10000,
                     height: 5000,
+                    pan: {
+                        x: 0,
+                        y: 0,
+                    },
+                    zoom: 1,
                 },
                 item: {
                     width: 500,
@@ -165,9 +170,14 @@ mainControllers.controller('MainController',[
                     stepSize: 250,
                 },
                 select: {
+                    active: true,
+                },
+                box_select: {
+                    active: true,
                     forceItemEnclosure: false,
                 },
                 move: {
+                    active: true,
                     snap: false,
                     selected: false,
                 },
