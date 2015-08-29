@@ -367,6 +367,40 @@ function($parse, $timeout, $filter, $document) { return {
             console.groupEnd();
         };
 
+        function mouse_touch_events_on(event, element, fn_move, fn_end) {
+            if (event.type.startsWith('touch')) {
+                // move
+                svg_base_jql.on('touchmove', fn_move);
+                // end
+                svg_base_jql.on('touchend', fn_end);
+                svg_base_jql.on('touchleave', fn_end);
+                svg_base_jql.on('touchcancle', fn_end);
+            } else {
+                // move
+                svg_base_jql.on('mousemove', fn_move);
+                // end
+                svg_base_jql.on('mouseup', fn_end);
+                svg_base_jql.on('mouseleave', fn_end);
+            }
+        }
+
+        function mouse_touch_events_off(event, element, fn_move, fn_end) {
+            if (event.type.startsWith('touch')) {
+                // move
+                svg_base_jql.off('touchmove', fn_move);
+                // end
+                svg_base_jql.off('touchend', fn_end);
+                svg_base_jql.off('touchleave', fn_end);
+                svg_base_jql.off('touchcancle', fn_end);
+            } else {
+                // move
+                svg_base_jql.off('mousemove', fn_move);
+                // end
+                svg_base_jql.off('mouseup', fn_end);
+                svg_base_jql.off('mouseleave', fn_end);
+            }
+        }
+
 
         /******************************************/
         /** item select **/
@@ -506,8 +540,10 @@ function($parse, $timeout, $filter, $document) { return {
 
 
 
+
         function item_moving_add(p_start, item, identifier, master) {
             var add_successfull = false;
+            console.log("item_moving_data", item_moving_data);
             // check so we don't add the draged item again.
             if (!item_moving_data.hasOwnProperty(item.id)) {
                 var i_new = {
@@ -543,6 +579,7 @@ function($parse, $timeout, $filter, $document) { return {
             } else {
                 console.log("item '" + item.id + "' already handled.");
             }
+            console.log("item_moving_data", item_moving_data);
             return add_successfull;
         }
 
@@ -571,7 +608,7 @@ function($parse, $timeout, $filter, $document) { return {
                             p_current
                         );
                         // convert to integer (strip all fractions)
-                        var p_master = point_round2integer(p_master);
+                        p_master = point_round2integer(p_master);
 
                         // remove offset for snapping
                         // so that all selected are moved relative with snapping
@@ -606,9 +643,13 @@ function($parse, $timeout, $filter, $document) { return {
             });
         }
 
+        function item_moving_remove_delayed() {
+
+        }
+
         function item_moving_remove(identifier, event_type) {
             // find i_move
-            var removed_master_id = undefined;
+            var removed_master_id = null;
             angular.forEach(item_moving_data, function(i_move, id) {
                 // console.log("  i_move", i_move);
                 // console.log("  identifier", identifier);
@@ -663,8 +704,10 @@ function($parse, $timeout, $filter, $document) { return {
 
             var add_successfull = false;
             var touch_identifier = null;
+
             var x_raw = 0;
             var y_raw = 0;
+
             if (event.type.startsWith('touch')) {
                 // console.log("tochstart!!");
                 var touches = event.changedTouches;
@@ -678,7 +721,7 @@ function($parse, $timeout, $filter, $document) { return {
                 // normal mouse event
                 x_raw = event.pageX;
                 y_raw = event.pageY;
-                touch_identifier = 0
+                touch_identifier = 0;
             }
 
             // create svg point with screen coordinates
@@ -693,12 +736,14 @@ function($parse, $timeout, $filter, $document) { return {
                 touch_identifier,
                 null // master
             );
+            // console.log("add_successfull", add_successfull);
 
             if (scope.settings.move.selected) {
+                var add_successfull_selected = false;
                 // do all the above for every selected item
                 // item_moving_selected_prepare(p_current);
                 angular.forEach(scope.selected, function(s_item, key) {
-                    add_successfull = item_moving_add(
+                    add_successfull_selected |= item_moving_add(
                         p_start,
                         s_item,
                         touch_identifier,
@@ -706,6 +751,7 @@ function($parse, $timeout, $filter, $document) { return {
                     );
                 });
             }
+            // console.log("add_successfull", add_successfull);
 
             // console.log("item_moving_data", item_moving_data);
 
@@ -713,21 +759,12 @@ function($parse, $timeout, $filter, $document) { return {
             if (add_successfull) {
                 console.log("add event listener for", event.type);
                 // setup event listeners
-                if (event.type.startsWith('touch')) {
-                    // move
-                    svg_base_jql.on('touchmove', item_moving_move);
-                    // end
-                    svg_base_jql.on('touchend', item_moving_end);
-                    svg_base_jql.on('touchleave', item_moving_end);
-                    svg_base_jql.on('touchcancle', item_moving_end);
-                } else {
-                    // move
-                    svg_base_jql.on('mousemove', item_moving_move);
-                    // end
-                    svg_base_jql.on('mouseup', item_moving_end);
-                    svg_base_jql.on('mouseleave', item_moving_end);
-                    // element_jql.on('mouseout', item_moving_end);
-                }
+                mouse_touch_events_on(
+                    event,
+                    svg_base_jql,
+                    item_moving_move,
+                    item_moving_end
+                );
             }
 
         }
@@ -762,7 +799,7 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function item_moving_end(event) {
-            // console.log("item_moving_end");
+            console.log("item_moving_end");
 
             // check for touch or mouse event
             var touches = [];
@@ -785,21 +822,15 @@ function($parse, $timeout, $filter, $document) { return {
             // console.log("item_moving_data", item_moving_data);
 
             // only unbind event handler when no more targets in process
-            if (Object.keys(item_moving_data).length == 0) {
-                if (event.type.startsWith('touch')) {
-                    // move
-                    svg_base_jql.off('touchmove', item_moving_move);
-                    // end
-                    svg_base_jql.off('touchend', item_moving_end);
-                    svg_base_jql.off('touchleave', item_moving_end);
-                    svg_base_jql.off('touchcancle', item_moving_end);
-                } else {
-                    // move
-                    svg_base_jql.off('mousemove', item_moving_move);
-                    // end
-                    svg_base_jql.off('mouseup', item_moving_end);
-                    svg_base_jql.off('mouseleave', item_moving_end);
-                }
+            // now handled in delayed element delete..
+            // only unbind event handler when no more targets in process
+            if (Object.keys(item_moving_data).length === 0) {
+                mouse_touch_events_off(
+                    event,
+                    svg_base_jql,
+                    item_moving_move,
+                    item_moving_end
+                );
             }
 
             // make all changes visible
@@ -1336,7 +1367,8 @@ function($parse) { return {
     restrict: 'A',
     compile: function($element, attr) {
         var fn = $parse(
-            attr['ngTouchstart'],
+            // attr['ngTouchstart'],
+            attr.ngTouchstart,
             /* interceptorFn */ null,
             /* expensiveChecks */ true
         );
