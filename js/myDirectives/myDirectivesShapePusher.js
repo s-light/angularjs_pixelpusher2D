@@ -148,10 +148,14 @@ function(
                 width: 10000,
                 height: 5000,
                 pan: {
+                    enabled: false,
                     x: 0,
                     y: 0,
                 },
-                zoom: 1,
+                zoom: {
+                    enabled: false,
+                    factor: 1,
+                },
             },
             item: {
                 width: 500,
@@ -1205,6 +1209,98 @@ function(
         // currentTranslate
         // var el = document.getElementsByTagName("svg")[0];
 
+        var pan_data = {
+            identifier: null,
+            p_start: {},
+            p_last: {},
+        };
+
+        svg_base_jql.on('mousedown', pan_start);
+        svg_base_jql.on('touchstart', pan_start);
+
+        function pan_start(event) {
+
+            // check if box_select is enabled
+            if (scope.settings.world.pan.enabled) {
+
+                // Prevent default dragging of selected content
+                event.preventDefault();
+                // prevent other things to trigger
+                // event.stopPropagation();
+
+                // console.log("scope", scope);
+
+                var touches = get_vtouches(event);
+                // use first touch in list
+                // only on touch per item is allowed.
+                var touch = touches[0];
+
+                // save identifier for later use
+                pan_data.identifier = touch.identifier;
+
+                // create svg point with screen coordinates
+                var p_start = convert_xy_2_SVG_coordinate_point(
+                    touch.clientX,
+                    touch.clientY
+                );
+
+                pan_data.p_start = p_start;
+                pan_data.p_last = p_start;
+
+                // setup event listeners
+                mouse_touch_events_on(
+                    event,
+                    svg_base_jql,
+                    pan_move,
+                    pan_end
+                );
+
+            } // end move.enabled
+
+        }
+
+        function pan_move(event) {
+            // console.log("event", event);
+
+            var touches = get_vtouches(event);
+            var touch = get_touch_by_identifier(
+                touches,
+                pan_data.identifier
+            );
+
+            // create svg point with screen coordinates
+            var p_current = convert_xy_2_SVG_coordinate_point(
+                touch.clientX,
+                touch.clientY
+            );
+
+            var p_offset = points_subtract(
+                pan_data.p_last,
+                p_current
+            );
+
+            var p_new = points_add(
+                scope.settings.world.pan,
+                p_offset
+            );
+
+            // set values separate so the object ref is not touched..
+            scope.settings.world.pan.x = p_new.x;
+            scope.settings.world.pan.y = p_new.y;
+
+            // update view
+            scope.$apply();
+
+        }
+
+        function pan_end(event) {
+            mouse_touch_events_off(
+                event,
+                svg_base_jql,
+                pan_move,
+                pan_end
+            );
+        }
 
 
         /******************************************/

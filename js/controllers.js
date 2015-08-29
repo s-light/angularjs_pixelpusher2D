@@ -151,10 +151,14 @@ mainControllers.controller('MainController',[
                     width: 10000,
                     height: 5000,
                     pan: {
+                        enabled: false,
                         x: 0,
                         y: 0,
                     },
-                    zoom: 1,
+                    zoom: {
+                        enabled: false,
+                        factor: 1,
+                    },
                 },
                 item: {
                     width: 500,
