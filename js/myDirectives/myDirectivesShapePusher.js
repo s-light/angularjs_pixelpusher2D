@@ -142,6 +142,11 @@ function($parse, $timeout, $filter, $document) { return {
                 // in mm
                 width: 10000,
                 height: 5000,
+                pan: {
+                    x: 0,
+                    y: 0,
+                },
+                zoom: 1,
             },
             item: {
                 width: 500,
