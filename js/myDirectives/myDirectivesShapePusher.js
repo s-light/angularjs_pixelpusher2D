@@ -643,11 +643,24 @@ function($parse, $timeout, $filter, $document) { return {
             });
         }
 
-        function item_moving_remove_delayed() {
+        function item_moving_remove_imove_delete(event, delete_id) {
+            // delete self
+            delete item_moving_data[delete_id];
 
+            // only unbind event handler when no more targets in process
+            if (Object.keys(item_moving_data).length === 0) {
+                mouse_touch_events_off(
+                    event,
+                    svg_base_jql,
+                    item_moving_move,
+                    item_moving_end
+                );
+            }
+
+            scope.$apply();
         }
 
-        function item_moving_remove(identifier, event_type) {
+        function item_moving_remove(identifier, event) {
             // find i_move
             var removed_master_id = null;
             angular.forEach(item_moving_data, function(i_move, id) {
@@ -660,8 +673,8 @@ function($parse, $timeout, $filter, $document) { return {
 
                         // check for toggle
                         if (
-                            (event_type == 'mouseup') ||
-                            (event_type == 'touchend')
+                            (event.type == 'mouseup') ||
+                            (event.type == 'touchend')
                         ) {
                             // check if mousemoved
                             if (!i_move.moved) {
@@ -677,8 +690,9 @@ function($parse, $timeout, $filter, $document) { return {
 
                         // remember id
                         removed_master_id = i_move.item.id;
-                        // delete self
-                        delete item_moving_data[id];
+
+                        // delay delete so the pointer click event does not get through
+                        $timeout(item_moving_remove_imove_delete, 300, event, id);
                     }
                 }
             });
@@ -816,22 +830,14 @@ function($parse, $timeout, $filter, $document) { return {
             for (var t_index = 0; t_index < touches.length; t_index++) {
                 var touch = touches[t_index];
 
-                item_moving_remove(touch.identifier, event.type);
+                item_moving_remove(touch.identifier, event);
             }
 
             // console.log("item_moving_data", item_moving_data);
 
             // only unbind event handler when no more targets in process
             // now handled in delayed element delete..
-            // only unbind event handler when no more targets in process
-            if (Object.keys(item_moving_data).length === 0) {
-                mouse_touch_events_off(
-                    event,
-                    svg_base_jql,
-                    item_moving_move,
-                    item_moving_end
-                );
-            }
+
 
             // make all changes visible
             scope.$apply();
