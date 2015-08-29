@@ -8,18 +8,18 @@ div[shapepusher]{
 	position: 				absolute;
 	margin: 				0;
 	padding: 				0;
-	left:					16em;
+	left:					14rem;
 	top:					0;
 	right:					0;
 	bottom:					0;
 }
 
 /* if debugView is hidden on small screens display full width */
-@media screen and (max-width: 1300px) {
+/*@media screen and (max-width: 1300px) {
 	div[shapepusher]{
 		left:					0;
     }
-}
+}*/
 
 div[shapepusher] .position_container{
 	position: 				absolute;

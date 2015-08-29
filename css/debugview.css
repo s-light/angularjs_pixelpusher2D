@@ -20,7 +20,8 @@ div.debugView {
 	/*height:30em;*/
 	max-height: 93%;
 	/*max-width: 30%;*/
-	max-width: 16em;
+	/*max-width: 16em;*/
+	max-width: 12rem;
 
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -53,8 +54,8 @@ div.debugView section label:first-child {
 }
 
 /* hide debugView on small screens*/
-@media screen and (max-width: 1300px) {
+/*@media screen and (max-width: 1300px) {
 	div.debugView {
 		display:none;
     }
-}
+}*/
