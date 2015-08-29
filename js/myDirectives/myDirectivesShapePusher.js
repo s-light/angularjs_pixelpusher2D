@@ -543,7 +543,7 @@ function($parse, $timeout, $filter, $document) { return {
 
         function item_moving_add(p_start, item, identifier, master) {
             var add_successfull = false;
-            console.log("item_moving_data", item_moving_data);
+            // console.log("item_moving_data", item_moving_data);
             // check so we don't add the draged item again.
             if (!item_moving_data.hasOwnProperty(item.id)) {
                 var i_new = {
@@ -577,9 +577,9 @@ function($parse, $timeout, $filter, $document) { return {
                 item_moving_data[item.id] = i_new;
                 add_successfull = true;
             } else {
-                console.log("item '" + item.id + "' already handled.");
+                // console.log("item '" + item.id + "' already handled.");
             }
-            console.log("item_moving_data", item_moving_data);
+            // console.log("item_moving_data", item_moving_data);
             return add_successfull;
         }
 
@@ -644,7 +644,7 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function item_moving_remove_imove_delete(event, delete_id) {
-            console.log("delayed delete '" + delete_id + "'");
+            // console.log("delayed delete '" + delete_id + "'");
             // delete self
             delete item_moving_data[delete_id];
 
@@ -776,7 +776,7 @@ function($parse, $timeout, $filter, $document) { return {
 
             // if new items then add events
             if (add_successfull) {
-                console.log("add event listener for", event.type);
+                // console.log("add event listener for", event.type);
                 // setup event listeners
                 mouse_touch_events_on(
                     event,
