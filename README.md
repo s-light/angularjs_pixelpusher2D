@@ -12,11 +12,14 @@ woks:
 - move all selected shapes
 - now move of items and box select works on touch devices
 
-goals:
-- different touch friendly add/remove/toggle modes for the box selection
-- zoom in&out / drag canvas around
-- group shapes
-- edit groups 'in-line'
 
 todo:
 - fix bug with snap and move selected
+
+goals:
+- different touch friendly add/remove/toggle modes for the box selection
+- zoom in&out / drag canvas around
+
+features
+- group shapes
+- edit groups 'in-line'
