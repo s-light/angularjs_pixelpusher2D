@@ -1135,20 +1135,12 @@ function($parse, $timeout, $filter, $document) { return {
             box_select.classList.add('active');
 
             // setup event listeners
-            if (event.type.startsWith('touch')) {
-                // move
-                svg_base_jql.on('touchmove', box_select_move);
-                // end
-                svg_base_jql.on('touchend', box_select_end);
-                svg_base_jql.on('touchleave', box_select_end);
-                svg_base_jql.on('touchcancle', box_select_end);
-            } else {
-                // move
-                svg_base_jql.on('mousemove', box_select_move);
-                // end
-                svg_base_jql.on('mouseup', box_select_end);
-                svg_base_jql.on('mouseleave', box_select_end);
-            }
+            mouse_touch_events_on(
+                event,
+                svg_base_jql,
+                box_select_move,
+                box_select_end
+            );
 
         }
 
@@ -1191,20 +1183,12 @@ function($parse, $timeout, $filter, $document) { return {
         }
 
         function box_select_end(event) {
-            if (event.type.startsWith('touch')) {
-                // move
-                svg_base_jql.off('touchmove', box_select_move);
-                // end
-                svg_base_jql.off('touchend', box_select_end);
-                svg_base_jql.off('touchleave', box_select_end);
-                svg_base_jql.off('touchcancle', box_select_end);
-            } else {
-                // move
-                svg_base_jql.off('mousemove', box_select_move);
-                // end
-                svg_base_jql.off('mouseup', box_select_end);
-                svg_base_jql.off('mouseleave', box_select_end);
-            }
+            mouse_touch_events_off(
+                event,
+                svg_base_jql,
+                box_select_move,
+                box_select_end
+            );
             box_select_data.active = false;
             box_select.classList.remove('active');
         }
