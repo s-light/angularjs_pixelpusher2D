@@ -98,8 +98,50 @@ mainControllers.controller('MainController',[
                 {
                     id: 'a5',
                     position: {
-                        x: 6000,
+                        x: 5000,
                         y: 3000,
+                    },
+                },
+                {
+                    id: 'a10',
+                    position: {
+                        x: 6000,
+                        y: 1000,
+                    },
+                },
+                {
+                    id: 'a11',
+                    position: {
+                        x: 7000,
+                        y: 1000,
+                    },
+                },
+                {
+                    id: 'a12',
+                    position: {
+                        x: 8000,
+                        y: 1000,
+                    },
+                },
+                {
+                    id: 'a13',
+                    position: {
+                        x: 6500,
+                        y: 1500,
+                    },
+                },
+                {
+                    id: 'a114',
+                    position: {
+                        x: 7500,
+                        y: 1500,
+                    },
+                },
+                {
+                    id: 'a15',
+                    position: {
+                        x: 8500,
+                        y: 1500,
                     },
                 },
             ],
