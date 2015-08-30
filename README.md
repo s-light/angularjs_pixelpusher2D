@@ -16,14 +16,15 @@ history:
 - fixed bug with snap and move selected
 - world pan & zoom available values in settings
 - fixed bug with item select on touch devices
-
+- zoom in&out per mouse wheel works.
+- drag world around works
 
 todo:
 - -
 
 goals:
-- drag world around
-- zoom in&out
+- zoom in&out to (cursor) location
+- zoom in&out per pinch gesture
 - different touch friendly add/remove/toggle modes for the box selection
 
 extension ideas:

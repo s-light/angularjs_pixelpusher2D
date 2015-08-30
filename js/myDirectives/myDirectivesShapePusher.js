@@ -1256,7 +1256,7 @@ function(
 
 
         /******************************************/
-        /** handle zoom / pan **/
+        /** handle world pan **/
 
         // currentTranslate
         // var el = document.getElementsByTagName("svg")[0];
@@ -1269,6 +1269,7 @@ function(
 
         svg_base_jql.on('mousedown', pan_start);
         svg_base_jql.on('touchstart', pan_start);
+
 
         function pan_start(event) {
 
@@ -1320,28 +1321,33 @@ function(
                 pan_data.identifier
             );
 
-            // create svg point with screen coordinates
-            var p_current = convert_xy_2_SVG_coordinate_point(
-                touch.clientX,
-                touch.clientY
-            );
+            // only process if we have found a touch with the right identifier
+            if (touch) {
 
-            var p_offset = points_subtract(
-                pan_data.p_last,
-                p_current
-            );
+                // create svg point with screen coordinates
+                var p_current = convert_xy_2_SVG_coordinate_point(
+                    touch.clientX,
+                    touch.clientY
+                );
 
-            var p_new = points_add(
-                scope.settings.world.pan,
-                p_offset
-            );
+                var p_offset = points_subtract(
+                    pan_data.p_last,
+                    p_current
+                );
 
-            // set values separate so the object ref is not touched..
-            scope.settings.world.pan.x = p_new.x;
-            scope.settings.world.pan.y = p_new.y;
+                var p_new = points_add(
+                    scope.settings.world.pan,
+                    p_offset
+                );
 
-            // update view
-            scope.$apply();
+                // set values separate so the object ref is not touched..
+                scope.settings.world.pan.x = p_new.x;
+                scope.settings.world.pan.y = p_new.y;
+
+                // update view
+                scope.$apply();
+
+            } // if touch
 
         }
 
@@ -1352,7 +1358,105 @@ function(
                 pan_move,
                 pan_end
             );
+            // console.log("event", event);
         }
+
+        svg_base_jql.on('keypress', pan_keypress);
+
+        function pan_keypress(event) {
+
+            // only process if we have found a touch with the right identifier
+            if (touch) {
+
+                // set values separate so the object ref is not touched..
+                scope.settings.world.pan.x = p_new.x;
+                scope.settings.world.pan.y = p_new.y;
+
+                // update view
+                scope.$apply();
+
+            } // if touch
+
+        }
+
+        /******************************************/
+        /** handle world zoom **/
+
+        svg_base_jql.on('wheel', zoom_wheel);
+
+        function zoom_wheel(event) {
+            // console.log("event", event);
+            // console.group("event", event);
+            // console.log("deltaX", event.deltaX);
+            // console.log("deltaY", event.deltaY);
+            // console.log("deltaZ", event.deltaZ);
+            // console.log("deltaMode", event.deltaMode);
+            // // const DOM_DELTA_PIXEL = 0x00;
+            // // const DOM_DELTA_LINE = 0x01;
+            // // const DOM_DELTA_PAGE = 0x02;
+            // var DOM_DELTA_PIXEL = 0x00;
+            // var DOM_DELTA_LINE = 0x01;
+            // var DOM_DELTA_PAGE = 0x02;
+            // switch (event.deltaMode) {
+            //     case DOM_DELTA_PIXEL:
+            //         console.log("DOM_DELTA_PIXEL");
+            //         break;
+            //     case DOM_DELTA_LINE:
+            //         console.log("DOM_DELTA_LINE");
+            //         break;
+            //     case DOM_DELTA_PAGE:
+            //         console.log("DOM_DELTA_PAGE");
+            //         break;
+            // }
+            // console.groupEnd();
+
+            // check if box_select is enabled
+            if (scope.settings.world.zoom.enabled) {
+
+                var f_current = scope.settings.world.zoom.factor;
+
+                // fixed offset per event.
+                var f_offset = 0.01;
+                // var f_offset = event.deltaY / 100;
+                // would be an idea
+                // to increas offset in proportion to zoom factor
+                // console.log("f_offset", f_offset);
+                f_offset = f_current / 100;
+                f_offset = Number(f_offset.toFixed(2));
+                // console.log("f_current", f_current);
+                // console.log("f_offset", f_offset);
+
+                // get direction from deltaY
+                if (event.deltaY < 0) {
+                    f_offset = f_offset * -1;
+                }
+
+                // calculate new value
+                var f_new = f_current + f_offset;
+
+                f_new = Number(f_new.toFixed(2));
+
+                // check for min
+                if (f_new <= 0.5) {
+                    f_new = 0.5;
+                }
+
+                // check for max
+                if (f_new >= 40) {
+                    f_new = 40;
+                }
+
+                // console.log("f_new", f_new);
+                // set value
+                scope.settings.world.zoom.factor = f_new;
+
+                // update view
+                scope.$apply();
+
+            } // if zoom enabled
+
+        }
+
 
 
         /******************************************/

@@ -204,7 +204,7 @@ mainControllers.controller('MainController',[
                 // touch
                 'touchstart',
                 'touchend',
-                'touchmove',
+                // 'touchmove',
                 'touchenter',
                 'touchleave',
                 'touchcancel',
@@ -212,8 +212,8 @@ mainControllers.controller('MainController',[
                 'click',
                 'dblclick',
                 'mousedown',
-                'mousemove',
-                // 'mouseup',
+                // 'mousemove',
+                'mouseup',
                 'mouseout',
                 'mouseover',
                 // paint
@@ -238,6 +238,8 @@ mainControllers.controller('MainController',[
                 'dragexit',
                 'draggesture',
                 'dragover',
+                // others
+
             ];
             angular.forEach(events, function(value, key){
                 console.log("event:", value);
