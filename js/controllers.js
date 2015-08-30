@@ -174,14 +174,14 @@ mainControllers.controller('MainController',[
                     stepSize: 250,
                 },
                 select: {
-                    active: true,
+                    enabled: true,
                 },
                 box_select: {
-                    active: true,
+                    enabled: true,
                     forceItemEnclosure: false,
                 },
                 move: {
-                    active: true,
+                    enabled: true,
                     snap: false,
                     selected: false,
                 },
@@ -190,10 +190,77 @@ mainControllers.controller('MainController',[
 
         $scope.itemActive = {};
 
+        /******************************************/
+        /** debug event things **/
+
+        function event_log(event) {
+            console.log("event", event);
+        }
+
+        function events_all_for(element, on) {
+            var events = [
+                // wheel
+                'wheel',
+                // touch
+                'touchstart',
+                'touchend',
+                'touchmove',
+                'touchenter',
+                'touchleave',
+                'touchcancel',
+                // mouse
+                'click',
+                'dblclick',
+                'mousedown',
+                'mousemove',
+                // 'mouseup',
+                'mouseout',
+                'mouseover',
+                // paint
+                'paint',
+                'resize',
+                'scroll',
+                // scroll
+                'overflow',
+                'underflow',
+                'overflowchanged',
+                // clipboard
+                'cut',
+                'copy',
+                'paste',
+                // key
+                'keydown',
+                'keypress',
+                'keyup',
+                // drag
+                'dragdrop',
+                'dragenter',
+                'dragexit',
+                'draggesture',
+                'dragover',
+            ];
+            angular.forEach(events, function(value, key){
+                console.log("event:", value);
+                if (on) {
+                    element.on(value, event_log);
+                } else {
+                    element.off(value, event_log);
+                }
+            });
+        }
+
         //////////////////////////////////////////
         // functions
         $scope.loadData = function() {
             console.log("loadData - TODO");
+
+            var svg_base = document.getElementsByTagName('svg')[0];
+            var svg_base_jql = angular.element(svg_base);
+
+            events_all_for(
+                svg_base_jql,
+                true
+            );
         };
 
 

@@ -116,15 +116,6 @@ function(
         //     ],
         // };
 
-        // item:{
-        //     id: 'a1',
-        //     position: {
-        //         x: 1,
-        //         y: 1,
-        //     },
-        //     selected:false,
-        //     active:false,
-        // };
 
         // default settings
 
@@ -246,6 +237,7 @@ function(
         var svg_base_jql = element.find("svg");
         var svg_base = svg_base_jql[0];
         // console.log("svg_base", svg_base);
+
 
         /******************************************/
         /** helper **/
@@ -716,22 +708,22 @@ function(
                 if (i_move.identifier == identifier) {
                     if (i_move.master === null) {
                         // console.log("i_move found.");
-
+                        // console.log("-->  event", event);
                         // check for
                         //     select is enabled
                         //     event.type is mouse
                         //     was not a moving operation
                         if (
                             (scope.settings.select.enabled) &&
-                            (event.type == 'mouseup') &&
-                            // (
-                            //     (event.type == 'mouseup') ||
-                            //     (event.type == 'touchend')
-                            // ) &&
+                            // (event.type == 'mouseup') &&
+                            (
+                                (event.type == 'mouseup') ||
+                                (event.type == 'touchend')
+                            ) &&
                             (!i_move.moved)
                         ) {
                             // console.log("!i_move.moved");
-                            // console.log("event", event);
+                            // console.log("-->  event", event);
                             // console.log("event_type", event_type);
                             // console.log("i_move", i_move);
                             // console.log(
@@ -768,60 +760,68 @@ function(
         // main event handlers:
         function item_moving_start(event, item) {
             // console.log("item_moving_start", event);
-            // Prevent default dragging of selected content
-            event.preventDefault();
-            // prevent box selection to trigger
-            event.stopPropagation();
 
-            var add_successfull = false;
+            // check if moveing is allowed.
+            if (
+                (scope.settings.select.enabled) ||
+                (scope.settings.move.enabled)
+            ){
 
-            var touches = get_vtouches(event);
-            // use first touch in list
-            // only on touch per item is allowed.
-            var touch = touches[0];
+                // Prevent default dragging of selected content
+                event.preventDefault();
+                // prevent box selection to trigger
+                event.stopPropagation();
 
-            // create svg point with screen coordinates
-            var p_start = convert_xy_2_SVG_coordinate_point(
-                touch.clientX,
-                touch.clientY
-            );
+                var add_successfull = false;
 
-            add_successfull = item_moving_add(
-                p_start,
-                item,
-                touch.identifier,
-                null // master
-            );
-            // console.log("add_successfull", add_successfull);
+                var touches = get_vtouches(event);
+                // use first touch in list
+                // only on touch per item is allowed.
+                var touch = touches[0];
 
-            if (scope.settings.move.selected) {
-                var add_successfull_selected = false;
-                // do all the above for every selected item
-                // item_moving_selected_prepare(p_current);
-                angular.forEach(scope.selected, function(s_item, key) {
-                    add_successfull_selected |= item_moving_add(
-                        p_start,
-                        s_item,
-                        touch.identifier,
-                        item.id // set master
-                    );
-                });
-            }
-            // console.log("add_successfull", add_successfull);
-
-            // console.log("item_moving_data", item_moving_data);
-
-            // if new items then add events
-            if (add_successfull) {
-                // console.log("add event listener for", event.type);
-                // setup event listeners
-                mouse_touch_events_on(
-                    event,
-                    svg_base_jql,
-                    item_moving_move,
-                    item_moving_end
+                // create svg point with screen coordinates
+                var p_start = convert_xy_2_SVG_coordinate_point(
+                    touch.clientX,
+                    touch.clientY
                 );
-            }
+
+                add_successfull = item_moving_add(
+                    p_start,
+                    item,
+                    touch.identifier,
+                    null // master
+                );
+                // console.log("add_successfull", add_successfull);
+
+                if (scope.settings.move.selected) {
+                    var add_successfull_selected = false;
+                    // do all the above for every selected item
+                    // item_moving_selected_prepare(p_current);
+                    angular.forEach(scope.selected, function(s_item, key) {
+                        add_successfull_selected |= item_moving_add(
+                            p_start,
+                            s_item,
+                            touch.identifier,
+                            item.id // set master
+                        );
+                    });
+                }
+                // console.log("add_successfull", add_successfull);
+
+                // console.log("item_moving_data", item_moving_data);
+
+                // if new items then add events
+                if (add_successfull) {
+                    // console.log("add event listener for", event.type);
+                    // setup event listeners
+                    mouse_touch_events_on(
+                        event,
+                        svg_base_jql,
+                        item_moving_move,
+                        item_moving_end
+                    );
+                }
+            } // move or select enabled
 
         }
         scope.item_moving_start = item_moving_start;
