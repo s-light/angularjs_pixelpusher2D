@@ -637,6 +637,7 @@ function(
                         (scope.settings.move.snap) &&
                         (i_move.master !== null)
                     ) {
+                        // console.log("1", p_current);
                         // first calculate offset for master
                         // calculate new position
                         var p_master = points_add(
@@ -646,12 +647,20 @@ function(
                         // convert to integer (strip all fractions)
                         p_master = point_round2integer(p_master);
 
-                        // remove offset for snapping
+                        // snap
+                        p_master = point_find_nearest_snap(p_master);
+
+                        // remove offset of master
                         // so that all selected are moved relative with snapping
                         p_current = points_subtract(
                             p_master,
                             item_moving_data[i_move.master].offset
                         );
+
+                        // convert to integer (strip all fractions)
+                        p_master = point_round2integer(p_master);
+
+                        // console.log("2", p_current);
                     }
 
                     // calculate new position
