@@ -50,12 +50,12 @@ var myDiSP_templateURL = myDiSP_scriptPath.replace('.js', '.html');
 
 myDirectivesShapePusher.directive('shapepusher', [
     // '$parse',
-    // '$timeout',
+    '$timeout',
     '$filter',
     // '$document',
 function(
     // $parse,
-    // $timeout,
+    $timeout,
     $filter
     // $document
 ) { return {
@@ -499,6 +499,7 @@ function(
 
         var item_moving_data = {};
 
+        var item_moving_clickprevent = [];
 
         function itemSVGelement_by_event(event){
             // get target element
@@ -569,11 +570,29 @@ function(
 
 
 
-        function item_moving_add(p_start, item, identifier, master) {
+        function item_moving_add(p_start, item, identifier, master, event) {
             var add_successfull = false;
             // console.log("item_moving_data", item_moving_data);
             // check so we don't add the draged item again.
-            if (!item_moving_data.hasOwnProperty(item.id)) {
+            // and check if last touch was this item (handles touch+click bugs)
+
+            // console.log(
+            //     "item.id",
+            //     item.id
+            // );
+            // console.log(
+            //     "item_moving_clickprevent.indexOf(item.id)",
+            //     item_moving_clickprevent.indexOf(item.id)
+            // );
+            if (
+                ( !item_moving_data.hasOwnProperty(item.id) ) &&
+                ( item_moving_clickprevent.indexOf(item.id) == -1 )
+            ) {
+
+                if (event.type.startsWith('touch')) {
+                    item_moving_clickprevent.push(item.id);
+                }
+
                 var i_new = {
                     item: {}, // reference to item
                     identifier: {},
@@ -680,28 +699,21 @@ function(
             });
         }
 
-        function item_moving_remove_imove_delete(event, delete_id) {
-            // console.log("delayed delete '" + delete_id + "'");
-            // delete self
-            delete item_moving_data[delete_id];
-
-            // only unbind event handler when no more targets in process
-            if (Object.keys(item_moving_data).length === 0) {
-                mouse_touch_events_off(
-                    event,
-                    svg_base_jql,
-                    item_moving_move,
-                    item_moving_end
+        function item_moving_remove_clickprevent(item_id) {
+            // console.log("delayed delete '" + item_id + "'");
+            var item_index = item_moving_clickprevent.indexOf(item_id);
+            if (item_index != -1) {
+                item_moving_clickprevent.splice(
+                    item_index,
+                    1
                 );
             }
-
-            scope.$apply();
         }
 
         function item_moving_remove(identifier, event) {
             // find i_move
             var removed_master_id = null;
-            angular.forEach(item_moving_data, function(i_move, id) {
+            angular.forEach(item_moving_data, function(i_move, item_id) {
                 // console.log("  i_move", i_move);
                 // console.log("  identifier", identifier);
 
@@ -735,13 +747,27 @@ function(
                         }
 
                         // remember id
-                        removed_master_id = i_move.item.id;
+                        removed_master_id = item_id;
 
-                        item_moving_remove_imove_delete(event, id);
-                        // delay delete so the pointer click event does not get through
-                        // $timeout(function () {
-                        //     item_moving_remove_imove_delete(event, id);
-                        // }, 100);
+                        // delete self
+                        delete item_moving_data[item_id];
+
+                        // only unbind event handler when no more targets in process
+                        if (Object.keys(item_moving_data).length === 0) {
+                            mouse_touch_events_off(
+                                event,
+                                svg_base_jql,
+                                item_moving_move,
+                                item_moving_end
+                            );
+                        }
+
+                        scope.$apply();
+
+                        // delay delete of item_moving_clickprevent entry
+                        $timeout(function () {
+                            item_moving_remove_clickprevent(item_id);
+                        }, 100);
                     }
                 }
             });
@@ -789,7 +815,8 @@ function(
                     p_start,
                     item,
                     touch.identifier,
-                    null // master
+                    null, // master
+                    event
                 );
                 // console.log("add_successfull", add_successfull);
 
@@ -802,7 +829,8 @@ function(
                             p_start,
                             s_item,
                             touch.identifier,
-                            item.id // set master
+                            item.id, // set master
+                            event
                         );
                     });
                 }
@@ -820,7 +848,9 @@ function(
                         item_moving_move,
                         item_moving_end
                     );
+
                 }
+
             } // move or select enabled
 
         }
@@ -853,16 +883,7 @@ function(
         function item_moving_end(event) {
             // console.log("item_moving_end");
 
-            // check for touch or mouse event
-            var touches = [];
-            if (event.type.startsWith('touch')) {
-                touches = event.changedTouches;
-            } else {
-                // normal mouse event
-                // add fake touch:
-                touches.push(event);
-                touches[0].identifier = 0;
-            }
+            var touches = get_vtouches(event);
 
             // console.log("touches", touches);
             for (var t_index = 0; t_index < touches.length; t_index++) {
