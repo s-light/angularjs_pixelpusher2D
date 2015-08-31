@@ -6,18 +6,23 @@ similar to a very striped down graphic editor.
 
 
 history:
-- shows 2D shapes on a 2D-canvas (SVG-based)
-- select single/muliple shapes
+- shows 2D shapes on a SVG view
+- select single/muliple shapes (last selected shapes is highlighted)
 - select with border (box selection) (inklusive forceItemEnclosure option)
-- drag and drop with mouse / touch to move the shapes on the canvas
+- drag and drop with mouse (=move) to position the shapes on the world
 - on move - snap to grid
 - move all selected shapes
-- now move of items and box select works on touch devices
+- move of items and box select works on touch devices
 - fixed bug with snap and move selected
-- world pan & zoom available values in settings
+- world pan & zoom values available in settings
 - fixed bug with item select on touch devices
 - zoom in&out per mouse wheel works.
 - drag world around works
+- added key controls: (only active if mouse is over svg)
+    zoom (+ and -)
+    pan (arrow keys)
+    reset view (home)
+
 
 todo:
 - -

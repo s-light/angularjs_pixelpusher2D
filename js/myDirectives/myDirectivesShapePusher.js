@@ -187,7 +187,7 @@ function(
                 scope.settings = settings_default;
                 messages.push("no settings found");
             } else {
-                angular.merge(scope.settings, settings_default);
+                scope.settings = angular.merge({}, settings_default, scope.settings);
 
                 // // check for every possible setting:
                 // angular.forEach(settings_default, function(value, key) {
@@ -347,7 +347,17 @@ function(
             return item;
         }
 
-
+        function fit_to_limits(value, min, max) {
+            // check for min
+            if (value <= min) {
+                value = min;
+            }
+            // check for max
+            if (value >= max) {
+                value = max;
+            }
+            return value;
+        }
 
 
 
@@ -1361,11 +1371,24 @@ function(
             // console.log("event", event);
         }
 
+        /******************************************/
+        /** handle world pan&zoom key controls   **/
+
         // svg_base_jql.on('keypress', pan_key);
-        $document.on('keydown', pan_key);
+        $document.on('keydown', panzoom_key);
+
+        var panzoom_key_enabled = false;
+        svg_base_jql.on('mouseenter', function(event) {
+            panzoom_key_enabled = true;
+            // console.log("mouseenter", panzoom_key_enabled);
+        });
+        svg_base_jql.on('mouseleave', function(event) {
+            panzoom_key_enabled = false;
+            // console.log("mouseleave", panzoom_key_enabled);
+        });
         // keydown reports arrowKeys - keypress not.
 
-        function pan_key(event) {
+        function panzoom_key(event) {
             // console.group("pan_key", event);
             // console.log("target:", event.target);
             // console.log("currentTarget:", event.currentTarget);
@@ -1373,114 +1396,206 @@ function(
             // console.groupEnd();
             // console.log("which:", event.which);
 
-            // check if box_select is enabled
-            if (scope.settings.world.pan.enabled) {
-
-                if (event.target == $document[0].getElementsByTagName('body')[0]) {
-                    // console.log("target:", event.target);
-
+            // console.log("currentTarget:", event.currentTarget);
+            // if (event.target == $document[0].getElementsByTagName('body')[0]) {
+            if (panzoom_key_enabled) {
+                // console.log("target:", event.target);
 
 
-                    // new API:
-                    // switch (event.key) {
-                    //     case "ArrowDown":
-                    //       // Do something for "down arrow" key press.
-                    //       break;
-                    //     case "ArrowUp":
-                    //       // Do something for "up arrow" key press.
-                    //       break;
-                    //     case "ArrowLeft":
-                    //       // Do something for "left arrow" key press.
-                    //       break;
-                    //     case "ArrowRight":
-                    //       // Do something for "right arrow" key press.
-                    //       break;
-                    //     default:
-                    //       return; // Quit when this doesn't handle the key event.
-                    //   }
 
-                    var offset = {
-                        x: 0,
-                        y: 0,
-                    };
-                    var navKey = false;
+                // new API:
+                // switch (event.key) {
+                //     case "ArrowDown":
+                //       // Do something for "down arrow" key press.
+                //       break;
+                //     case "ArrowUp":
+                //       // Do something for "up arrow" key press.
+                //       break;
+                //     case "ArrowLeft":
+                //       // Do something for "left arrow" key press.
+                //       break;
+                //     case "ArrowRight":
+                //       // Do something for "right arrow" key press.
+                //       break;
+                //     default:
+                //       return; // Quit when this doesn't handle the key event.
+                //   }
 
-                    // console.log("which:", event.which);
+                var offset = {
+                    x: 0,
+                    y: 0,
+                    factor: 0,
+                };
+                var navKey = false;
 
-                    // normalized by jQuery
-                    // http://api.jquery.com/event.which/
-                    switch (event.which) {
-                        case 37:
-                            // "ArrowLeft"
-                            // console.log("ArrowLeft");
-                            navKey = true;
-                            offset.x  = -1;
-                            offset.y  = 0;
-                            break;
-                        case 38:
-                            // "ArrowUp"
-                            navKey = true;
-                            offset.x  = 0;
-                            offset.y  = 1;
-                            break;
-                        case 39:
-                            // "ArrowRight"
-                            navKey = true;
-                            offset.x  = 1;
-                            offset.y  = 0;
-                            break;
-                        case 40:
-                            // "ArrowDown"
-                            navKey = true;
-                            offset.x  = 0;
-                            offset.y  = -1;
-                            break;
-                      }
+                // console.log("which:", event.which);
+
+                // normalized by jQuery
+                // http://api.jquery.com/event.which/
+                switch (event.which) {
+                    case 36:
+                        // "Home"
+                        // console.log("Home");
+                        navKey = 'setdirekt';
+                        offset.x  = 0;
+                        offset.y  = 0;
+                        offset.factor = 1;
+                        break;
+                    case 37:
+                        // "ArrowLeft"
+                        // console.log("ArrowLeft");
+                        navKey = true;
+                        offset.x  = -1;
+                        offset.y  = 0;
+                        break;
+                    case 38:
+                        // "ArrowUp"
+                        navKey = true;
+                        offset.x  = 0;
+                        offset.y  = -1;
+                        break;
+                    case 39:
+                        // "ArrowRight"
+                        navKey = true;
+                        offset.x  = 1;
+                        offset.y  = 0;
+                        break;
+                    case 40:
+                        // "ArrowDown"
+                        navKey = true;
+                        offset.x  = 0;
+                        offset.y  = 1;
+                        break;
+                    case 107:
+                        // "NumPad +"
+                    case 171:
+                        // "+"
+                        navKey = true;
+                        offset.factor  = 1;
+                        break;
+                    case 109:
+                        // "NumPad -"
+                    case 173:
+                        // "-"
+                        navKey = true;
+                        offset.factor  = -1;
+                        break;
+                }
+
+                // console.log("offset:", offset);
+                // console.log("navKey:", navKey);
+                // if ( (event.key >= 39) && (event.key <= 40)) {
+                if (navKey) {
+
+                    // Prevent default scrooling in site
+                    event.preventDefault();
+                    // prevent other things to trigger
+                    // event.stopPropagation();
 
                     // console.log("offset:", offset);
-                    // console.log("navKey:", navKey);
-                    // if ( (event.key >= 39) && (event.key <= 40)) {
-                    if (navKey) {
+                    var newvalues = {
+                        x: 0,
+                        y: 0,
+                        factor: 1,
+                    };
 
-                        // Prevent default scrooling in site
-                        event.preventDefault();
-                        // prevent other things to trigger
-                        // event.stopPropagation();
+                    // use direct or offset mode
+                    if (navKey == 'setdirekt') {
+                        newvalues.x = offset.x;
+                        newvalues.y = offset.y;
+                        newvalues.factor = offset.factor;
+                    } else {
 
-                        // console.log("offset:", offset);
+                        // default offset calculation
+                        var speed = {
+                            x: 10,
+                            y: 10,
+                            factor: 0.01, // 0.01 steps
+                        };
 
-                        offset.x = offset.x * 10;
-                        offset.y = offset.y * 10;
 
-                        // set values separate so the object ref is not touched..
-                        scope.settings.world.pan.x =
+                        // fast mode
+                        if (event.shiftKey) {
+                            speed.x = 250;
+                            speed.y = 250;
+                            speed.factor = 0.1;
+                        }
+
+                        // super fast mode
+                        if (event.shiftKey && event.altKey) {
+                            speed.x = 1000;
+                            speed.y = 1000;
+                            speed.factor = 1;
+                        }
+
+                        // calculate offset
+                        offset.x = offset.x * speed.x;
+                        offset.y = offset.y * speed.y;
+                        offset.factor = offset.factor * speed.factor;
+
+                        // calculate new values
+                        newvalues.x =
                             scope.settings.world.pan.x + offset.x;
-                        scope.settings.world.pan.y =
+                        newvalues.y =
                             scope.settings.world.pan.y + offset.y;
 
-                        // // check for min
-                        // if (f_new <= 0.5) {
-                        //     f_new = 0.5;
-                        // }
-                        //
-                        // // check for max
-                        // if (f_new >= 40) {
-                        //     f_new = 40;
-                        // }
+                        newvalues.factor =
+                            scope.settings.world.zoom.factor + offset.factor;
 
-                        // update view
-                        scope.$apply();
 
-                    } // if offset
+                    }
 
-                } // if target == body
+                    // fit all values to limits
+                    newvalues.x = fit_to_limits(
+                        newvalues.x,
+                        0,
+                        scope.settings.world.width
+                    );
 
-            } // end pan.enabled
+                    newvalues.y = fit_to_limits(
+                        newvalues.y,
+                        0,
+                        scope.settings.world.height
+                    );
+
+                    newvalues.factor = fit_to_limits(
+                        newvalues.factor,
+                        0.5,
+                        40
+                    );
+
+                    // check if pan is enabled
+                    if (scope.settings.world.pan.enabled) {
+                        // set values separate so the object ref is not touched..
+                        scope.settings.world.pan.x = newvalues.x;
+                        scope.settings.world.pan.y = newvalues.y;
+                    }
+                    // check if zoom is enabled
+                    if (scope.settings.world.zoom.enabled) {
+                        scope.settings.world.zoom.factor = newvalues.factor;
+                    }
+
+                    // update view
+                    scope.$apply();
+
+                } // if offset
+
+            } // if panzoom_key_enabled
 
         }
 
         /******************************************/
         /** handle world zoom **/
+
+        function zoom_to_cursor(p_current, zoom_factor) {
+            var p_new = {
+                x: 0,
+                y: 0,
+            };
+            // multiply with zoom factor
+            return p_new;
+        }
+
 
         svg_base_jql.on('wheel', zoom_wheel);
 
