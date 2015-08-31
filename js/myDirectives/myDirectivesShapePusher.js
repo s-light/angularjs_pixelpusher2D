@@ -52,12 +52,12 @@ myDirectivesShapePusher.directive('shapepusher', [
     // '$parse',
     '$timeout',
     '$filter',
-    // '$document',
+    '$document',
 function(
     // $parse,
     $timeout,
-    $filter
-    // $document
+    $filter,
+    $document
 ) { return {
     restrict: 'A',
     // require: 'ngModel',
@@ -1308,7 +1308,7 @@ function(
                     pan_end
                 );
 
-            } // end move.enabled
+            } // end pan.enabled
 
         }
 
@@ -1361,21 +1361,121 @@ function(
             // console.log("event", event);
         }
 
-        svg_base_jql.on('keypress', pan_keypress);
+        // svg_base_jql.on('keypress', pan_key);
+        $document.on('keydown', pan_key);
+        // keydown reports arrowKeys - keypress not.
 
-        function pan_keypress(event) {
+        function pan_key(event) {
+            // console.group("pan_key", event);
+            // console.log("target:", event.target);
+            // console.log("currentTarget:", event.currentTarget);
+            // console.log("$document[0].getElementsByTagName('body')[0]:", $document[0].getElementsByTagName('body')[0]);
+            // console.groupEnd();
+            // console.log("which:", event.which);
 
-            // only process if we have found a touch with the right identifier
-            if (touch) {
+            // check if box_select is enabled
+            if (scope.settings.world.pan.enabled) {
 
-                // set values separate so the object ref is not touched..
-                scope.settings.world.pan.x = p_new.x;
-                scope.settings.world.pan.y = p_new.y;
+                if (event.target == $document[0].getElementsByTagName('body')[0]) {
+                    // console.log("target:", event.target);
 
-                // update view
-                scope.$apply();
 
-            } // if touch
+
+                    // new API:
+                    // switch (event.key) {
+                    //     case "ArrowDown":
+                    //       // Do something for "down arrow" key press.
+                    //       break;
+                    //     case "ArrowUp":
+                    //       // Do something for "up arrow" key press.
+                    //       break;
+                    //     case "ArrowLeft":
+                    //       // Do something for "left arrow" key press.
+                    //       break;
+                    //     case "ArrowRight":
+                    //       // Do something for "right arrow" key press.
+                    //       break;
+                    //     default:
+                    //       return; // Quit when this doesn't handle the key event.
+                    //   }
+
+                    var offset = {
+                        x: 0,
+                        y: 0,
+                    };
+                    var navKey = false;
+
+                    // console.log("which:", event.which);
+
+                    // normalized by jQuery
+                    // http://api.jquery.com/event.which/
+                    switch (event.which) {
+                        case 37:
+                            // "ArrowLeft"
+                            // console.log("ArrowLeft");
+                            navKey = true;
+                            offset.x  = -1;
+                            offset.y  = 0;
+                            break;
+                        case 38:
+                            // "ArrowUp"
+                            navKey = true;
+                            offset.x  = 0;
+                            offset.y  = 1;
+                            break;
+                        case 39:
+                            // "ArrowRight"
+                            navKey = true;
+                            offset.x  = 1;
+                            offset.y  = 0;
+                            break;
+                        case 40:
+                            // "ArrowDown"
+                            navKey = true;
+                            offset.x  = 0;
+                            offset.y  = -1;
+                            break;
+                      }
+
+                    // console.log("offset:", offset);
+                    // console.log("navKey:", navKey);
+                    // if ( (event.key >= 39) && (event.key <= 40)) {
+                    if (navKey) {
+
+                        // Prevent default scrooling in site
+                        event.preventDefault();
+                        // prevent other things to trigger
+                        // event.stopPropagation();
+
+                        // console.log("offset:", offset);
+
+                        offset.x = offset.x * 10;
+                        offset.y = offset.y * 10;
+
+                        // set values separate so the object ref is not touched..
+                        scope.settings.world.pan.x =
+                            scope.settings.world.pan.x + offset.x;
+                        scope.settings.world.pan.y =
+                            scope.settings.world.pan.y + offset.y;
+
+                        // // check for min
+                        // if (f_new <= 0.5) {
+                        //     f_new = 0.5;
+                        // }
+                        //
+                        // // check for max
+                        // if (f_new >= 40) {
+                        //     f_new = 40;
+                        // }
+
+                        // update view
+                        scope.$apply();
+
+                    } // if offset
+
+                } // if target == body
+
+            } // end pan.enabled
 
         }
 
@@ -1427,7 +1527,7 @@ function(
                 // console.log("f_offset", f_offset);
 
                 // get direction from deltaY
-                if (event.deltaY < 0) {
+                if (event.deltaY > 0) {
                     f_offset = f_offset * -1;
                 }
 
