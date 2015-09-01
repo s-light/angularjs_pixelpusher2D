@@ -1926,34 +1926,11 @@ function(
 
                 var f_new = 1;
 
-                // distance_last    = f_current;
-                // distance         = f_new;
-                // f_new = (f_current * distance) / distance_last;
+                // calc new zoom factor
+                // based on the proporiton to distnace
+                // f_current = distance_last
+                // f_new = distance
                 f_new = (f_current * distance) / distance_last;
-                // console.group("pinch_move");
-                // console.log("scope.settings.world.zoom.factor", scope.settings.world.zoom.factor);
-                // console.log("f_current", f_current);
-                // console.log("distance", distance);
-                // console.log("distance_last", distance_last);
-                // console.log("f_new", f_new);
-                // console.groupEnd();
-
-
-                // fixed offset per event.
-                // var f_offset = 0.01;
-                // increas offset in proportion to distance?
-                // f_offset = f_current / 100;
-                // f_offset = Number(f_offset.toFixed(2));
-                // console.log("f_current", f_current);
-                // console.log("f_offset", f_offset);
-
-                // get direction from deltaY
-                // if (event.deltaY > 0) {
-                //     f_offset = f_offset * -1;
-                // }
-
-                // calculate new value
-                // var f_new = f_current + f_offset;
 
                 // rond to two decimal places
                 // f_new = Number(f_new.toFixed(2));
@@ -1970,9 +1947,10 @@ function(
                 // console.log("f_new", f_new);
 
                 // set values
+                scope.settings.world.zoom.factor = f_new;
+                // dont set - these values are start values.
                 // pinch_data.distance = distance;
                 // pinch_data.p_center = p_center;
-                scope.settings.world.zoom.factor = f_new;
 
                 // check if zoom to cursor is enabled
                 if (scope.settings.world.zoom.toCursor) {
@@ -1981,7 +1959,7 @@ function(
 
                     p_new = fit_pan_point_to_limits(p_new);
 
-                    // set pan values separate
+                    // set pan x y  values separate
                     // so the object ref is not touched..
                     scope.settings.world.pan.x = p_new.x;
                     scope.settings.world.pan.y = p_new.y;

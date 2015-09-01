@@ -258,16 +258,16 @@ mainControllers.controller('MainController',[
 
         //////////////////////////////////////////
         // functions
-        $scope.loadData = function() {
-            console.log("loadData - TODO");
+        $scope.testThing = function() {
+            console.log("testThing");
 
-            var svg_base = document.getElementsByTagName('svg')[0];
-            var svg_base_jql = angular.element(svg_base);
-
-            events_all_for(
-                svg_base_jql,
-                true
-            );
+            // var svg_base = document.getElementsByTagName('svg')[0];
+            // var svg_base_jql = angular.element(svg_base);
+            //
+            // events_all_for(
+            //     svg_base_jql,
+            //     true
+            // );
         };
 
 
