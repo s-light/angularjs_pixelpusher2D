@@ -24,15 +24,13 @@ history:
     reset view (home)
     fast mode: hold shiftKey
     super fast mode: hold shiftKey + altKey
+- zoom in&out to cursor location (with wheel)
+- zoom in&out per pinch gesture
 
 
 todo:
-- -
-
-goals:
-- zoom in&out to (cursor) location
-- zoom in&out per pinch gesture
 - different touch friendly add/remove/toggle modes for the box selection
+- 
 
 extension ideas:
 - group shapes
