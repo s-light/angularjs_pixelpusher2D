@@ -147,6 +147,9 @@ function(
                 zoom: {
                     enabled: false,
                     factor: 1,
+                    min: 0.5,
+                    max: 40,
+                    toCursor: true,
                 },
             },
             item: {
@@ -1330,7 +1333,24 @@ function(
         /******************************************/
         /** handle world pan **/
 
-        // currentTranslate
+        function fit_pan_point_to_limits(p_current) {
+            p_new = {
+                x: 0,
+                y: 0,
+            };
+            p_new.x = fit_to_limits(
+                p_current.x,
+                (scope.settings.world.width * -1),
+                scope.settings.world.width
+            );
+            p_new.y = fit_to_limits(
+                p_current.y,
+                (scope.settings.world.height * -1),
+                scope.settings.world.height
+            );
+            return p_new;
+        }
+
         // var el = document.getElementsByTagName("svg")[0];
 
         var pan_data = {
@@ -1411,6 +1431,8 @@ function(
                     scope.settings.world.pan,
                     p_offset
                 );
+
+                p_new = fit_pan_point_to_limits(p_new);
 
                 // set values separate so the object ref is not touched..
                 scope.settings.world.pan.x = p_new.x;
@@ -1555,17 +1577,17 @@ function(
                     event.stopPropagation();
 
                     // console.log("offset:", offset);
-                    var newvalues = {
+                    var p_new = {
                         x: 0,
                         y: 0,
-                        factor: 1,
                     };
+                    var new_factor = 1;
 
                     // use direct or offset mode
                     if (navKey == 'setdirekt') {
-                        newvalues.x = offset.x;
-                        newvalues.y = offset.y;
-                        newvalues.factor = offset.factor;
+                        p_new.x = offset.x;
+                        p_new.y = offset.y;
+                        new_factor = offset.factor;
                     } else {
 
                         // default offset calculation
@@ -1596,46 +1618,28 @@ function(
                         offset.factor = offset.factor * speed.factor;
 
                         // calculate new values
-                        newvalues.x =
-                            scope.settings.world.pan.x + offset.x;
-                        newvalues.y =
-                            scope.settings.world.pan.y + offset.y;
+                        p_new = points_add(scope.settings.world.pan, offset);
 
-                        newvalues.factor =
+                        new_factor =
                             scope.settings.world.zoom.factor + offset.factor;
 
 
                     }
 
                     // fit all values to limits
-                    newvalues.x = fit_to_limits(
-                        newvalues.x,
-                        (scope.settings.world.width*-1),
-                        scope.settings.world.width
+                    p_new = fit_pan_point_to_limits(p_new);
+
+                    new_factor = fit_to_limits(
+                        new_factor,
+                        scope.settings.world.zoom.min,
+                        scope.settings.world.zoom.max
                     );
 
-                    newvalues.y = fit_to_limits(
-                        newvalues.y,
-                        (scope.settings.world.height*-1),
-                        scope.settings.world.height
-                    );
+                    // set values separate so the object ref is not touched..
+                    scope.settings.world.pan.x = p_new.x;
+                    scope.settings.world.pan.y = p_new.y;
+                    scope.settings.world.zoom.factor = new_factor;
 
-                    newvalues.factor = fit_to_limits(
-                        newvalues.factor,
-                        0.5,
-                        40
-                    );
-
-                    // check if pan is enabled
-                    if (scope.settings.world.pan.enabled) {
-                        // set values separate so the object ref is not touched..
-                        scope.settings.world.pan.x = newvalues.x;
-                        scope.settings.world.pan.y = newvalues.y;
-                    }
-                    // check if zoom is enabled
-                    if (scope.settings.world.zoom.enabled) {
-                        scope.settings.world.zoom.factor = newvalues.factor;
-                    }
 
                     // update view
                     scope.$apply();
@@ -1649,7 +1653,7 @@ function(
         /******************************************/
         /** handle world zoom **/
 
-        function zoom_to_cursor(p_current, zoom_factor) {
+        function calc_zoom_to_cursor(p_current, zoom_factor) {
             var p_new = {
                 x: 0,
                 y: 0,
@@ -1713,21 +1717,37 @@ function(
                 // calculate new value
                 var f_new = f_current + f_offset;
 
-                f_new = Number(f_new.toFixed(2));
+                // rond to two decimal places
+                // f_new = Number(f_new.toFixed(2));
+                // http://stackoverflow.com/a/15401089/574981
+                f_new = Math.round( f_new * 10 * 10) / 100;
 
-                // check for min
-                if (f_new <= 0.5) {
-                    f_new = 0.5;
-                }
-
-                // check for max
-                if (f_new >= 40) {
-                    f_new = 40;
-                }
+                f_new = fit_to_limits(
+                    f_new,
+                    scope.settings.world.zoom.min,
+                    scope.settings.world.zoom.max
+                );
 
                 // console.log("f_new", f_new);
                 // set value
                 scope.settings.world.zoom.factor = f_new;
+
+                // check if zoom to cursor is enabled
+                if (scope.settings.world.zoom.toCursor) {
+                    // create svg point with screen coordinates
+                    var p_current = convert_xy_2_SVG_coordinate_point(
+                        event.clientX,
+                        event.clientY
+                    );
+                    var p_new = calc_zoom_to_cursor(p_current, f_new);
+
+                    p_new = fit_pan_point_to_limits(p_new);
+
+                    // set pan values separate
+                    // so the object ref is not touched..
+                    scope.settings.world.pan.x = p_new.x;
+                    scope.settings.world.pan.y = p_new.y;
+                }
 
                 // update view
                 scope.$apply();

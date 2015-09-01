@@ -120,7 +120,9 @@
                             type="number"
                             inputmode="numeric"
                             title="x"
-                            min="-10000"
+                            ng-attr-min="
+                                {{data.shapepusher_settings.world.width * -1}}
+                            "
                             ng-attr-max="
                                 {{data.shapepusher_settings.world.width}}
                             "
@@ -136,7 +138,9 @@
                             type="number"
                             inputmode="numeric"
                             title="y"
-                            min="-10000"
+                            ng-attr-min="
+                                {{data.shapepusher_settings.world.height * -1}}
+                            "
                             ng-attr-max="
                                 {{data.shapepusher_settings.world.height}}
                             "
@@ -162,8 +166,12 @@
                             type="number"
                             inputmode="numeric"
                             title="zoom"
-                            min="0.5"
-                            max="40"
+                            ng-attr-min="
+                                {{data.shapepusher_settings.world.zoom.min}}
+                            "
+                            ng-attr-max="
+                                {{data.shapepusher_settings.world.zoom.max}}
+                            "
                             step="0.1"
                             ng-model="data.shapepusher_settings.world.zoom.factor"
                             ng-model-options="{
