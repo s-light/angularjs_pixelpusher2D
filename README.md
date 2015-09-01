@@ -7,10 +7,10 @@ similar to a very striped down graphic editor.
 
 history:
 - shows 2D shapes on a SVG view
-- select single/muliple shapes (last selected shapes is highlighted)
+- select single/muliple shapes (last selected shape is highlighted)
 - select with border (box selection) (inklusive forceItemEnclosure option)
 - drag and drop with mouse (=move) to position the shapes on the world
-- on move - snap to grid
+- move with snap to grid
 - move all selected shapes
 - move of items and box select works on touch devices
 - fixed bug with snap and move selected
@@ -22,6 +22,8 @@ history:
     zoom (+ and -)
     pan (arrow keys)
     reset view (home)
+    fast mode: hold shiftKey
+    super fast mode: hold shiftKey + altKey
 
 
 todo:
