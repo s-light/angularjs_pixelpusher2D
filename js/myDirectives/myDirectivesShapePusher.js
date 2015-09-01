@@ -242,9 +242,16 @@ function(
         /******************************************/
         /** helper **/
 
-        function convert_point_2_SVG_coordinate_point(point) {
+        function point_convert_2_SVG_coordinate_point(point) {
             // tipp with getScreenCTM found at
             // http://stackoverflow.com/a/22185664/574981
+            // make sure point is SVGPoint
+            if ( ! (point instanceof SVGPoint) ) {
+                var pSVG = svg_base.createSVGPoint();
+                pSVG.x = point.x;
+                pSVG.y = point.y;
+                point = pSVG;
+            }
             // get transform matrix
             var screen2SVG = svg_base.getScreenCTM().inverse();
             // transform to svg coordinates
@@ -257,61 +264,134 @@ function(
             var point_in = svg_base.createSVGPoint();
             point_in.x = x;
             point_in.y = y;
-            var point_out = convert_point_2_SVG_coordinate_point(point_in);
+            var point_out = point_convert_2_SVG_coordinate_point(point_in);
             return point_out;
         }
 
         function points_add(p1, p2) {
-            var result_p = svg_base.createSVGPoint();
-            result_p.x = p1.x + p2.x;
-            result_p.y = p1.y + p2.y;
-            return result_p;
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x + p2.x;
+            p_result.y = p1.y + p2.y;
+            return p_result;
         }
 
         function points_subtract(p1, p2) {
-            var result_p = svg_base.createSVGPoint();
-            result_p.x = p1.x - p2.x;
-            result_p.y = p1.y - p2.y;
-            return result_p;
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x - p2.x;
+            p_result.y = p1.y - p2.y;
+            return p_result;
         }
 
-        function points_distances(p1, p2) {
-            var result = {
-                width: 0,
-                height: 0,
+        function points_multiply(p1, p2) {
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x * p2.x;
+            p_result.y = p1.y * p2.y;
+            return p_result;
+        }
+
+        function points_divide(p1, p2) {
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x / p2.x;
+            p_result.y = p1.y / p2.y;
+            return p_result;
+        }
+
+        function points_calc_center(p1, p2) {
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            // var distances = points_calc_distances(p1, p2);
+            var distances = points_subtract(p1, p2);
+            var dist_half = point_divide_by(distances, 2);
+            p_result = points_add(p1, dist_half);
+            return p_result;
+        }
+
+        function points_calc_distances(p1, p2) {
+            var p_result = {
+                x: 0,
+                y: 0,
             };
             var distances = points_subtract(p1, p2);
-            result.width = Math.abs(distances.x);
-            result.height = Math.abs(distances.y);
-            return result;
+            p_result.x = Math.abs(distances.x);
+            p_result.y = Math.abs(distances.y);
+            return p_result;
         }
 
-        function points_get_distance(p1, p2) {
-            var distances = points_distances(p1, p2);
+        function points_calc_distance(p1, p2) {
+            var distances = points_calc_distances(p1, p2);
             // get distance with trigonometry
             // a²+b² = c²
             var distance = Math.sqrt(
-                (distances.width * distances.width) +
-                (distances.height * distances.height)
+                (distances.x * distances.x) +
+                (distances.y * distances.y)
             );
             return distance;
         }
 
         function points_check_xy_higher_then(p1, p2, width, height) {
             var result = false;
-            var distance = points_distances(p1, p2);
+            var distance = points_calc_distances(p1, p2);
             if (
-                (distance.width > width) &&
-                (distance.height > height)
+                (distance.x > width) &&
+                (distance.y > height)
             ) {
                 result = true;
             }
             return result;
         }
 
+        function points_remap_HighLow(p1, p2) {
+            // switch between positiv and negative orientations..
+            var result = {
+                p1: {
+                    x: 0,
+                    y: 0,
+                },
+                p2: {
+                    x: 0,
+                    y: 0,
+                },
+            };
+            if (p1.x < p2.x) {
+                result.p1.x = p1.x;
+                result.p2.x = p2.x;
+            } else {
+                result.p1.x = p2.x;
+                result.p2.x = p1.x;
+            }
+            if (p1.y < p2.y) {
+                result.p1.y = p1.y;
+                result.p2.y = p2.y;
+            } else {
+                result.p1.y = p2.y;
+                result.p2.y = p1.y;
+            }
+            return result;
+        }
+
+        function points_remap_HighLow_Obj(points) {
+            return points_remap_HighLow(points.p1, points.p2);
+        }
 
         function point_round2multiple(p1, stepSize) {
-            var result_p = svg_base.createSVGPoint();
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
             // divide by stepSize
             var x1 = p1.x / stepSize;
             var y1 = p1.y / stepSize;
@@ -319,9 +399,9 @@ function(
             var x2 = Math.round(x1);
             var y2 = Math.round(y1);
             // multiply by stepSize
-            result_p.x = x2 * stepSize;
-            result_p.y = y2 * stepSize;
-            return result_p;
+            p_result.x = x2 * stepSize;
+            p_result.y = y2 * stepSize;
+            return p_result;
         }
 
         function point_find_nearest_snap(p1) {
@@ -330,11 +410,35 @@ function(
         }
 
         function point_round2integer(point) {
-            var result_p = svg_base.createSVGPoint();
-            result_p.x = parseInt(point.x, 10);
-            result_p.y = parseInt(point.y, 10);
-            return result_p;
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = parseInt(point.x, 10);
+            p_result.y = parseInt(point.y, 10);
+            return p_result;
         }
+
+        function point_multiply_with(p1, value) {
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x * value;
+            p_result.y = p1.y * value;
+            return p_result;
+        }
+
+        function point_divide_by(p1, value) {
+            var p_result = {
+                x: 0,
+                y: 0,
+            };
+            p_result.x = p1.x / value;
+            p_result.y = p1.y / value;
+            return p_result;
+        }
+
 
         function itemById(id) {
             var item = scope.items.find(function(element, index, array){
@@ -524,60 +628,6 @@ function(
             return itemSVG;
         }
 
-        function item_moving_selected_prepare(p_start) {
-            // clean list:
-            item_moving_data.selected.length = 0;
-            // fill list:
-            angular.forEach(scope.selected, function(s_item, key) {
-                // check so we don't add the draged item again.
-                if (s_item !== item_moving_data.item) {
-                    var si_new = {
-                        item: {}, // reference to item
-                        element: {},
-                        offset: {
-                            x: 0,
-                            y: 0,
-                        }
-                    };
-                    // set reference
-                    si_new.item = s_item;
-                    si_new.element = svg_base.getElementById(si_new.item.id);
-                    // calculate & set offset
-                    si_new.offset = points_subtract(
-                        s_item.position,
-                        p_start
-                    );
-                    // add to list
-                    item_moving_data.selected.push(si_new);
-                }
-            });
-        }
-
-        function item_moving_selected_update(p_current) {
-            angular.forEach(item_moving_data.selected, function(si_data, key) {
-                    // calculate new position
-                    var p_new = points_add(si_data.offset, p_current);
-
-                    // convert to integer (strip all fractions)
-                    var p_clean = point_round2integer(p_new);
-
-                    // check if snapping is enabled
-                    // if (scope.settings.move.snap) {
-                    //     // snap
-                    //     p_clean = point_find_nearest_snap(p_clean);
-                    // }
-
-                    // set item position
-                    si_data.item.position.x = p_clean.x;
-                    si_data.item.position.y = p_clean.y;
-                    // scope.$apply();
-                    si_data.element.x.baseVal.value = p_clean.x;
-                    si_data.element.y.baseVal.value = p_clean.y;
-            });
-        }
-
-
-
 
 
         function item_moving_add(p_start, item, identifier, master, event) {
@@ -646,7 +696,7 @@ function(
 
                     // check if mouse moved
                     if (!i_move.moved) {
-                        var dist = points_get_distance(p_current, i_move.p_start);
+                        var dist = points_calc_distance(p_current, i_move.p_start);
                         if (dist > 10) {
                             i_move.moved = true;
                         }
@@ -760,7 +810,19 @@ function(
                         removed_master_id = item_id;
 
                         // delete self
-                        delete item_moving_data[item_id];
+                        // console.log(
+                        //     "delete item_moving_data[item_id (" +
+                        //     item_id +
+                        //     ")]",
+                        //     item_moving_data[item_id]
+                        // );
+                        var delete_success = delete item_moving_data[item_id];
+                        console.log(
+                            "deleted item_moving_data[item_id (" +
+                            item_id +
+                            ")]",
+                            delete_success
+                        );
 
                         // only unbind event handler when no more targets in process
                         if (Object.keys(item_moving_data).length === 0) {
@@ -782,11 +844,22 @@ function(
                 }
             });
             // check for slaves
-            angular.forEach(item_moving_data, function(i_move, id) {
+            console.log("removed_master_id", removed_master_id);
+            angular.forEach(item_moving_data, function(i_move, i_move_id) {
                 if (i_move.identifier == identifier) {
                     if (i_move.master == removed_master_id) {
+                        // console.log("i_move", i_move);
                         // delete self
-                        delete item_moving_data[id];
+                        delete item_moving_data[i_move_id];
+                        // var delete_success = delete item_moving_data[i_move_id];
+                        // console.log(
+                        //     "- deleted item_moving_data[i_move_id (" +
+                        //     i_move_id +
+                        //     ")]",
+                        //     delete_success
+                        // );
+                        // console.log("item_moving_data", item_moving_data);
+                        item_moving_remove_clickprevent(i_move_id);
                     }
                 }
             });
@@ -830,26 +903,26 @@ function(
                 );
                 // console.log("add_successfull", add_successfull);
 
-                if (scope.settings.move.selected) {
-                    var add_successfull_selected = false;
-                    // do all the above for every selected item
-                    // item_moving_selected_prepare(p_current);
-                    angular.forEach(scope.selected, function(s_item, key) {
-                        add_successfull_selected |= item_moving_add(
-                            p_start,
-                            s_item,
-                            touch.identifier,
-                            item.id, // set master
-                            event
-                        );
-                    });
-                }
-                // console.log("add_successfull", add_successfull);
-
-                // console.log("item_moving_data", item_moving_data);
-
-                // if new items then add events
+                // if new master item then add events
                 if (add_successfull) {
+
+                    if (scope.settings.move.selected) {
+                        var add_successfull_selected = false;
+                        // do all the above for every selected item
+                        angular.forEach(scope.selected, function(s_item, key) {
+                            add_successfull_selected |= item_moving_add(
+                                p_start,
+                                s_item,
+                                touch.identifier,
+                                item.id, // set master
+                                event
+                            );
+                        });
+                    }
+                    // console.log("add_successfull", add_successfull);
+
+                    // console.log("item_moving_data", item_moving_data);
+
                     // console.log("add event listener for", event.type);
                     // setup event listeners
                     mouse_touch_events_on(
@@ -939,12 +1012,24 @@ function(
         var box_select_data = {
             active: false,
             start: {
-                p1: svg_base.createSVGPoint(),
-                p2: svg_base.createSVGPoint(),
+                p1: {
+                    x: 0,
+                    y: 0,
+                },
+                p2: {
+                    x: 0,
+                    y: 0,
+                },
             },
             current: {
-                p1: svg_base.createSVGPoint(),
-                p2: svg_base.createSVGPoint(),
+                p1: {
+                    x: 0,
+                    y: 0,
+                },
+                p2: {
+                    x: 0,
+                    y: 0,
+                },
             },
             touch_id: 0,
         };
@@ -955,8 +1040,14 @@ function(
 
         function itemGetPoints(item) {
             var result_points = {
-                p1: svg_base.createSVGPoint(),
-                p2: svg_base.createSVGPoint(),
+                p1: {
+                    x: 0,
+                    y: 0,
+                },
+                p2: {
+                    x: 0,
+                    y: 0,
+                },
             };
             // var el = svg_base.getElementById("a1");
             var element = svg_base.getElementById(item.id);
@@ -1099,32 +1190,7 @@ function(
             });
         }
 
-        function remap_pointsObj(points) {
-            return remap_points(points.p1, points.p2);
-        }
 
-        function remap_points(p1, p2) {
-            // switch between positiv and negative orientations..
-            var result = {
-                p1: svg_base.createSVGPoint(),
-                p2: svg_base.createSVGPoint(),
-            };
-            if (p1.x < p2.x) {
-                result.p1.x = p1.x;
-                result.p2.x = p2.x;
-            } else {
-                result.p1.x = p2.x;
-                result.p2.x = p1.x;
-            }
-            if (p1.y < p2.y) {
-                result.p1.y = p1.y;
-                result.p2.y = p2.y;
-            } else {
-                result.p1.y = p2.y;
-                result.p2.y = p1.y;
-            }
-            return result;
-        }
 
         function box_select_set_position_size(points) {
             box_select.x.baseVal.value = points.p1.x;
@@ -1228,7 +1294,7 @@ function(
                     touch.clientY
                 );
 
-                box_select_data.current = remap_points(
+                box_select_data.current = points_remap_HighLow(
                     box_select_data.start.p1,
                     p_current
                 );
@@ -1592,7 +1658,8 @@ function(
                 x: 0,
                 y: 0,
             };
-            // multiply with zoom factor
+            // divide by zoom factor
+            // points_multiply
             return p_new;
         }
 

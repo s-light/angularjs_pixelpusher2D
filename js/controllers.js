@@ -148,8 +148,8 @@ mainControllers.controller('MainController',[
             shapepusher_settings: {
                 world: {
                     // in mm
-                    width: 10000,
-                    height: 5000,
+                    width: 6000,
+                    height: 6000,
                     pan: {
                         enabled: true,
                         x: 0,
@@ -181,9 +181,11 @@ mainControllers.controller('MainController',[
                     forceItemEnclosure: false,
                 },
                 move: {
-                    enabled: false,
-                    snap: false,
-                    selected: false,
+                    enabled: true,
+                    // enabled: false,
+                    snap: true,
+                    selected: true,
+                    // selected: false,
                 },
             },
         };
