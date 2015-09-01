@@ -315,7 +315,7 @@ function(
                 y: 0,
             };
             // var distances = points_calc_distances(p1, p2);
-            var distances = points_subtract(p1, p2);
+            var distances = points_subtract(p2, p1);
             var dist_half = point_divide_by(distances, 2);
             p_result = points_add(p1, dist_half);
             return p_result;
@@ -1552,7 +1552,7 @@ function(
                     // Prevent default scrooling in site
                     event.preventDefault();
                     // prevent other things to trigger
-                    // event.stopPropagation();
+                    event.stopPropagation();
 
                     // console.log("offset:", offset);
                     var newvalues = {
@@ -1610,13 +1610,13 @@ function(
                     // fit all values to limits
                     newvalues.x = fit_to_limits(
                         newvalues.x,
-                        0,
+                        (scope.settings.world.width*-1),
                         scope.settings.world.width
                     );
 
                     newvalues.y = fit_to_limits(
                         newvalues.y,
-                        0,
+                        (scope.settings.world.height*-1),
                         scope.settings.world.height
                     );
 
@@ -1655,7 +1655,8 @@ function(
                 y: 0,
             };
             // divide by zoom factor
-            // points_multiply
+            var p_offset = point_divide_by(p_current, zoom_factor);
+            p_new = points_subtract(p_current, p_offset);
             return p_new;
         }
 
