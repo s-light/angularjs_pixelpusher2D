@@ -34,6 +34,7 @@
 var myDirectivesShapePusher = angular.module('myDirectivesShapePusher', [
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
+    'myDirectives_ngTouch',
 ]);
 
 // get current script path
@@ -810,19 +811,14 @@ function(
                         removed_master_id = item_id;
 
                         // delete self
+                        delete item_moving_data[item_id];
+                        // var delete_success = delete item_moving_data[item_id];
                         // console.log(
-                        //     "delete item_moving_data[item_id (" +
+                        //     "deleted item_moving_data[item_id (" +
                         //     item_id +
                         //     ")]",
-                        //     item_moving_data[item_id]
+                        //     delete_success
                         // );
-                        var delete_success = delete item_moving_data[item_id];
-                        console.log(
-                            "deleted item_moving_data[item_id (" +
-                            item_id +
-                            ")]",
-                            delete_success
-                        );
 
                         // only unbind event handler when no more targets in process
                         if (Object.keys(item_moving_data).length === 0) {
@@ -844,7 +840,7 @@ function(
                 }
             });
             // check for slaves
-            console.log("removed_master_id", removed_master_id);
+            // console.log("removed_master_id", removed_master_id);
             angular.forEach(item_moving_data, function(i_move, i_move_id) {
                 if (i_move.identifier == identifier) {
                     if (i_move.master == removed_master_id) {
@@ -1891,36 +1887,6 @@ function(
             true
         );
 
-    }
-};}
-]);
-
-/*
-ngTouchstart
-not official part of angularjs 1.4.4 - so manualy added here:
-code copied from
-https://github.com/angular/angular.js/blob/g3_v1_4/src/ng/directive/ngEventDirs.js
-http://stackoverflow.com/a/32238039/574981
-*/
-myDirectivesShapePusher.directive('ngTouchstart', [
-    '$parse',
-function($parse) { return {
-    restrict: 'A',
-    compile: function($element, attr) {
-        var fn = $parse(
-            // attr['ngTouchstart'],
-            attr.ngTouchstart,
-            /* interceptorFn */ null,
-            /* expensiveChecks */ true
-        );
-        return function ngEventHandler(scope, element) {
-            element.on('touchstart', function(event) {
-                var callback = function() {
-                    fn(scope, {$event:event});
-                };
-                scope.$apply(callback);
-            });
-          };
     }
 };}
 ]);
