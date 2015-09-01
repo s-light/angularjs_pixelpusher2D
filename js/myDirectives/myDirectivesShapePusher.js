@@ -1218,7 +1218,7 @@ function(
                     // Prevent default dragging of selected content
                     event.preventDefault();
                     // prevent other things to trigger
-                    // event.stopPropagation();
+                    event.stopPropagation();
 
                     // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
                     // console.log("event", event);
@@ -1286,6 +1286,10 @@ function(
 
             // only process if we have found a touch with the right identifier
             if (touch) {
+                // Prevent default dragging of selected content
+                event.preventDefault();
+                // prevent other things to trigger
+                event.stopPropagation();
 
                 // create svg point with screen coordinates
                 var p_current = convert_xy_2_SVG_coordinate_point(
@@ -1415,6 +1419,10 @@ function(
 
             // only process if we have found a touch with the right identifier
             if (touch) {
+                // Prevent default dragging of selected content
+                event.preventDefault();
+                // prevent other things to trigger
+                event.stopPropagation();
 
                 // create svg point with screen coordinates
                 var p_current = convert_xy_2_SVG_coordinate_point(
@@ -1781,19 +1789,42 @@ function(
             // check if zoom is enabled
             if (scope.settings.world.zoom.enabled) {
 
-                var touches = event.touches;
+                var touches = event.changedTouches;
+                // console.log("touches", touches);
+
+                var flag_fresh = false;
 
                 // setup touch identifiers
+                // if (touches.length >= 2) {
+                //     if (
+                //         (pinch_data.touch1.identifier === null) &&
+                //         (pinch_data.touch2.identifier === null)
+                //     ){
+                //         // set first identifier
+                //         pinch_data.touch1.identifier = touches[0].identifier;
+                //         // set second identifier
+                //         pinch_data.touch2.identifier = touches[1].identifier;
+                //         // set flag
+                //         flag_fresh = true;
+                //     } else {
+                //         // ignore all further touches
+                //     }
+                // }
+
                 for (var i = 0; i < touches.length; i++) {
+
+                    // console.log("touches[i]", touches[i]);
 
                     if (pinch_data.touch1.identifier === null) {
                         // set first identifier
                         pinch_data.touch1.identifier = touches[i].identifier;
+                        flag_fresh = true;
                     } else {
 
                         if (pinch_data.touch2.identifier === null) {
                             // set second identifier
                             pinch_data.touch2.identifier = touches[i].identifier;
+                            flag_fresh = true;
                         } else {
                             // ignore all further touchse
                         }
@@ -1803,6 +1834,7 @@ function(
 
                 // check we have both touches
                 if (
+                    (flag_fresh) &&
                     (pinch_data.touch1.identifier !== null) &&
                     (pinch_data.touch2.identifier !== null)
                 ){
@@ -1811,14 +1843,15 @@ function(
                     // prevent other things to trigger
                     event.stopPropagation();
 
-                    console.log("Juchu Pinch can start!");
-                    console.log("p1", p1);
-                    console.log("p2", p2);
+                    console.log("Juchu pinch can start!");
+                    // console.log("touch1", pinch_data.touch1);
+                    // console.log("touch2", pinch_data.touch2);
 
                     // init to null so the real initialization
                     // can happen on the first move
                     pinch_data.distance = null;
                     pinch_data.p_center = null;
+
 
                 } // end if touch1 && touch2
 
@@ -1835,13 +1868,18 @@ function(
 
         function pinch_move(event) {
 
+            // console.group("pinch_move");
+            // console.log("event.touches[0]", event.touches[0]);
+            // console.log("event.touches[1]", event.touches[1]);
+            // console.groupEnd();
+
             var touch1 = get_touch_by_identifier(
-                event.touches,
+                event.changedTouches,
                 pinch_data.touch1.identifier
             );
 
             var touch2 = get_touch_by_identifier(
-                event.touches,
+                event.changedTouches,
                 pinch_data.touch2.identifier
             );
 
@@ -1879,7 +1917,7 @@ function(
 
                 var distance_last = pinch_data.distance;
 
-                var p_center_last = pinch_data.p_center;
+                // var p_center_last = pinch_data.p_center;
 
                 var f_current = scope.settings.world.zoom.factor;
 
@@ -1891,7 +1929,7 @@ function(
                 // distance_last    = f_current;
                 // distance         = f_new;
                 // f_new = (f_current * distance) / distance_last;
-                // f_new = (f_current * distance) / distance_last;
+                f_new = (f_current * distance) / distance_last;
                 // console.group("pinch_move");
                 // console.log("scope.settings.world.zoom.factor", scope.settings.world.zoom.factor);
                 // console.log("f_current", f_current);
@@ -1920,7 +1958,7 @@ function(
                 // rond to two decimal places
                 // f_new = Number(f_new.toFixed(2));
                 // http://stackoverflow.com/a/15401089/574981
-                // f_new = Math.round( f_new * 10 * 10) / 100;
+                f_new = Math.round( f_new * 10 * 10) / 100;
 
 
                 f_new = fit_to_limits(
@@ -1929,11 +1967,11 @@ function(
                     scope.settings.world.zoom.max
                 );
 
-                console.log("f_new", f_new);
+                // console.log("f_new", f_new);
 
                 // set values
-                pinch_data.distance = distance;
-                pinch_data.p_center = p_center;
+                // pinch_data.distance = distance;
+                // pinch_data.p_center = p_center;
                 scope.settings.world.zoom.factor = f_new;
 
                 // check if zoom to cursor is enabled
@@ -1958,29 +1996,52 @@ function(
 
         function pinch_end(event) {
 
+            // console.group("pinch_end");
+            // console.log("event", event);
+            // console.group("event.touches", event.touches);
+            //     console.log("event.touches[0]", event.touches[0]);
+            //     console.log("event.touches[1]", event.touches[1]);
+            // console.groupEnd();
+            // console.group("event.changedTouches", event.changedTouches);
+            //     console.log("event.changedTouches[0]", event.changedTouches[0]);
+            //     console.log("event.changedTouches[1]", event.changedTouches[1]);
+            // console.groupEnd();
+            // console.log("event.touches[0]", event.touches[0]);
+            // console.log("event.touches[1]", event.touches[1]);
+
             var touch1 = get_touch_by_identifier(
-                event.touches,
+                event.changedTouches,
                 pinch_data.touch1.identifier
             );
             // if touch is found - clear identifier
             if (touch1){
                 pinch_data.touch1.identifier = null;
+                // console.log("removed touch1 identifier");
             }
 
             var touch2 = get_touch_by_identifier(
-                event.touches,
+                event.changedTouches,
                 pinch_data.touch2.identifier
             );
             // if touch is found - clear identifier
             if (touch2){
                 pinch_data.touch2.identifier = null;
+                // console.log("removed touch2 identifier");
             }
+
+
+            // console.log("touch1", touch1);
+            // console.log("touch2", touch2);
+            // console.log("pinch_data.touch1.identifier", pinch_data.touch1.identifier);
+            // console.log("pinch_data.touch2.identifier", pinch_data.touch2.identifier);
+            // console.log("event.touches[1]", event.touches[1]);
 
             // check both touch identifier are cleared
             if (
                 (pinch_data.touch1.identifier === null) &&
                 (pinch_data.touch2.identifier === null)
             ){
+                // console.log("stop all event listeners");
                 // stop event listeners
                 mouse_touch_events_off(
                     event,
@@ -1989,6 +2050,8 @@ function(
                     pinch_end
                 );
             }
+
+            // console.groupEnd();
         }
 
         /******************************************/

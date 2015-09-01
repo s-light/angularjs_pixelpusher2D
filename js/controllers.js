@@ -151,7 +151,8 @@ mainControllers.controller('MainController',[
                     width: 6000,
                     height: 6000,
                     pan: {
-                        enabled: true,
+                        // enabled: true,
+                        enabled: false,
                         x: 0,
                         y: 0,
                     },
@@ -174,15 +175,17 @@ mainControllers.controller('MainController',[
                     stepSize: 250,
                 },
                 select: {
-                    enabled: true,
+                    // enabled: true,
+                    enabled: false,
                 },
                 box_select: {
+                    // enabled: true,
                     enabled: false,
                     forceItemEnclosure: false,
                 },
                 move: {
-                    enabled: true,
-                    // enabled: false,
+                    // enabled: true,
+                    enabled: false,
                     snap: true,
                     selected: true,
                     // selected: false,
