@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+/******************************************/
+/**  slShapePusherControls styling       **/
+/******************************************/
+
+div[sl-shape-pusher-controls] {
+	/*flex box item (of app)*/
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}

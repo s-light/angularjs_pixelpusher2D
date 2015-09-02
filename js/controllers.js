@@ -19,7 +19,8 @@
 var mainControllers = angular.module('mainControllers', [
     // 'myServices',
     'myFilters',
-    'myDirectivesShapePusher',
+    'slShapePusher',
+    'slShapePusherControls',
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
     // 'CtrlBall',

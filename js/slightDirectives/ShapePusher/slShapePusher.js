@@ -31,25 +31,25 @@
 
 ******************************************************************************/
 
-var myDirectivesShapePusher = angular.module('myDirectivesShapePusher', [
+var slShapePusher = angular.module('slShapePusher', [
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
-    'myDirectives_ngTouch',
+    'slngTouch',
 ]);
 
 // get current script path
 // http://stackoverflow.com/a/21103831/574981
 // var scripts = document.getElementsByTagName("script");
 // var myDTl_scriptPath = scripts[scripts.length-1].src;
-var myDiSP_scriptElement = document.querySelector(
-    "[src*=myDirectivesShapePusher]"
+var slShapePusher_scriptElement = document.querySelector(
+    "[src*=slShapePusher]"
 );
-var myDiSP_scriptPath = myDiSP_scriptElement.getAttribute('src');
-var myDiSP_templateURL = myDiSP_scriptPath.replace('.js', '.html');
-// var myDiSP_templateURL_svggrid = myDiSP_templateURL.replace('.html', '_svggrid.html');
+var slShapePusher_scriptPath = slShapePusher_scriptElement.getAttribute('src');
+var slShapePusher_templateURL = slShapePusher_scriptPath.replace('.js', '.html');
+// var slShapePusher_templateURL_svggrid = slShapePusher_templateURL.replace('.html', '_svggrid.html');
 
 
-myDirectivesShapePusher.directive('shapepusher', [
+slShapePusher.directive('slShapePusher', [
     // '$parse',
     '$timeout',
     '$filter',
@@ -70,14 +70,14 @@ function(
         selected: '=',
     },
     // template: '<ul class="tagslist"></ul>',
-    // templateUrl: 'js/myDirectivesShapePusher.html',
-    // templateUrl: myDiSP_templateURL,
+    // templateUrl: 'js/ShapePusher.html',
+    // templateUrl: slShapePusher_templateURL,
     templateUrl: function() {
         // only for development!!!!!
         // this disables the caching of the template file..
         // console.log("shapepusher");
         // console.log("myDTl_scriptPath:", myDTl_scriptPath);
-        return myDiSP_templateURL + '?' + new Date();
+        return slShapePusher_templateURL + '?' + new Date();
     },
     link: function(scope, element, attr, ctrl) {
         // console.log("directive date");
@@ -88,35 +88,6 @@ function(
 
         // console.log("items", scope.items);
         // console.log("settings", scope.settings);
-
-
-        // shapepusher_data: {
-        //     world: {
-        //         width: 10,
-        //         height: 8,
-        //         grid: {
-        //             visible: true,
-        //             numbers: true,
-        //         }
-        //     },
-        //     items: [
-        //         {
-        //             id: 'a1',
-        //             position: {
-        //                 x: 1,
-        //                 y: 1,
-        //             },
-        //         },
-        //         {
-        //             id: 'a2',
-        //             position: {
-        //                 x: 1,
-        //                 y: 2,
-        //             },
-        //         },
-        //     ],
-        // };
-
 
         // default settings
 

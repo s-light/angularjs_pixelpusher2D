@@ -4,45 +4,52 @@
 /**  shape pusher directive styling     **/
 /******************************************/
 
-div[shapepusher]{
-	position: 				absolute;
+div[sl-shape-pusher]{
+	/*flex box item (of app)*/
+	order: 					0;
+    flex: 					1 1 auto;
+    align-self: 			auto;
+
+	/*position: 				absolute;
 	margin: 				0;
 	padding: 				0;
 	left:					14rem;
 	top:					0;
 	right:					0;
-	bottom:					0;
+	bottom:					0;*/
 }
 
 /* if debugView is hidden on small screens display full width */
 /*@media screen and (max-width: 1300px) {
-	div[shapepusher]{
+	div[sl-shape-pusher]{
 		left:					0;
     }
 }*/
 
-div[shapepusher] .position_container{
-	position: 				absolute;
-
-	margin: 				0;
-	padding: 				0;
+div[sl-shape-pusher] .position_container{
+	/*position: 				absolute;
 
 	left:					0;
 	top:					0;
 	right:					0;
-	bottom:					0;
-}
-
-div[shapepusher] .svg_container{
-	position: 				absolute;
+	bottom:					0;*/
 
 	margin: 				0;
 	padding: 				0;
 
+}
+
+div[sl-shape-pusher] .svg_container{
+	/*position: 				absolute;
+
+
 	left:					1em;
 	top:					1em;
 	right:					1em;
-	bottom:					1em;
+	bottom:					1em;*/
+
+	margin: 				0;
+	padding: 				0;
 
 	border-color:			rgb(0, 0, 0);
 	border-color:			rgba(0, 0, 0, 0.1);
@@ -51,7 +58,7 @@ div[shapepusher] .svg_container{
 	border-radius: 			1em;
 }
 
-[shapepusher] svg:not(.item) {
+[sl-shape-pusher] svg:not(.item) {
 	width: 					100%;
 	height: 				100%;
 
@@ -64,7 +71,7 @@ div[shapepusher] .svg_container{
 
 /******************************************/
 
-[shapepusher] svg text {
+[sl-shape-pusher] svg text {
 	color:					rgb(0, 0, 0);
 	/*font-size:				0.01em;*/
 	font-size:				1em;
@@ -80,7 +87,7 @@ div[shapepusher] .svg_container{
 /******************************************/
 /* item */
 
-[shapepusher] .item {
+[sl-shape-pusher] .item {
 	/*border-color:			rgb(0, 0, 0);
 	border-width: 			0.5em;
 	border-style: 			solid;
@@ -88,7 +95,7 @@ div[shapepusher] .svg_container{
 	cursor: 				pointer;
 }
 
-[shapepusher] .item rect {
+[sl-shape-pusher] .item rect {
 	/*width: 1;
 	height: 1;*/
 	fill: 					rgb(230, 0, 0);
@@ -98,13 +105,13 @@ div[shapepusher] .svg_container{
 	stroke-width: 			50;
 }
 
-/*[shapepusher] .item:hover rect,
-[shapepusher] .item.selected.active:hover rect,
-[shapepusher] .item.selected:hover rect {
+/*[sl-shape-pusher] .item:hover rect,
+[sl-shape-pusher] .item.selected.active:hover rect,
+[sl-shape-pusher] .item.selected:hover rect {
 	stroke:					rgba(255, 255, 0, 0.5);
 }*/
 
-[shapepusher] svg.item:hover {
+[sl-shape-pusher] svg.item:hover {
 	/* similar syntax as box-shadow */
 	-webkit-filter:
 				drop-shadow( 0 0 0.1em rgb(255, 240, 0) )
@@ -115,17 +122,17 @@ div[shapepusher] .svg_container{
 }
 
 
-[shapepusher] .item.selected rect{
+[sl-shape-pusher] .item.selected rect{
 	stroke:					rgb(255, 140, 0);
 }
 
-[shapepusher] .item.selected.active rect{
+[sl-shape-pusher] .item.selected.active rect{
 	stroke:					rgb(140, 255, 0);
 }
 
 /******************************************/
 /* box select*/
-[shapepusher] .box_select {
+[sl-shape-pusher] .box_select {
 	fill:					rgba(255, 220, 0, 0.3);
 	stroke:					rgb(255, 220, 0);
 	stroke-width:			50;
@@ -135,7 +142,7 @@ div[shapepusher] .svg_container{
 	stroke-dasharray:		100 100;
 }
 
-[shapepusher] .box_select:not(.active) {
+[sl-shape-pusher] .box_select:not(.active) {
 	stroke:					none;
 	fill:					none;
 }
@@ -143,34 +150,34 @@ div[shapepusher] .svg_container{
 /******************************************/
 /* grid style */
 
-[shapepusher] .grid line {
+[sl-shape-pusher] .grid line {
 	fill: 					none;
 
 	stroke: 				rgba(0, 0, 0, 0.5);
 	stroke-width: 			10;
 }
 
-[shapepusher] .gridSnap line {
+[sl-shape-pusher] .gridSnap line {
 	fill: 					none;
 
 	stroke: 				rgba(0, 0, 0, 0.5);
 	stroke-width: 			2;
 }
 
-/*[shapepusher] .grid:not(.visible) line {
+/*[sl-shape-pusher] .grid:not(.visible) line {
 	stroke: 				none;
 }*/
 
-[shapepusher] .grid text {
+[sl-shape-pusher] .grid text {
 	fill: 				rgba(0, 0, 0, 0.5);
 	font-size: 			0.8em;
 }
 
-[shapepusher] .grid:not(.numbers) text {
+[sl-shape-pusher] .grid:not(.numbers) text {
 	fill: 				transparent;
 }
 
-[shapepusher] .grid .xArray text {
+[sl-shape-pusher] .grid .xArray text {
 	transform: 				rotate(90deg)
 							translate(0, -2.2em);
 	transform-origin: 		50% 50% 0;

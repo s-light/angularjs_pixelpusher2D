@@ -14,7 +14,6 @@
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/debugview.css">
     <link rel="stylesheet" type="text/css" href="css/buttons.css">
-    <link rel="stylesheet" type="text/css" href="css/myDirectivesShapePusher.css">
     <link rel="stylesheet" type="text/css" href="css/icons.css">
     <!-- <link rel="stylesheet" type="text/css" href="css/symbols.css"> -->
 
@@ -27,9 +26,23 @@
     <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>
     <script type="text/javascript" charset="UTF-8" src="js/controllers.js"></script>
     <script type="text/javascript" charset="UTF-8" src="js/myFilters.js"></script>
-    <!--<script type="text/javascript" charset="UTF-8" src="js/myDirectives/myDirectivesTextFileButton.js"></script>-->
-    <script type="text/javascript" charset="UTF-8" src="js/myDirectives/myDirectivesShapePusher.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="js/myDirectives/myDirectives_ngTouch.js"></script>
+    <!--<script type="text/javascript" charset="UTF-8" src="js/slightDirectives/myDirectivesTextFileButton.js"></script>-->
+
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/ShapePusher/slngTouch.js"
+    ></script>
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/ShapePusher/slShapePusher.js"
+    ></script>
+    <link rel="stylesheet" type="text/css"
+        href="js/slightDirectives/ShapePusher/slShapePusher.css"
+    >
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/ShapePusher/slShapePusherControls.js"
+    ></script>
+    <link rel="stylesheet" type="text/css"
+        href="js/slightDirectives/ShapePusher/slShapePusherControls.css"
+    >
 
 
     <!-- mobile specific -->
@@ -83,226 +96,6 @@
                     testThing
                 </button>
                 <br>
-                <section>
-                    <label>world:</label><br>
-                    <label>width</label>
-                    <input
-                        type="number"
-                        inputmode="numeric"
-                        title="width"
-                        min="500"
-                        max="100000"
-                        step="500"
-                        ng-model="data.shapepusher_settings.world.width"
-                        ng-model-options="{
-                            updateOn: 'default blur',
-                            debounce: {'default': 500, 'blur': 0}
-                        }"
-                    ><br>
-                    <label>height</label>
-                    <input
-                        type="number"
-                        inputmode="numeric"
-                        title="height"
-                        min="500"
-                        max="100000"
-                        step="500"
-                        ng-model="data.shapepusher_settings.world.height"
-                        ng-model-options="{
-                            updateOn: 'default blur',
-                            debounce: {'default': 500, 'blur': 0}
-                        }"
-                    ><br>
-                    <section>
-                    <label>pan</label><br>
-                        <label>x</label>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="x"
-                            ng-attr-min="
-                                {{data.shapepusher_settings.world.width * -1}}
-                            "
-                            ng-attr-max="
-                                {{data.shapepusher_settings.world.width}}
-                            "
-                            step="1"
-                            ng-model="data.shapepusher_settings.world.pan.x"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        /><br>
-                        <label>y</label>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="y"
-                            ng-attr-min="
-                                {{data.shapepusher_settings.world.height * -1}}
-                            "
-                            ng-attr-max="
-                                {{data.shapepusher_settings.world.height}}
-                            "
-                            step="1"
-                            ng-model="data.shapepusher_settings.world.pan.y"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        /><br>
-                        <label>
-                            <input
-                                type="checkbox"
-                                ng-model="data.shapepusher_settings.world.pan.enabled"
-                            >
-                            enabled
-                        </label><br>
-                    </section>
-                    <section>
-                        <label>zoom</label><br>
-                        <label>factor</label>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="zoom"
-                            ng-attr-min="
-                                {{data.shapepusher_settings.world.zoom.min}}
-                            "
-                            ng-attr-max="
-                                {{data.shapepusher_settings.world.zoom.max}}
-                            "
-                            step="0.1"
-                            ng-model="data.shapepusher_settings.world.zoom.factor"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        /><br>
-                        <label>
-                            <input
-                                type="checkbox"
-                                ng-model="data.shapepusher_settings.world.zoom.enabled"
-                            >
-                            enabled
-                        </label><br>
-                        <label>
-                            <input
-                                type="checkbox"
-                                ng-model="data.shapepusher_settings.world.zoom.toCursor"
-                            >
-                            toCursor
-                        </label>
-                    </section>
-                </section>
-                <section>
-                    <label>grid:</label><br>
-                    <label>stepSize</label>
-                    <input
-                        type="number"
-                        inputmode="numeric"
-                        title="stepSize"
-                        min="250"
-                        max="100000"
-                        step="250"
-                        ng-model="data.shapepusher_settings.grid.stepSize"
-                        ng-model-options="{
-                            updateOn: 'default blur',
-                            debounce: {'default': 500, 'blur': 0}
-                        }"
-                    ><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.grid.visible"
-                        >
-                        visible
-                    </label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.grid.numbers"
-                        >
-                        numbers
-                    </label><br>
-                </section>
-                <section>
-                    <label>gridSnap:</label><br>
-                    <label>stepSize</label>
-                    <input
-                        type="number"
-                        inputmode="numeric"
-                        title="stepSize"
-                        min="250"
-                        max="100000"
-                        step="250"
-                        ng-model="data.shapepusher_settings.gridSnap.stepSize"
-                        ng-model-options="{
-                            updateOn: 'default blur',
-                            debounce: {'default': 500, 'blur': 0}
-                        }"
-                    ><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.gridSnap.visible"
-                        >
-                        visible
-                    </label>
-                </section>
-                <section>
-                    <label>item_select:</label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.select.enabled"
-                        >
-                        enabled
-                    </label>
-                </section>
-                <section>
-                    <label>box_select:</label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.box_select.enabled"
-                        >
-                        enabled
-                    </label><br>
-                    <label
-                        title="forceItemEnclosure"
-                    >
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.box_select.forceItemEnclosure"
-                        >
-                        enclosure
-                    </label>
-                </section>
-                <section>
-                    <label>move:</label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.move.enabled"
-                        >
-                        enabled
-                    </label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.move.snap"
-                        >
-                        snap
-                    </label><br>
-                    <label>
-                        <input
-                            type="checkbox"
-                            ng-model="data.shapepusher_settings.move.selected"
-                        >
-                        selected
-                    </label>
-                </section>
                 <br>
             </div>
             <!--******************************************-->
@@ -319,10 +112,16 @@ itemActive.id: {{itemActive.id}}
 		</div><!-- debugView end -->
 
         <div
-            shapepusher
+            sl-shape-pusher
             items="data.shapepusher_items"
             settings="data.shapepusher_settings"
             item-active="itemActive"
+        >
+        </div>
+
+        <div
+            sl-shape-pusher-controls
+            settings="data.shapepusher_settings"
         >
         </div>
 

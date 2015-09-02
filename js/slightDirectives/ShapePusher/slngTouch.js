@@ -1,4 +1,4 @@
-var myDirectives_ngTouch = angular.module('myDirectives_ngTouch', []);
+var slngTouch = angular.module('slngTouch', []);
 
 /*
 ngTouchstart
@@ -7,7 +7,7 @@ code mostly copied from
 https://github.com/angular/angular.js/blob/g3_v1_4/src/ng/directive/ngEventDirs.js
 http://stackoverflow.com/a/32238039/574981
 */
-myDirectives_ngTouch.directive('ngTouchstart', [
+slngTouch.directive('ngTouchstart', [
     '$parse',
 function($parse) { return {
     restrict: 'A',

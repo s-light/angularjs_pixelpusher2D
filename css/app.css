@@ -6,17 +6,19 @@
 
 /***** app *****/
 
-.app > div {
+/*.app > div {*/
+.app {
 	/* flex boxes :
 		https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes#Basic_flex_example
 		http://the-echoplex.net/flexyboxes/
 	*/
 	display:				flex;
-	flex-direction:			column;
+	flex-direction:			row;
 	flex-wrap:				nowrap;
 	justify-content:		flex-start;
 	align-content:			center;
-	align-items:			center;
+	align-items:			stretch;
+    }
 }
 
 .group {

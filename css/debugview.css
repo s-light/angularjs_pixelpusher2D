@@ -7,18 +7,23 @@
 div.debugView {
 	display:block;
 
-	position:absolute;
+	/*flex box item (of app)*/
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+
+	/*position:absolute;
 	top:0;
 
 	float:left;
-	clear:both;
+	clear:both;*/
 
 	margin: 0;
 	padding: 1em;
 
 	/*height:24em;*/
 	/*height:30em;*/
-	max-height: 93%;
+	/*max-height: 93%;*/
 	/*max-width: 30%;*/
 	/*max-width: 16em;*/
 	max-width: 12rem;
