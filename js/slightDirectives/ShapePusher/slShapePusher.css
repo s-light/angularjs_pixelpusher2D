@@ -4,19 +4,27 @@
 /**  shape pusher directive styling     **/
 /******************************************/
 
+/* overwrite system to get fullscreen results */
+html, body, .app {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* shape pusher things */
+
 div[sl-shape-pusher]{
 	/*flex box item (of app)*/
 	order: 					0;
     flex: 					1 1 auto;
     align-self: 			auto;
 
-	/*position: 				absolute;
-	margin: 				0;
-	padding: 				0;
-	left:					14rem;
-	top:					0;
-	right:					0;
-	bottom:					0;*/
+	height: 100%;
+	margin: 0;
 }
 
 /* if debugView is hidden on small screens display full width */
@@ -27,12 +35,8 @@ div[sl-shape-pusher]{
 }*/
 
 div[sl-shape-pusher] .position_container{
-	/*position: 				absolute;
 
-	left:					0;
-	top:					0;
-	right:					0;
-	bottom:					0;*/
+	height: 				100%;
 
 	margin: 				0;
 	padding: 				0;
@@ -40,20 +44,15 @@ div[sl-shape-pusher] .position_container{
 }
 
 div[sl-shape-pusher] .svg_container{
-	/*position: 				absolute;
 
-
-	left:					1em;
-	top:					1em;
-	right:					1em;
-	bottom:					1em;*/
-
+	height: 				100%;
 	margin: 				0;
 	padding: 				0;
 
 	border-color:			rgb(0, 0, 0);
 	border-color:			rgba(0, 0, 0, 0.1);
-	border-width: 			0.5em;
+	border-width: 			0;
+	/*border-width: 			0.5em;*/
 	border-style: 			solid;
 	border-radius: 			1em;
 }

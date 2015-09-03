@@ -9,4 +9,34 @@ div[sl-shape-pusher-controls] {
 	order: 					0;
     flex: 					0 1 auto;
     align-self: 			auto;
+
+	height: 100%;
+	margin: 0;
+
+	/*own styles*/
+	font-size: 				0.9em;
+	line-height: 			100%;
 }
+
+div[sl-shape-pusher-controls] .flex_container {
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		flex-start;
+	align-content:			center;
+	align-items:			center;
+
+	height: 100%;
+	margin: 0;
+	overflow-x: auto;
+	overflow-y: scroll;
+}
+
+div[sl-shape-pusher-controls] section {
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}
+
+
+/* convert input type checkbox to button */
