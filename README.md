@@ -27,10 +27,11 @@ history:
 - zoom in&out to cursor location (with wheel)
 - zoom in&out per pinch gesture
 - added button user interface to select tools / modes
+- added replace/add/substract/toggle modes for box selection
 
 
 todo:
-- different touch friendly add/remove/toggle modes for the box selection
+- test performance on target devices
 
 extension ideas:
 - group shapes
