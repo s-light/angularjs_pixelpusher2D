@@ -307,7 +307,7 @@ mainControllers.controller('MainController',[
         // functions
         $scope.testThing = function() {
             console.log("testThing");
-
+            $scope.showButtons = showButtons_all;
             // var svg_base = document.getElementsByTagName('svg')[0];
             // var svg_base_jql = angular.element(svg_base);
             //
