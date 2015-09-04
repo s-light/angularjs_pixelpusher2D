@@ -121,6 +121,12 @@ div[sl-shape-pusher-controls] input[type='radio']:not(:checked) ~ .button {
 	color:						rgba(0, 0, 0, 0.2);
 }
 
+.blueocean div[sl-shape-pusher-controls] input[type='checkbox']:not(:checked) ~ .button ,
+.blueocean div[sl-shape-pusher-controls] input[type='radio']:not(:checked) ~ .button {
+	color:						rgb(0, 100, 200);
+	color:						rgba(0, 200, 255, 0.4);
+}
+
 /* overlay icons */
 .position-icon-overlay.item-enclosure {
 	bottom: 					0em;
