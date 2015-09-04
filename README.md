@@ -26,11 +26,11 @@ history:
     super fast mode: hold shiftKey + altKey
 - zoom in&out to cursor location (with wheel)
 - zoom in&out per pinch gesture
+- added button user interface to select tools / modes
 
 
 todo:
 - different touch friendly add/remove/toggle modes for the box selection
-- 
 
 extension ideas:
 - group shapes
