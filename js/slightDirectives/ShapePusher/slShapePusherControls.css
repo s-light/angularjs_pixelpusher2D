@@ -45,7 +45,8 @@ div[sl-shape-pusher-controls] h4 {
 
 /* convert input type checkbox to button */
 
-div[sl-shape-pusher-controls] input[type="checkbox"] {
+div[sl-shape-pusher-controls] input[type="checkbox"] ,
+div[sl-shape-pusher-controls] input[type="radio"] {
     display: none;
 }
 
@@ -77,7 +78,8 @@ div[sl-shape-pusher-controls] .button {
 	align-items:			center;
 }
 
-div[sl-shape-pusher-controls] input[type='checkbox'] ~ .text {
+div[sl-shape-pusher-controls] input[type='checkbox'] ~ .text ,
+div[sl-shape-pusher-controls] input[type='radio'] ~ .text {
 	display:					none;
 }
 
@@ -94,6 +96,11 @@ div[sl-shape-pusher-controls] .button[class*='icon-'] .text {
 	display:					none;
 }
 
+div[sl-shape-pusher-controls] fieldset {
+    border: 0.1em solid rgba(0, 0, 0, 0.3);
+    border-radius: 0.5em;
+}
+
 /* special button element position */
 
 div[sl-shape-pusher-controls] button.button[class^="icon-"]::before,
@@ -103,11 +110,13 @@ div[sl-shape-pusher-controls] button.button[class*=" icon-"]::before {
 
 
 /*state deactivated*/
-div[sl-shape-pusher-controls] input[type='checkbox']:checked ~ .button {
+div[sl-shape-pusher-controls] input[type='checkbox']:checked ~ .button ,
+div[sl-shape-pusher-controls] input[type='radio']:checked ~ .button {
 	color:						inherit;
 }
 
-div[sl-shape-pusher-controls] input[type='checkbox']:not(:checked) ~ .button {
+div[sl-shape-pusher-controls] input[type='checkbox']:not(:checked) ~ .button ,
+div[sl-shape-pusher-controls] input[type='radio']:not(:checked) ~ .button {
 	color:						rgb(0, 0, 0);
 	color:						rgba(0, 0, 0, 0.2);
 }

@@ -142,6 +142,13 @@ function(
             box_select: {
                 enabled: true,
                 forceItemEnclosure: false,
+                mode: 'replace',
+                modeList: [
+                    'replace',
+                    'add',
+                    'substract',
+                    'toggle',
+                ],
             },
             move: {
                 enabled: true,
@@ -415,14 +422,19 @@ function(
         }
 
 
-        function itemById(id) {
-            var item = scope.items.find(function(element, index, array){
+        function itemByIdFromArray(array, id) {
+            var item = array.find(function(element, index, array){
                 if (element.id == id) {
                     return true;
                 } else {
                     return false;
                 }
             });
+            return item;
+        }
+
+        function itemById(id) {
+            var item = itemByIdFrom(scope.items, id);
             return item;
         }
 
@@ -538,6 +550,16 @@ function(
                 item.selected = 1;
                 // item.selected = true;
                 scope.itemActive = item;
+            }
+        }
+
+        function item_selection_toggle_direct(item) {
+            if (item.selected) {
+                // currently selected
+                item_deselect(item);
+            } else {
+                // currently unselected
+                item_select(item);
             }
         }
 
@@ -990,6 +1012,7 @@ function(
                     x: 0,
                     y: 0,
                 },
+                selected: {},
             },
             current: {
                 p1: {
@@ -1134,7 +1157,66 @@ function(
             return result;
         }
 
-        function selectCoverdItem(item, rectPs) {
+        function handle_coverd_Item_replace(item, inArea) {
+            if (inArea) {
+                // select
+                item_select(item);
+            } else {
+                // deselect
+                item_deselect(item);
+            }
+        }
+
+        function handle_coverd_Item_add(item, inArea) {
+            if (inArea) {
+                // select
+                item_select(item);
+            } else {
+                if(!itemByIdFromArray(box_select_data.start.selected, item.id)) {
+                    // deselect
+                    item_deselect(item);
+                }
+            }
+        }
+
+        function handle_coverd_Item_substact(item, inArea) {
+            if (inArea) {
+                // deselect
+                item_deselect(item);
+            } else {
+                // if(box_select_data.start.selected[item.id]) {
+                if(itemByIdFromArray(box_select_data.start.selected, item.id)) {
+                    // select
+                    item_select(item);
+                }
+            }
+        }
+
+        function handle_coverd_Item_toggle(item, inArea) {
+            if (inArea) {
+                // toggle
+                // if(!box_select_data.start.selected[item.id]) {
+                if(!itemByIdFromArray(box_select_data.start.selected, item.id)) {
+                    // select
+                    item_select(item);
+                } else {
+                    // deselect
+                    item_deselect(item);
+                }
+            } else {
+                // restore
+                // if(box_select_data.start.selected[item.id]) {
+                if(itemByIdFromArray(box_select_data.start.selected, item.id)) {
+                    // select
+                    item_select(item);
+                } else {
+                    // deselect
+                    item_deselect(item);
+                }
+            }
+        }
+
+        function handle_coverd_Item(item, rectPs) {
             // get coverd area of item
             var itemPs = itemGetPoints(item);
             // check
@@ -1144,19 +1226,31 @@ function(
             } else {
                 itemInArea = checkForIntersection(itemPs, rectPs);
             }
-            if (itemInArea) {
-                // select
-                item_select(item);
-            } else {
-                // deselect
-                item_deselect(item);
+
+            // handle different box_select modes
+            switch (scope.settings.box_select.mode) {
+                case 'replace':
+                    handle_coverd_Item_replace(item, itemInArea);
+                    break;
+                case 'add':
+                    handle_coverd_Item_add(item, itemInArea);
+                    break;
+                case 'substract':
+                    handle_coverd_Item_substact(item, itemInArea);
+                    break;
+                case 'toggle':
+                    handle_coverd_Item_toggle(item, itemInArea);
+                    break;
+                default:
+                    console.log("box_select mode not recognized");
             }
+
             scope.$apply();
         }
 
-        function selectCoverdItems(rectPs) {
+        function handle_coverd_Items(rectPs) {
             scope.items.forEach(function(item, index, items){
-                selectCoverdItem(item, rectPs);
+                handle_coverd_Item(item, rectPs);
             });
         }
 
@@ -1211,6 +1305,9 @@ function(
 
                     // save identifier for later use
                     box_select_data.touch_id = touch.identifier;
+
+                    // backup selected items before we start.
+                    box_select_data.start.selected = angular.copy(scope.selected);
 
                     // create svg point with screen coordinates
                     var p_start = convert_xy_2_SVG_coordinate_point(
@@ -1275,7 +1372,7 @@ function(
                 // set size
                 box_select_set_position_size(box_select_data.current);
                 // update selection
-                selectCoverdItems(box_select_data.current);
+                handle_coverd_Items(box_select_data.current);
 
             } // if touch
 

@@ -256,6 +256,83 @@
                 box select item enclosure
             </span>
         </label>
+        <fieldset
+            ng-if="showButtons.box_select_mode"
+        >
+            <legend>mode</legend>
+            <label
+                title="box select - replace selection"
+            >
+                <input
+                    type="radio"
+                    ng-model="settings.box_select.mode"
+                    value="replace"
+                >
+                <span class="button icon-box-select">
+                    <span class="position-icon-overlay icon-trash"></span>
+                    <span class="text">
+                        replace
+                    </span>
+                </span>
+                <span class="text">
+                    replace
+                </span>
+            </label>
+            <label
+                title="box select - add to selection"
+            >
+                <input
+                    type="radio"
+                    ng-model="settings.box_select.mode"
+                    value="add"
+                >
+                <span class="button icon-box-select">
+                    <span class="position-icon-overlay icon-plus"></span>
+                    <span class="text">
+                        add
+                    </span>
+                </span>
+                <span class="text">
+                    add
+                </span>
+            </label>
+            <label
+                title="box select - substract from selection"
+            >
+                <input
+                    type="radio"
+                    ng-model="settings.box_select.mode"
+                    value="substract"
+                >
+                <span class="button icon-box-select">
+                    <span class="position-icon-overlay icon-minus"></span>
+                    <span class="text">
+                        substract
+                    </span>
+                </span>
+                <span class="text">
+                    substract
+                </span>
+            </label>
+            <label
+                title="box select - toggle selection"
+            >
+                <input
+                    type="radio"
+                    ng-model="settings.box_select.mode"
+                    value="toggle"
+                >
+                <span class="button icon-box-select">
+                    <span class="position-icon-overlay icon-arrows-ccw"></span>
+                    <span class="text">
+                        toggle
+                    </span>
+                </span>
+                <span class="text">
+                    toggle
+                </span>
+            </label>
+        </fieldset>
     </section>
 
 </div>

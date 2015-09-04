@@ -243,6 +243,7 @@
                 <h3 class="caption">internals:</h3>
     			<pre class="text_small">
 ******************************
+box_select: {{data.shapepusher_settings.box_select| angular2json}}
 itemActive.id: {{itemActive.id}}
 <!-- shapepusher_items: {{data.shapepusher_items | angular2json}} -->
 <!-- shapepusher_settings: {{data.shapepusher_settings | angular2json}} -->
@@ -258,60 +259,10 @@ itemActive.id: {{itemActive.id}}
             item-active="itemActive"
         >
         </div>
-
-        <!--
-            show all
-            show-buttons="{
-                pan_zoom_home: true,
-                pan_enabled: true,
-                zoom_enabled: true,
-                zoom_toCursor: true,
-                grid_visible: true,
-                grid_numbers: true,
-                gridSnap_visible: true,
-                select_enabled: true,
-                move_enabled: true,
-                move_snap: true,
-                move_selected: true,
-                box_select_enabled: true,
-                box_select_forceItemEnclosure: true,
-            }"
-
-            show minimal
-            show-buttons="{
-                pan_zoom_home: true,
-                pan_enabled: true,
-                zoom_enabled: true,
-                zoom_toCursor: false,
-                grid_visible: false,
-                grid_numbers: false,
-                gridSnap_visible: false,
-                select_enabled: true,
-                move_enabled: true,
-                move_snap: true,
-                move_selected: true,
-                box_select_enabled: true,
-                box_select_forceItemEnclosure: false,
-            }"
-        -->
         <div
             sl-shape-pusher-controls
             settings="data.shapepusher_settings"
-            show-buttons="{
-                pan_zoom_home: true,
-                pan_enabled: true,
-                zoom_enabled: true,
-                zoom_toCursor: false,
-                grid_visible: false,
-                grid_numbers: false,
-                gridSnap_visible: false,
-                select_enabled: true,
-                move_enabled: true,
-                move_snap: true,
-                move_selected: true,
-                box_select_enabled: true,
-                box_select_forceItemEnclosure: false,
-            }"
+            show-buttons="showButtons"
         >
         </div>
 

@@ -158,7 +158,7 @@ mainControllers.controller('MainController',[
                         y: 0,
                     },
                     zoom: {
-                        enabled: true,
+                        // enabled: true,
                         factor: 1,
                     },
                 },
@@ -180,9 +180,16 @@ mainControllers.controller('MainController',[
                     enabled: false,
                 },
                 box_select: {
-                    // enabled: true,
-                    enabled: false,
+                    enabled: true,
+                    // enabled: false,
                     forceItemEnclosure: false,
+                    mode: 'replace',
+                    // modeList: [
+                    //     'replace',
+                    //     'add',
+                    //     'substract',
+                    //     'toggle',
+                    // ],
                 },
                 move: {
                     // enabled: true,
@@ -194,7 +201,44 @@ mainControllers.controller('MainController',[
             },
         };
 
+
         $scope.itemActive = {};
+
+        // show all
+        // $scope.showButtons = {
+        //     pan_zoom_home: true,
+        //     pan_enabled: true,
+        //     zoom_enabled: true,
+        //     zoom_toCursor: true,
+        //     grid_visible: true,
+        //     grid_numbers: true,
+        //     gridSnap_visible: true,
+        //     select_enabled: true,
+        //     move_enabled: true,
+        //     move_snap: true,
+        //     move_selected: true,
+        //     box_select_enabled: true,
+        //     box_select_forceItemEnclosure: true,
+        //     box_select_mode: true,
+        // };
+
+        // show minimal
+        $scope.showButtons = {
+            pan_zoom_home: true,
+            pan_enabled: true,
+            zoom_enabled: true,
+            zoom_toCursor: false,
+            grid_visible: false,
+            grid_numbers: false,
+            gridSnap_visible: false,
+            select_enabled: true,
+            move_enabled: true,
+            move_snap: true,
+            move_selected: true,
+            box_select_enabled: true,
+            box_select_forceItemEnclosure: false,
+            box_select_mode: true,
+        };
 
         /******************************************/
         /** debug event things **/

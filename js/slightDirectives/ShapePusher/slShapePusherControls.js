@@ -143,6 +143,7 @@ function(
             move_selected: true,
             box_select_enabled: true,
             box_select_forceItemEnclosure: true,
+            box_select_mode: true,
         };
 
         scope.showButtons = angular.merge({}, showButtons_default, scope.showButtons);
