@@ -12,6 +12,15 @@
 		https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes#Basic_flex_example
 		http://the-echoplex.net/flexyboxes/
 	*/
+
+	/* for safari: */
+	display: 						-webkit-flex;
+    -webkit-flex-direction: 		row;
+	-webkit-flex-wrap:				nowrap;
+	-webkit-justify-content:		flex-start;
+	-webkit-align-content:			center;
+	-webkit-align-items:			stretch;
+	/* for all others ;-) */
 	display:				flex;
 	flex-direction:			row;
 	flex-wrap:				nowrap;
@@ -23,6 +32,12 @@
 .group {
 	display:				block;
 	position: 				relative;
+
+	/* for safari: */
+	-webkit-order:					0;
+	-webkit-flex: 					0 1 auto;
+	-webkit-align-self: 			auto;
+	/* for all others ;-) */
 	order:					0;
 	flex: 					0 1 auto;
 	align-self: 			auto;

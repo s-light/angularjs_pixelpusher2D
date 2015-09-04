@@ -8,6 +8,11 @@ div.debugView {
 	display:block;
 
 	/*flex box item (of app)*/
+	/* for safari: */
+	-webkit-order:					0;
+	-webkit-flex: 					0 1 auto;
+	-webkit-align-self: 			auto;
+	/* for all others ;-) */
 	order: 					0;
     flex: 					0 1 auto;
     align-self: 			auto;
