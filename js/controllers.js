@@ -21,6 +21,8 @@ var mainControllers = angular.module('mainControllers', [
     'myFilters',
     'slShapePusher',
     'slShapePusherControls',
+    'slTabbedContent',
+    // 'slPane',
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
     // 'CtrlBall',

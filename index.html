@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html ng-app="mainApp" ng-strict-di>
+<!-- <html ng-app="mainApp" ng-strict-di> -->
+<html ng-app="mainApp">
 <head>
     <title>ShapePusher Example</title>
     <meta charset="UTF-8">
@@ -43,6 +44,12 @@
     <link rel="stylesheet" type="text/css"
         href="js/slightDirectives/ShapePusher/slShapePusherControls.css"
     >
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/TabbedContent/slTabbedContent.js"
+    ></script>
+    <link rel="stylesheet" type="text/css"
+        href="js/slightDirectives/TabbedContent/slTabbedContent.css"
+    >
 
 
     <!-- mobile specific -->
@@ -72,185 +79,200 @@
     ng-controller="MainController"
 >
     <div id="MainController" class="app" >
-        <div class="debugView">
-            <div>
-                <label>style:</label>
-                <select
-                    ng-model="data.settings.viewStyle"
-                    title="switch style"
-                    ng-options="
-                        vStyleName as vStyle.name for (
-                            vStyleName,
-                            vStyle
-                        ) in viewStyle.list
-                    "
-                >
-                    <option value="">-- choose style --</option>
-                </select>
-                <br>
-                <button
-                    class="button small inline"
-                    title="test something"
-                    ng-click="testThing()"
-                >
-                    show all buttons
-                </button>
-                <br>
-                <br>
+        <sl-tabbed-content>
+            <sl-pane title="debug" class="debugView">
                 <div>
-                    <section>
-                        <label>world:</label><br>
-                        <label>width
+                    <label>style:</label>
+                    <select
+                        ng-model="data.settings.viewStyle"
+                        title="switch style"
+                        ng-options="
+                            vStyleName as vStyle.name for (
+                                vStyleName,
+                                vStyle
+                            ) in viewStyle.list
+                        "
+                    >
+                        <option value="">-- choose style --</option>
+                    </select>
+                    <br>
+                    <button
+                        class="button small inline"
+                        title="test something"
+                        ng-click="testThing()"
+                    >
+                        show all buttons
+                    </button>
+                    <br>
+                    <br>
+                    <div>
+                        <section>
+                            <label>world:</label><br>
+                            <label>width
+                                <input
+                                    type="number"
+                                    inputmode="numeric"
+                                    title="width"
+                                    min="500"
+                                    max="100000"
+                                    step="500"
+                                    ng-model="data.shapepusher_settings.world.width"
+                                    ng-model-options="{
+                                        updateOn: 'default blur',
+                                        debounce: {'default': 500, 'blur': 0}
+                                    }"
+                                >
+                            </label>
+                            <br>
+                            <label>
+                                height
+                                <input
+                                    type="number"
+                                    inputmode="numeric"
+                                    title="height"
+                                    min="500"
+                                    max="100000"
+                                    step="500"
+                                    ng-model="data.shapepusher_settings.world.height"
+                                    ng-model-options="{
+                                        updateOn: 'default blur',
+                                        debounce: {'default': 500, 'blur': 0}
+                                    }"
+                                >
+                            </label>
+                            <br>
+                        </section>
+                        <section>
+                            <label>pan</label>
+                            <br>
+                            <label>x</label>
                             <input
                                 type="number"
                                 inputmode="numeric"
-                                title="width"
-                                min="500"
-                                max="100000"
-                                step="500"
-                                ng-model="data.shapepusher_settings.world.width"
-                                ng-model-options="{
-                                    updateOn: 'default blur',
-                                    debounce: {'default': 500, 'blur': 0}
-                                }"
-                            >
-                        </label>
-                        <br>
-                        <label>
-                            height
-                            <input
-                                type="number"
-                                inputmode="numeric"
-                                title="height"
-                                min="500"
-                                max="100000"
-                                step="500"
-                                ng-model="data.shapepusher_settings.world.height"
-                                ng-model-options="{
-                                    updateOn: 'default blur',
-                                    debounce: {'default': 500, 'blur': 0}
-                                }"
-                            >
-                        </label>
-                        <br>
-                    </section>
-                    <section>
-                        <label>pan</label>
-                        <br>
-                        <label>x</label>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="x"
-                            ng-attr-min="
-                                {{data.shapepusher_settings.world.width * -1}}
-                            "
-                            ng-attr-max="
-                                {{data.shapepusher_settings.world.width}}
-                            "
-                            step="1"
-                            ng-model="data.shapepusher_settings.world.pan.x"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        /><br>
-                        <label>y</label>
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="y"
-                            ng-attr-min="
-                                {{data.shapepusher_settings.world.height * -1}}
-                            "
-                            ng-attr-max="
-                                {{data.shapepusher_settings.world.height}}
-                            "
-                            step="1"
-                            ng-model="data.shapepusher_settings.world.pan.y"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        /><br>
-                    </section>
-                    <section>
-                        <label>zoom</label><br>
-                        <label>
-                            factor
-                            <input
-                                type="number"
-                                inputmode="numeric"
-                                title="zoom"
+                                title="x"
                                 ng-attr-min="
-                                    {{data.shapepusher_settings.world.zoom.min}}
+                                    {{data.shapepusher_settings.world.width * -1}}
                                 "
                                 ng-attr-max="
-                                    {{data.shapepusher_settings.world.zoom.max}}
+                                    {{data.shapepusher_settings.world.width}}
                                 "
-                                step="0.1"
-                                ng-model="data.shapepusher_settings.world.zoom.factor"
+                                step="1"
+                                ng-model="data.shapepusher_settings.world.pan.x"
                                 ng-model-options="{
                                     updateOn: 'default blur',
                                     debounce: {'default': 500, 'blur': 0}
                                 }"
-                            />
-                        </label>
-                    </section>
-                    <section>
-                        <label>grid</label><br>
-                        <label>
-                            stepSize
+                            /><br>
+                            <label>y</label>
                             <input
                                 type="number"
                                 inputmode="numeric"
-                                title="stepSize"
-                                min="250"
-                                max="100000"
-                                step="250"
-                                ng-model="data.shapepusher_settings.grid.stepSize"
+                                title="y"
+                                ng-attr-min="
+                                    {{data.shapepusher_settings.world.height * -1}}
+                                "
+                                ng-attr-max="
+                                    {{data.shapepusher_settings.world.height}}
+                                "
+                                step="1"
+                                ng-model="data.shapepusher_settings.world.pan.y"
                                 ng-model-options="{
                                     updateOn: 'default blur',
                                     debounce: {'default': 500, 'blur': 0}
                                 }"
-                            >
-                        </label>
-                    </section>
-                    <section>
-                        <label>gridSnap</label><br>
-                        <label>
-                            stepSize
-                            <input
-                                type="number"
-                                inputmode="numeric"
-                                title="stepSize"
-                                min="250"
-                                max="100000"
-                                step="250"
-                                ng-model="data.shapepusher_settings.gridSnap.stepSize"
-                                ng-model-options="{
-                                    updateOn: 'default blur',
-                                    debounce: {'default': 500, 'blur': 0}
-                                }"
-                            >
-                        </label>
-                    </section>
-                </div>
+                            /><br>
+                        </section>
+                        <section>
+                            <label>zoom</label><br>
+                            <label>
+                                factor
+                                <input
+                                    type="number"
+                                    inputmode="numeric"
+                                    title="zoom"
+                                    ng-attr-min="
+                                        {{data.shapepusher_settings.world.zoom.min}}
+                                    "
+                                    ng-attr-max="
+                                        {{data.shapepusher_settings.world.zoom.max}}
+                                    "
+                                    step="0.1"
+                                    ng-model="data.shapepusher_settings.world.zoom.factor"
+                                    ng-model-options="{
+                                        updateOn: 'default blur',
+                                        debounce: {'default': 500, 'blur': 0}
+                                    }"
+                                />
+                            </label>
+                        </section>
+                        <section>
+                            <label>grid</label><br>
+                            <label>
+                                stepSize
+                                <input
+                                    type="number"
+                                    inputmode="numeric"
+                                    title="stepSize"
+                                    min="250"
+                                    max="100000"
+                                    step="250"
+                                    ng-model="data.shapepusher_settings.grid.stepSize"
+                                    ng-model-options="{
+                                        updateOn: 'default blur',
+                                        debounce: {'default': 500, 'blur': 0}
+                                    }"
+                                >
+                            </label>
+                        </section>
+                        <section>
+                            <label>gridSnap</label><br>
+                            <label>
+                                stepSize
+                                <input
+                                    type="number"
+                                    inputmode="numeric"
+                                    title="stepSize"
+                                    min="250"
+                                    max="100000"
+                                    step="250"
+                                    ng-model="data.shapepusher_settings.gridSnap.stepSize"
+                                    ng-model-options="{
+                                        updateOn: 'default blur',
+                                        debounce: {'default': 500, 'blur': 0}
+                                    }"
+                                >
+                            </label>
+                        </section>
+                    </div>
 
-            </div>
-            <!--******************************************-->
-            <div  class="toggle">
-                <h3 class="caption">internals:</h3>
-    			<pre class="text_small">
+                </div>
+                <!--******************************************-->
+                <div  class="toggle">
+                    <h3 class="caption">internals:</h3>
+        			<pre class="text_small">
 ******************************
 box_select: {{data.shapepusher_settings.box_select| angular2json}}
 itemActive.id: {{itemActive.id}}
 <!-- shapepusher_items: {{data.shapepusher_items | angular2json}} -->
 <!-- shapepusher_settings: {{data.shapepusher_settings | angular2json}} -->
 ******************************
-			    </pre>
-            </div>
-		</div><!-- debugView end -->
+    			    </pre>
+                </div>
+    		</sl-pane><!-- debugView end -->
+
+            <sl-pane title="properties">
+                <button
+                    class="button small inline"
+                    title="test something"
+                    ng-click="setProperties()"
+                >
+                    set properties for selected items
+                </button>
+                <br>
+                itemActive.id: {{itemActive.id}}<br>
+                more to come...
+            </sl-pane><!-- properties end -->
+        </sl-tabbed-content>
 
         <div
             sl-shape-pusher
