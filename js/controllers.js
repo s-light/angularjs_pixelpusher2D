@@ -149,8 +149,8 @@ mainControllers.controller('MainController',[
             shapepusher_settings: {
                 world: {
                     // in mm
-                    width: 6000,
-                    height: 6000,
+                    width: 10000,
+                    height: 4000,
                     pan: {
                         // enabled: true,
                         enabled: false,

@@ -38,5 +38,84 @@ div[sl-shape-pusher-controls] section {
     align-self: 			auto;
 }
 
+div[sl-shape-pusher-controls] h4 {
+	margin:					0.5em auto;
+}
+
 
 /* convert input type checkbox to button */
+
+div[sl-shape-pusher-controls] input[type="checkbox"] {
+    display: none;
+}
+
+/* main button definition is in app.css */
+/*div[sl-shape-pusher-controls] input[type='checkbox'] ~ .button {*/
+div[sl-shape-pusher-controls] .button {
+	position: 				relative;
+
+	font-size: 				1.5em;
+	line-height: 			2em;
+
+	width:					2em;
+	height: 				2em;
+
+	margin: 				0.1em auto;
+	padding: 				0;
+
+	overflow:               hidden;
+
+
+	border-radius: 			0.5em;
+
+	/* flex_container used to align symbol in button center */
+	display:				flex;
+	flex-direction:			row;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			center;
+}
+
+div[sl-shape-pusher-controls] input[type='checkbox'] ~ .text {
+	display:					none;
+}
+
+div[sl-shape-pusher-controls] .button .text {
+	/*flex_item*/
+	order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+
+	font-size: 					0.6em;
+}
+
+div[sl-shape-pusher-controls] .button[class*='icon-'] .text {
+	display:					none;
+}
+
+/* special button element position */
+
+div[sl-shape-pusher-controls] button.button[class^="icon-"]::before,
+div[sl-shape-pusher-controls] button.button[class*=" icon-"]::before {
+    width: 						1.35em;
+}
+
+
+/*state deactivated*/
+div[sl-shape-pusher-controls] input[type='checkbox']:checked ~ .button {
+	color:						inherit;
+}
+
+div[sl-shape-pusher-controls] input[type='checkbox']:not(:checked) ~ .button {
+	color:						rgb(0, 0, 0);
+	color:						rgba(0, 0, 0, 0.2);
+}
+
+/* overlay icons */
+.position-icon-overlay.item-enclosure {
+	bottom: 					0em;
+	left:						1.1em;
+
+	font-size: 					0.5em;
+}

@@ -25,8 +25,8 @@ div.debugView {
 	/*height:30em;*/
 	/*max-height: 93%;*/
 	/*max-width: 30%;*/
-	/*max-width: 16em;*/
-	max-width: 12rem;
+	max-width: 20em;
+	/*max-width: 12rem;*/
 
 	overflow-x: hidden;
 	overflow-y: auto;

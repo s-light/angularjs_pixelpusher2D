@@ -1,0 +1,390 @@
+{
+  "name": "shapepusher",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "2abac6d5cb7fcb880cc4b3d9843814b6",
+      "css": "arrows-move",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M500 50L300 250 425 250 425 425 250 425 250 300 50 500 250 700 250 575 425 575 425 750 300 750 500 950 700 750 575 750 575 575 750 575 750 700 950 500 750 300 750 425 575 425 575 250 700 250 500 50Z",
+        "width": 1000
+      },
+      "search": [
+        "arrows-move"
+      ]
+    },
+    {
+      "uid": "4c91bff807410256ffb23155e2581868",
+      "css": "mouse-pointer",
+      "code": 59400,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M543 599.8L669.3 903.8 558.5 950 432.3 647.5 250 831.2V55L797.3 599.4 543 599.8Z",
+        "width": 1000
+      },
+      "search": [
+        "mouse-pointer"
+      ]
+    },
+    {
+      "uid": "6c6d16830151c09f799aab6f1aa61b73",
+      "css": "hand",
+      "code": 59401,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M896.2 865.8C893.3 874.5 886.5 884.1 875.4 887.4 867.4 889.7 601 966.9 592.8 969 569.3 975.3 553 970.7 542.3 961.2 526 946.9 337.7 818.7 100.1 806.6 74.7 805.4 87.1 709.1 159.7 709.1 209.5 709.1 354.9 745.2 372.5 727.6 386 714 392.2 633.7 335.6 493.5L335.6 493.5 221.9 211.6C211.1 184.8 224.1 154.4 250.8 143.7 277.6 132.8 308.1 145.8 318.8 172.6 318.8 172.6 408.3 394.4 418.1 418.5 427.7 442.5 439.6 451.6 452.6 446.6 464.1 442.2 466.5 434.5 459.5 411.2L357.2 109.7C347.9 82.5 362.5 52.8 389.8 43.5 417.2 34.2 446.9 48.8 456.1 76.2L553.4 362.8C562 387.9 571.1 401.1 585.5 395.1 594.1 391.4 593.5 378.2 591.2 366.6L522.9 93.1C515.9 65 533 36.7 561 29.7 589 22.8 617.2 39.7 624.3 67.8L687.3 319.9C696.5 356.9 704.9 370.3 719.5 366.6 734.5 363 733.8 350.7 731.8 340.5 727 316.8 688.1 124.1 688.1 124.1 683 98.3 699.6 73.3 725.4 68.2 751 63 776.1 79.7 781.1 105.3L828.5 340.9 828.6 340.9C828.6 340.9 828.6 340.9 828.6 341L857 482.3C863.2 508.9 870.3 534 879.5 558.6 933.8 703 905.5 836.8 896.2 865.8Z",
+        "width": 1000
+      },
+      "search": [
+        "hand"
+      ]
+    },
+    {
+      "uid": "ece084c8b47a0a605e131107e9d3d0df",
+      "css": "box-select",
+      "code": 59402,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M950-0.4C922.3-0.4 900 21.9 900 49.6L900 149.6C900 177.3 922.3 199.6 950 199.6 977.7 199.6 1000 177.3 1000 149.6L1000 49.6C1000 21.9 977.7-0.4 950-0.4ZM50 0C22.3 0 0 22.3 0 50 0 77.7 22.3 100 50 100L150 100C177.7 100 200 77.7 200 50 200 22.3 177.7 0 150 0L50 0ZM350 0C322.3 0 300 22.3 300 50 300 77.7 322.3 100 350 100L450 100C477.7 100 500 77.7 500 50 500 22.3 477.7 0 450 0L350 0ZM650 0C622.3 0 600 22.3 600 50 600 77.7 622.3 100 650 100L750 100C777.7 100 800 77.7 800 50 800 22.3 777.7 0 750 0L650 0ZM50 199.6C22.3 199.6 0 221.9 0 249.6L0 349.6C0 377.3 22.3 399.6 50 399.6 77.7 399.6 100 377.3 100 349.6L100 249.6C100 221.9 77.7 199.6 50 199.6ZM950 300C922.3 300 900 322.3 900 350L900 450C900 477.7 922.3 500 950 500 977.7 500 1000 477.7 1000 450L1000 350C1000 322.3 977.7 300 950 300ZM50 500C22.3 500 0 522.3 0 550L0 650C0 677.7 22.3 700 50 700 77.7 700 100 677.7 100 650L100 550C100 522.3 77.7 500 50 500ZM950 600C922.3 600 900 622.3 900 650L900 750C900 777.7 922.3 800 950 800 977.7 800 1000 777.7 1000 750L1000 650C1000 622.3 977.7 600 950 600ZM50 800C22.3 800 0 822.3 0 850L0 950C0 977.7 22.3 1000 50 1000 77.7 1000 100 977.7 100 950L100 850C100 822.3 77.7 800 50 800ZM250 900C222.3 900 200 922.3 200 950 200 977.7 222.3 1000 250 1000L350 1000C377.7 1000 400 977.7 400 950 400 922.3 377.7 900 350 900L250 900ZM550 900C522.3 900 500 922.3 500 950 500 977.7 522.3 1000 550 1000L650 1000C677.7 1000 700 977.7 700 950 700 922.3 677.7 900 650 900L550 900ZM850 900C822.3 900 800 922.3 800 950 800 977.7 822.3 1000 850 1000L950 1000C977.7 1000 1000 977.7 1000 950 1000 922.3 977.7 900 950 900L850 900Z",
+        "width": 1000
+      },
+      "search": [
+        "box-select"
+      ]
+    },
+    {
+      "uid": "7222571caa5c15f83dcfd447c58d68d9",
+      "css": "search",
+      "code": 59399,
+      "src": "entypo"
+    },
+    {
+      "uid": "c9b928dc82d7d77033644fcf59dca3b3",
+      "css": "flashlight",
+      "code": 59412,
+      "src": "entypo"
+    },
+    {
+      "uid": "3def559c3c39b8500882e02892b7daa8",
+      "css": "picture",
+      "code": 59406,
+      "src": "entypo"
+    },
+    {
+      "uid": "85017ab6ca074831a8de771b40e9640c",
+      "css": "camera",
+      "code": 59407,
+      "src": "entypo"
+    },
+    {
+      "uid": "5e9f01871d44e56b45ecbfd00f4dbc3a",
+      "css": "layout",
+      "code": 59440,
+      "src": "entypo"
+    },
+    {
+      "uid": "2cfb3f2b46b34a1790aec0aa846297b6",
+      "css": "menu",
+      "code": 59417,
+      "src": "entypo"
+    },
+    {
+      "uid": "14017aae737730faeda4a6fd8fb3a5f0",
+      "css": "check",
+      "code": 59418,
+      "src": "entypo"
+    },
+    {
+      "uid": "c709da589c923ba3c2ad48d9fc563e93",
+      "css": "cancel",
+      "code": 59419,
+      "src": "entypo"
+    },
+    {
+      "uid": "70370693ada58ef0a60fa0984fe8d52a",
+      "css": "plus",
+      "code": 59420,
+      "src": "entypo"
+    },
+    {
+      "uid": "1256e3054823e304d7e452a589cf8bb8",
+      "css": "minus",
+      "code": 59421,
+      "src": "entypo"
+    },
+    {
+      "uid": "3a230e539a4f3b904debd04c6c155034",
+      "css": "help",
+      "code": 59442,
+      "src": "entypo"
+    },
+    {
+      "uid": "63b86fedd4ee9ad2105f54f4888e7088",
+      "css": "info",
+      "code": 59441,
+      "src": "entypo"
+    },
+    {
+      "uid": "513ac180ff85bd275f2b736720cbbf5e",
+      "css": "home",
+      "code": 59415,
+      "src": "entypo"
+    },
+    {
+      "uid": "1a7104205ea96e6f40ac716d0ca72f21",
+      "css": "lock",
+      "code": 59414,
+      "src": "entypo"
+    },
+    {
+      "uid": "e81fc3a0d39ace6ee735d7b24eedd56d",
+      "css": "lock-open",
+      "code": 59413,
+      "src": "entypo"
+    },
+    {
+      "uid": "25fc99a30fecc4021fdcae5fff5ba9ac",
+      "css": "eye",
+      "code": 59422,
+      "src": "entypo"
+    },
+    {
+      "uid": "390d6d13398cbf8c8c3c5493f7d34088",
+      "css": "export",
+      "code": 59431,
+      "src": "entypo"
+    },
+    {
+      "uid": "c77fd2fd065b5fe16d6f2b41e190b266",
+      "css": "pencil",
+      "code": 59397,
+      "src": "entypo"
+    },
+    {
+      "uid": "bcb868184ff9c35f8aef564f50c0d649",
+      "css": "feather",
+      "code": 59425,
+      "src": "entypo"
+    },
+    {
+      "uid": "9bdc80f58999873c5a8079ad2d7f4143",
+      "css": "cup",
+      "code": 59427,
+      "src": "entypo"
+    },
+    {
+      "uid": "2626e3a1bbcd90e45849af3b58a1d594",
+      "css": "trash",
+      "code": 59426,
+      "src": "entypo"
+    },
+    {
+      "uid": "49bd3e825b8267f976f6d1ad391e2f4d",
+      "css": "doc",
+      "code": 59448,
+      "src": "entypo"
+    },
+    {
+      "uid": "922ab2cb66943a83de969990289ef1dc",
+      "css": "docs",
+      "code": 59447,
+      "src": "entypo"
+    },
+    {
+      "uid": "8782cc70184b33096ae927590d1fadc4",
+      "css": "doc-landscape",
+      "code": 59449,
+      "src": "entypo"
+    },
+    {
+      "uid": "bc64550dd022ce21604f97309b346cea",
+      "css": "cog",
+      "code": 59395,
+      "src": "entypo"
+    },
+    {
+      "uid": "a204f0fa972408eaae5a363c444991b2",
+      "css": "login",
+      "code": 59394,
+      "src": "entypo"
+    },
+    {
+      "uid": "2d76f2c8d13be40694ecadfea7fb83c3",
+      "css": "logout",
+      "code": 59392,
+      "src": "entypo"
+    },
+    {
+      "uid": "d5098cb09be5827a2911dbab5af49ad2",
+      "css": "down",
+      "code": 59398,
+      "src": "entypo"
+    },
+    {
+      "uid": "6acd5cf005d48f96787350e72bd45688",
+      "css": "left",
+      "code": 59403,
+      "src": "entypo"
+    },
+    {
+      "uid": "9e67bfab0143d9511f8eef6897caeb88",
+      "css": "right",
+      "code": 59404,
+      "src": "entypo"
+    },
+    {
+      "uid": "43c4064ec1260d0e55c37e0467c75cbb",
+      "css": "up",
+      "code": 59405,
+      "src": "entypo"
+    },
+    {
+      "uid": "a30a32d49f80bb534c062ae1743ef433",
+      "css": "down-thin",
+      "code": 59446,
+      "src": "entypo"
+    },
+    {
+      "uid": "8d8f4722d16e95290858eaf294d9d830",
+      "css": "left-thin",
+      "code": 59445,
+      "src": "entypo"
+    },
+    {
+      "uid": "ef3eda51383ce050517892df3fc05ffc",
+      "css": "right-thin",
+      "code": 59443,
+      "src": "entypo"
+    },
+    {
+      "uid": "dbc97808cba7d0c135c7054e7a85fb86",
+      "css": "up-thin",
+      "code": 59444,
+      "src": "entypo"
+    },
+    {
+      "uid": "465bb89b6f204234e5787c326b4ae54c",
+      "css": "ccw",
+      "code": 59429,
+      "src": "entypo"
+    },
+    {
+      "uid": "bb46b15cb78cc4cc05d3d715d522ac4d",
+      "css": "cw",
+      "code": 59428,
+      "src": "entypo"
+    },
+    {
+      "uid": "3bd18d47a12b8709e9f4fe9ead4f7518",
+      "css": "arrows-ccw",
+      "code": 59411,
+      "src": "entypo"
+    },
+    {
+      "uid": "3eadc3e443cf1c7e17f1b44d21254c00",
+      "css": "target",
+      "code": 59432,
+      "src": "entypo"
+    },
+    {
+      "uid": "80451d627470ea7f977a263fdb771d7b",
+      "css": "palette",
+      "code": 59433,
+      "src": "entypo"
+    },
+    {
+      "uid": "3626b3f3a0b284e7f4166b815719aece",
+      "css": "list",
+      "code": 59396,
+      "src": "entypo"
+    },
+    {
+      "uid": "97bd5542ed3e143d2ee9b60e14487615",
+      "css": "list-add",
+      "code": 59416,
+      "src": "entypo"
+    },
+    {
+      "uid": "6a12c2b74456ea21cc984e11dec227a1",
+      "css": "globe",
+      "code": 59408,
+      "src": "entypo"
+    },
+    {
+      "uid": "114fed43140e2b5ce42c48b95c19375b",
+      "css": "cloud",
+      "code": 59409,
+      "src": "entypo"
+    },
+    {
+      "uid": "97c6901d8db077614e77b089d4eedac8",
+      "css": "mouse",
+      "code": 59434,
+      "src": "entypo"
+    },
+    {
+      "uid": "9ea7cce5e08e5ac2c225fabf2e6dc353",
+      "css": "briefcase",
+      "code": 59423,
+      "src": "entypo"
+    },
+    {
+      "uid": "11dd26ebf6934bf750a9156b353d7f2d",
+      "css": "suitcase",
+      "code": 59424,
+      "src": "entypo"
+    },
+    {
+      "uid": "d2c6b59d9a239140cb76be0627480855",
+      "css": "dot",
+      "code": 59438,
+      "src": "entypo"
+    },
+    {
+      "uid": "13b11ab72c6ae9c97ee12428e17f3a4e",
+      "css": "dot-2",
+      "code": 59437,
+      "src": "entypo"
+    },
+    {
+      "uid": "d10920db2e79c997c5e783279291970c",
+      "css": "dot-3",
+      "code": 59436,
+      "src": "entypo"
+    },
+    {
+      "uid": "39c4d0e225a1263a398a47523cb5b9bd",
+      "css": "brush",
+      "code": 59439,
+      "src": "entypo"
+    },
+    {
+      "uid": "d55e21e6468c04c5ca38a6560b27d1aa",
+      "css": "magnet",
+      "code": 59430,
+      "src": "entypo"
+    },
+    {
+      "uid": "248db7c0563d8cee80b7041f7736dcad",
+      "css": "database",
+      "code": 59410,
+      "src": "entypo"
+    },
+    {
+      "uid": "2bbde1076919db3d1dcc7f6b43d19bd4",
+      "css": "traffic-cone",
+      "code": 59435,
+      "src": "entypo"
+    }
+  ]
+}

@@ -56,6 +56,7 @@ function(
     // transclude: true,
     scope: {
         settings: '=',
+        showButtons: '=',
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/myDirectivesShapePusher.html',
@@ -128,17 +129,36 @@ function(
         // set defaults
         // scope.settings = angular.merge({}, settings_default, scope.settings);
 
+        var showButtons_default = {
+            pan_zoom_home: true,
+            pan_enabled: true,
+            zoom_enabled: true,
+            zoom_toCursor: false,
+            grid_visible: true,
+            grid_numbers: false,
+            gridSnap_visible: false,
+            select_enabled: true,
+            move_enabled: true,
+            move_snap: true,
+            move_selected: true,
+            box_select_enabled: true,
+            box_select_forceItemEnclosure: true,
+        };
+
+        scope.showButtons = angular.merge({}, showButtons_default, scope.showButtons);
+
         /******************************************/
-        /** special elements **/
+        /** functions **/
 
-        // var svg_base = document.getElementsByTagName("svg")[0];
-        // var item_elements = svg_base.getElementsByClassName('item');
+        scope.resetPanZoom = function(event) {
+            // console.group("resetPanZoom");
+            // console.log("event", event);
 
-        scope.testCall = function(event, item) {
-            console.group("testCall");
-            console.log("event", event);
-            console.log("item", item);
-            console.groupEnd();
+            scope.settings.world.pan.x = 0;
+            scope.settings.world.pan.y = 0;
+            scope.settings.world.zoom.factor = 1;
+
+            // console.groupEnd();
         };
 
     }

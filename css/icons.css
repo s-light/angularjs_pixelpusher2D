@@ -5,37 +5,71 @@
 /**  from base local server directory                   **/
 /*********************************************************/
 
-@import url("../font/fontello-horaiter/css/horaiter.css");
+@import url("../font/fontello-shapepusher/css/shapepusher.css");
 /*	contains fonts:
-        horaiter
-        css contains icon definitions:
+    shapepusher
+        contains icon definitions:
         .icon-logout
-        .icon-logo_horaiter
+        .icon-arrows-move
         .icon-login
         .icon-cog
         .icon-list
-        .icon-upload-cloud
-        .icon-print
+        .icon-pencil
+        .icon-down
         .icon-search
-        .icon-user
-        .icon-users
-        .icon-user-add
-        .icon-vcard
-        .icon-newspaper
-        .icon-book-open
-        .icon-archive
-        .icon-folder
+        .icon-mouse-pointer
+        .icon-hand
+        .icon-box-select
+        .icon-left
+        .icon-right
+        .icon-up
+        .icon-picture
+        .icon-camera
         .icon-globe
         .icon-cloud
         .icon-database
         .icon-arrows-ccw
-        .icon-hourglass
+        .icon-flashlight
         .icon-lock-open
         .icon-lock
-        .icon-clock
+        .icon-home
+        .icon-list-add
+        .icon-menu
+        .icon-check
+        .icon-cancel
+        .icon-plus
+        .icon-minus
+        .icon-eye
+        .icon-briefcase
+        .icon-suitcase
+        .icon-feather
+        .icon-trash
+        .icon-cup
+        .icon-cw
+        .icon-ccw
+        .icon-magnet
+        .icon-export
+        .icon-target
+        .icon-palette
+        .icon-mouse
+        .icon-traffic-cone
+        .icon-dot-3
+        .icon-dot-2
+        .icon-dot
+        .icon-brush
+        .icon-layout
+        .icon-info
+        .icon-help
+        .icon-right-thin
+        .icon-up-thin
+        .icon-left-thin
+        .icon-down-thin
+        .icon-docs
+        .icon-doc
+        .icon-doc-landscape
 */
 
-@import url("../font/fontello-horaiter/css/animation.css");
+@import url("../font/fontello-shapepusher/css/animation.css");
 /*	contains:
     .animate-spin
 */
@@ -74,11 +108,12 @@
 /***** overlay icons *****/
 .position-icon-overlay {
     position: 					absolute;
-	bottom: 					-0.5em;
-	left:						1.5em;
+	bottom: 					-0.3em;
+	left:						0.7em;
 
-	font-size: 					0.5em;
+	font-size: 					0.9em;
 	text-shadow: 				0 0 2px rgb(0, 0, 0);
+    overflow:                   hidden;
 }
 
 .status-online {

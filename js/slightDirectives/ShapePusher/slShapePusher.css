@@ -23,6 +23,9 @@ div[sl-shape-pusher]{
     flex: 					1 1 auto;
     align-self: 			auto;
 
+	/* needed to resize properly.*/
+	min-width: 				10em;
+
 	height: 100%;
 	margin: 0;
 }
