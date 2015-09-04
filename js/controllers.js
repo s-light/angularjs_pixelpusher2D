@@ -178,8 +178,8 @@ mainControllers.controller('MainController',[
                     stepSize: 250,
                 },
                 select: {
-                    // enabled: true,
-                    enabled: false,
+                    enabled: true,
+                    // enabled: false,
                 },
                 box_select: {
                     enabled: true,
