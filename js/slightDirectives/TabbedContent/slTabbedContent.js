@@ -50,11 +50,13 @@ var slTabbedContent_templateURL = slTabbedContent_scriptPath.replace('.js', '.ht
 var slTabbedContent_templateURL_Pane = slTabbedContent_templateURL.replace('.html', '_Pane.html');
 
 
+
+
 slTabbedContent.directive('slTabbedContent', [
-    // '$scope',
+    // 'slTabbedContentController',
     '$filter',
 function(
-    // $scope,
+    // slTabbedContentController,
     $filter
 ) { return {
     restrict: 'E',
@@ -70,61 +72,62 @@ function(
         // this disables the caching of the template file..
         return slTabbedContent_templateURL + '?' + new Date();
     },
-    // controller: [
-    //     $scope,
-    //     function($scope) {
-    controller: function($scope) {
-        // console.log("slTabbedContent");
-        // console.log("$scope", $scope);
+    controller:[
+        '$scope',
+        // '$filter',
+        function($scope) {
+            // console.log("slTabbedContent");
+            // console.log("$scope", $scope);
 
-        var panes = $scope.panes = [];
+            var panes = $scope.panes = [];
 
-        /******************************************/
-        /** functions **/
+            /******************************************/
+            /** functions **/
 
-        $scope.test = function(event) {
-            // console.group("test");
-            // console.log("event", event);
+            $scope.test = function(event) {
+                // console.group("test");
+                // console.log("event", event);
 
-            // console.groupEnd();
-        };
+                // console.groupEnd();
+            };
 
-        $scope.switchToPane = function(pane) {
-            // console.group("switchToPane");
-            // console.log("pane", pane);
-            // deactivate all but given
-            angular.forEach(panes, function(paneCurrent, paneIndex){
-                if (paneCurrent == pane) {
-                    paneCurrent.active = true;
-                } else {
-                    paneCurrent.active = false;
+            $scope.switchToPane = function(pane) {
+                // console.group("switchToPane");
+                // console.log("pane", pane);
+                // deactivate all but given
+                angular.forEach(panes, function(paneCurrent, paneIndex){
+                    if (paneCurrent == pane) {
+                        paneCurrent.active = true;
+                    } else {
+                        paneCurrent.active = false;
+                    }
+                });
+                // console.groupEnd();
+            };
+
+            this.addPane = function(pane) {
+                // console.group("addPane");
+                // console.log("pane", pane);
+
+                // add new pane to list
+                panes.push(pane);
+
+                // show first added pane
+                if (panes.length == 1) {
+                    $scope.switchToPane(pane);
                 }
-            });
-            // console.groupEnd();
-        };
 
-        this.addPane = function(pane) {
-            // console.group("addPane");
-            // console.log("pane", pane);
-
-            // add new pane to list
-            panes.push(pane);
-
-            // show first added pane
-            if (panes.length == 1) {
-                $scope.switchToPane(pane);
-            }
-
-            // console.log("panes", panes);
-            // console.groupEnd();
-        };
+                // console.log("panes", panes);
+                // console.groupEnd();
+            };
 
 
 
-    }
-    // }]
+        }
+    ]
 };}
 ]);
+
 
 slTabbedContent.directive('slPane', [
     '$filter',
