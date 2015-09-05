@@ -76,12 +76,22 @@ mainControllers.controller('MainController',[
                         x: 1000,
                         y: 1000,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a2',
                     position: {
                         x: 1000,
                         y: 2000,
+                    },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
                     },
                 },
                 {
@@ -90,12 +100,22 @@ mainControllers.controller('MainController',[
                         x: 2000,
                         y: 2500,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a4',
                     position: {
                         x: 3000,
                         y: 2000,
+                    },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
                     },
                 },
                 {
@@ -104,12 +124,22 @@ mainControllers.controller('MainController',[
                         x: 5000,
                         y: 3000,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a10',
                     position: {
                         x: 6000,
                         y: 1000,
+                    },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
                     },
                 },
                 {
@@ -118,12 +148,22 @@ mainControllers.controller('MainController',[
                         x: 7000,
                         y: 1000,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a12',
                     position: {
                         x: 8000,
                         y: 1000,
+                    },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
                     },
                 },
                 {
@@ -132,6 +172,11 @@ mainControllers.controller('MainController',[
                         x: 6500,
                         y: 1500,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a114',
@@ -139,12 +184,22 @@ mainControllers.controller('MainController',[
                         x: 7500,
                         y: 1500,
                     },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                    },
                 },
                 {
                     id: 'a15',
                     position: {
                         x: 8500,
                         y: 1500,
+                    },
+                    color: {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
                     },
                 },
             ],

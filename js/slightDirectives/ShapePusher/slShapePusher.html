@@ -20,6 +20,23 @@
                 {{settings.world.height / settings.world.zoom.factor}}
             "
         >
+            <defs>
+                <!-- http://www.xanthir.com/b4Yv0 -->
+                <filter id="inset-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feComponentTransfer in=SourceAlpha>
+                        <feFuncA type="table" tableValues="1 0" />
+                    </feComponentTransfer>
+                    <feGaussianBlur stdDeviation="10"/>
+                    <feOffset dx="50" dy="0" result="offsetblur"/>
+                    <feFlood flood-color="rgb(20, 0, 0)" result="color"/>
+                    <feComposite in2="offsetblur" operator="in"/>
+                    <feComposite in2="SourceAlpha" operator="in" />
+                    <feMerge>
+                        <feMergeNode in="SourceGraphic" />
+                        <feMergeNode />
+                    </feMerge>
+                </filter>
+            </defs>
             <g
                 ng-if="settings.grid.visible"
                 id="grid1"
@@ -99,6 +116,12 @@
                 />
             </g>
 
+            <text
+                x="50%"
+                y="50%"
+            >
+                center
+            </text>
             <!--
 
             -->
@@ -123,7 +146,15 @@
                 <rect
                     width="100%"
                     height="100%"
+                    ng-attr-fill="
+                        rgb(
+                            {{itemData.color.red}},
+                            {{itemData.color.green}},
+                            {{itemData.color.blue}}
+                        )
+                    "
                 />
+                <!-- filter="url(#inset-shadow)" -->
                 <text
                     x="50%"
                     y="50%"

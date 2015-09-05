@@ -269,6 +269,93 @@ itemActive.id: {{itemActive.id}}
                 <br>
                 itemActive.id: {{itemActive.id}}<br>
                 more to come...
+                <section>
+                    <label>position</label><br>
+                    <label>
+                        x
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="x"
+                            min="0"
+                            max="{{data.shapepusher_settings.world.width}}"
+                            step="1"
+                            ng-model="itemActive.position.x"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label><br>
+                    <label>
+                        y
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="y"
+                            min="0"
+                            max="{{data.shapepusher_settings.world.height}}"
+                            step="1"
+                            ng-model="itemActive.position.y"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label>
+                </section>
+                <section>
+                    <label>color</label><br>
+                    <label>
+                        red
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="red"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.red"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label><br>
+                    <label>
+                        green
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="green"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.green"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label><br>
+                    <label>
+                        blue
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="blue"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.blue"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label>
+                </section>
+
             </sl-pane><!-- properties end -->
         </sl-tabbed-content>
 

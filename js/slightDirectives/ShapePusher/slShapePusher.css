@@ -106,7 +106,7 @@ div[sl-shape-pusher] .svg_container{
 [sl-shape-pusher] .item rect {
 	/*width: 1;
 	height: 1;*/
-	fill: 					rgb(230, 0, 0);
+	/*fill: 					rgb(230, 0, 0);*/
 	/*fill: 					rgba(255, 0, 0, 0.5);*/
 
 	stroke: 				rgb(0, 0, 0);
