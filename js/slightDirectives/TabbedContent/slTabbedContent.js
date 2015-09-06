@@ -62,7 +62,7 @@ function(
     restrict: 'E',
     transclude: true,
     scope: {
-        settings: '=',
+        initialPane: '@',
     },
     // template: '<ul class=""></ul>',
     // templateUrl: 'js/xxx.html',
@@ -113,7 +113,7 @@ function(
                 panes.push(pane);
 
                 // show first added pane
-                if (panes.length == 1) {
+                if (pane.title == $scope.initialPane) {
                     $scope.switchToPane(pane);
                 }
 
