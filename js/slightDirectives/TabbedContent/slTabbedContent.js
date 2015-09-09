@@ -166,7 +166,7 @@ function(
 
         scope.test = function(event) {
             // console.group("test", event);
-
+            // console.log("testinfo");
             // console.groupEnd();
         };
 
