@@ -29,6 +29,10 @@
     <!--<script type="text/javascript" charset="UTF-8" src="js/slightDirectives/myDirectivesTextFileButton.js"></script>-->
 
     <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/slInputMods.js"
+    ></script>
+
+    <script type="text/javascript" charset="UTF-8"
         src="js/slightDirectives/ShapePusher/slngTouch.js"
     ></script>
 
@@ -268,16 +272,7 @@ itemActive.id: {{itemActive.id}}
     		</sl-pane><!-- debugView end -->
 
             <sl-pane title="properties">
-                <button
-                    class="button small inline"
-                    title="test something"
-                    ng-click="setProperties()"
-                >
-                    set properties for selected items
-                </button>
-                <br>
                 itemActive.id: {{itemActive.id}}<br>
-                more to come...
                 <section>
                     <label>position</label><br>
                     <label>
@@ -362,7 +357,23 @@ itemActive.id: {{itemActive.id}}
                                 debounce: {'default': 500, 'blur': 0}
                             }"
                         >
+                        <input
+                            type="range"
+                            title="blue"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.blue"
+
+                        >
                     </label>
+                    <button
+                        class="button small inline"
+                        title="test something"
+                        ng-click="setProperties()"
+                    >
+                        set for all selected items
+                    </button>
                 </section>
 
             </sl-pane><!-- properties end -->

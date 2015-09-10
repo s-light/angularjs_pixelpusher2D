@@ -31,6 +31,12 @@ history:
 
 
 todo:
+- refactor slShapePusher into smaller modules
+    for example:
+    - slSvgPanZoom
+    - slSvgElementDragdrop
+    - slItemSelect
+    - slSvgBoxselect
 - test performance on target devices
 
 extension ideas:

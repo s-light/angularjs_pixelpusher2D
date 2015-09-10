@@ -22,7 +22,7 @@ var mainControllers = angular.module('mainControllers', [
     'slShapePusher',
     'slShapePusherControls',
     'slTabbedContent',
-    // 'slPane',
+    'slInputMods',
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
     // 'CtrlBall',
@@ -364,7 +364,7 @@ mainControllers.controller('MainController',[
         // functions
         $scope.testThing = function() {
             console.log("testThing");
-            if ($scope.showButtons == showButtons_min) {
+            if ($scope.showButtons === showButtons_min) {
                 $scope.showButtons = showButtons_all;
             } else {
                 $scope.showButtons = showButtons_min;
