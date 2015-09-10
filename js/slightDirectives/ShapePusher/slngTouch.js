@@ -4,7 +4,7 @@ var slngTouch = angular.module('slngTouch', []);
 ngTouchstart
 not official part of angularjs 1.4.4 - so manualy added here:
 code mostly copied from
-https://github.com/angular/angular.js/blob/g3_v1_4/src/ng/directive/ngEventDirs.js
+https://github.com/angular/angular.js/blob/g3_v1_4/src/ng/directive/ngEventDirs.js#L53
 http://stackoverflow.com/a/32238039/574981
 */
 slngTouch.directive('ngTouchstart', [

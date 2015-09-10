@@ -35,6 +35,7 @@ var slShapePusher = angular.module('slShapePusher', [
     // 'myDirectivesArrays',
     // 'myDirectivesInput',
     'slngTouch',
+    'slSvgGrid',
 ]);
 
 // get current script path
@@ -2099,138 +2100,6 @@ function(
 
             // console.groupEnd();
         }
-
-        /******************************************/
-        /** handle grid **/
-
-        // range function by Mathieu Rodic
-        // http://stackoverflow.com/questions/11873570/angularjs-for-loop-with-numbers-ranges
-        function range(min, max, step) {
-            // parameters validation for method overloading
-            if (max === undefined) {
-                max = min;
-                min = 0;
-            }
-            step = Math.abs(step) || 1;
-            if (min > max) {
-                step = -step;
-            }
-            // building the array
-            var output = [];
-            for (var value=min; value<max; value+=step) {
-                output.push(value);
-            }
-            // returning the generated array
-            return output;
-        }
-
-        function numberToMultipleOf(value, base){
-            var result = 0;
-            var times = Math.floor(value/base);
-            result = times * base;
-            // while (result < value) {
-                // result = result + base;
-            // }
-            return result;
-        }
-
-        // update grid
-        function updateRange(range_array, newLength, stepSize) {
-            newLength = numberToMultipleOf(newLength, stepSize);
-            var newCount = (newLength / stepSize)-1;
-            if (!range_array){
-                range_array = [0];
-            }
-            // update array
-            if (range_array.length > newCount) {
-                // pop elements from end.
-                while (range_array.length > newCount) {
-                    range_array.pop();
-                }
-            } else {
-                // push elements to end.
-                while (range_array.length <= newCount) {
-                    var indexNew = range_array[range_array.length-1]+1;
-                    range_array.push(indexNew);
-                }
-            }
-            // console.log("range_array", range_array);
-            return range_array;
-        }
-
-        function updateGridXArray() {
-            // scope.settings.grid.xArray = updateRange(
-            //     scope.settings.grid.xArray,
-            //     scope.settings.world.width,
-            //     scope.settings.grid.stepSize
-            // );
-            scope.settings.grid.xArray = range(
-                0,
-                scope.settings.world.width,
-                scope.settings.grid.stepSize
-            );
-
-            scope.settings.gridSnap.xArray = range(
-                0,
-                scope.settings.world.width,
-                scope.settings.gridSnap.stepSize
-            );
-            // console.log("scope.settings.grid.xArray", scope.settings.grid.xArray);
-        }
-
-        function updateGridYArray() {
-            // scope.settings.grid.yArray = updateRange(
-            //     scope.settings.grid.yArray,
-            //     scope.settings.world.height,
-            //     scope.settings.grid.stepSize
-            // );
-            scope.settings.grid.yArray = range(
-                0,
-                scope.settings.world.height,
-                scope.settings.grid.stepSize
-            );
-
-            scope.settings.gridSnap.yArray = range(
-                0,
-                scope.settings.world.height,
-                scope.settings.gridSnap.stepSize
-            );
-        }
-
-        // world.width (x axis)
-        scope.$watch(
-            function() {
-                return scope.settings.world.width;
-            },
-            updateGridXArray
-        );
-        // world.height (y axis)
-        scope.$watch(
-            function(){
-                return scope.settings.world.height;
-            },
-            updateGridYArray
-        );
-        // watch grid.stepSize
-        scope.$watch(
-            function() {
-                return scope.settings.grid.stepSize;
-            },
-            function() {
-                updateGridXArray();
-                updateGridYArray();
-            }
-        );
-        // watch gridSnap.stepSize
-        scope.$watch(
-            function() {
-                return scope.settings.gridSnap.stepSize;
-            },
-            function() {
-                updateGridXArray();
-                updateGridYArray();
-            }
-        );
 
 
         /******************************************/

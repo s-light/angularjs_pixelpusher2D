@@ -37,84 +37,29 @@
                     </feMerge>
                 </filter>
             </defs>
+
             <g
-                ng-if="settings.grid.visible"
-                id="grid1"
-                class="grid"
-                ng-class="{'numbers': settings.grid.numbers}"
+                sl-svg-grid=""
+                width="settings.world.width"
+                height="settings.world.height"
+                step-size="settings.grid.stepSize"
+                show-grid="settings.grid.visible"
+                show-numbers="settings.grid.numbers"
             >
-                <g
-                    class="xArray"
-                    ng-repeat="
-                        xPos in settings.grid.xArray
-                        track by xPos
-                    "
-                >
-                    <line
-                        ng-attr-x1="{{xPos}}"
-                        y1="0"
-                        ng-attr-x2="{{xPos}}"
-                        ng-attr-y2="{{settings.world.height}}"
-                    />
-                    <text
-                        ng-attr-x="{{xPos}}"
-                        ng-attr-y="{{(settings.grid.stepSize/2)}}"
-                    >
-                        {{xPos}}
-                    </text>
-                </g>
-
-                <g
-                    class="yArray"
-                    ng-repeat="
-                        yPos in settings.grid.yArray
-                        track by yPos
-                    "
-                >
-                    <!-- x2="100%" -->
-                    <line
-                        x1="0"
-                        ng-attr-y1="{{yPos}}"
-                        ng-attr-x2="{{settings.world.width}}"
-                        ng-attr-y2="{{yPos}}"
-                    />
-                    <text
-                        ng-attr-x="{{(settings.grid.stepSize/2)}}"
-                        ng-attr-y="{{yPos}}"
-                    >
-                        {{yPos}}
-                    </text>
-                </g>
-
             </g>
+
             <g
-                ng-if="settings.gridSnap.visible"
-                id="gridSnap"
                 class="gridSnap"
+                sl-svg-grid=""
+                width="settings.world.width"
+                height="settings.world.height"
+                step-size="settings.gridSnap.stepSize"
+                show-grid="settings.gridSnap.visible"
+                show-numbers="false"
             >
-                <line
-                    class="xArray"
-                    ng-repeat="
-                        xPos in settings.gridSnap.xArray
-                        track by xPos
-                    "
-                    ng-attr-x1="{{xPos}}"
-                    y1="0"
-                    ng-attr-x2="{{xPos}}"
-                    ng-attr-y2="{{settings.world.height}}"
-                />
-                <line
-                    class="yArray"
-                    ng-repeat="
-                        yPos in settings.gridSnap.yArray
-                        track by yPos
-                    "
-                    x1="0"
-                    ng-attr-y1="{{yPos}}"
-                    ng-attr-x2="{{settings.world.width}}"
-                    ng-attr-y2="{{yPos}}"
-                />
             </g>
+
+
 
             <text
                 x="50%"
