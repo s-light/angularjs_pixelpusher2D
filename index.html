@@ -325,6 +325,14 @@ itemActive.id: {{itemActive.id}}
                                 debounce: {'default': 500, 'blur': 0}
                             }"
                         >
+                        <input
+                            type="range"
+                            title="red"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.red"
+                        >
                     </label><br>
                     <label>
                         green
@@ -340,6 +348,14 @@ itemActive.id: {{itemActive.id}}
                                 updateOn: 'default blur',
                                 debounce: {'default': 500, 'blur': 0}
                             }"
+                        >
+                        <input
+                            type="range"
+                            title="green"
+                            min="0"
+                            max="255"
+                            step="1"
+                            ng-model="itemActive.color.green"
                         >
                     </label><br>
                     <label>
@@ -364,7 +380,6 @@ itemActive.id: {{itemActive.id}}
                             max="255"
                             step="1"
                             ng-model="itemActive.color.blue"
-
                         >
                     </label>
                     <button
