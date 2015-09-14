@@ -309,79 +309,87 @@ itemActive.id: {{itemActive.id}}
                     </label>
                 </section>
                 <section>
-                    <label>color</label><br>
-                    <label>
-                        red
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="red"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.red"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        >
-                        <input
-                            type="range"
-                            title="red"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.red"
-                        >
-                    </label><br>
-                    <label>
-                        green
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="green"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.green"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        >
-                        <input
-                            type="range"
-                            title="green"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.green"
-                        >
-                    </label><br>
-                    <label>
-                        blue
-                        <input
-                            type="number"
-                            inputmode="numeric"
-                            title="blue"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.blue"
-                            ng-model-options="{
-                                updateOn: 'default blur',
-                                debounce: {'default': 500, 'blur': 0}
-                            }"
-                        >
-                        <input
-                            type="range"
-                            title="blue"
-                            min="0"
-                            max="255"
-                            step="1"
-                            ng-model="itemActive.color.blue"
-                        >
-                    </label>
+                    <label>color</label>
+                    <div class="flex horizontal">
+                        <label class="flex vertical end">
+                            <span class="label">red</span>
+                            <input
+                                type="number"
+                                inputmode="numeric"
+                                title="red"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.red"
+                                ng-model-options="{
+                                    updateOn: 'default blur',
+                                    debounce: {'default': 500, 'blur': 0}
+                                }"
+                            >
+                            <input
+                                type="range"
+                                class="vertical"
+                                orient="vertical"
+                                title="red"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.red"
+                            >
+                        </label>
+                        <label class="flex vertical end">
+                            <span class="label">green</span>
+                            <input
+                                type="number"
+                                inputmode="numeric"
+                                title="green"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.green"
+                                ng-model-options="{
+                                    updateOn: 'default blur',
+                                    debounce: {'default': 500, 'blur': 0}
+                                }"
+                            >
+                            <input
+                                type="range"
+                                class="vertical"
+                                orient="vertical"
+                                title="green"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.green"
+                            >
+                        </label>
+                        <label class="flex vertical end">
+                            <span class="label">blue</span>
+                            <input
+                                type="number"
+                                inputmode="numeric"
+                                title="blue"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.blue"
+                                ng-model-options="{
+                                    updateOn: 'default blur',
+                                    debounce: {'default': 500, 'blur': 0}
+                                }"
+                            >
+                            <input
+                                type="range"
+                                class="vertical"
+                                orient="vertical"
+                                title="blue"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="itemActive.color.blue"
+                            >
+                        </label>
+                    </div>
                     <button
                         class="button small inline"
                         title="test something"
