@@ -260,6 +260,7 @@ mainControllers.controller('MainController',[
 
 
         $scope.itemActive = {};
+        $scope.itemsSelected = [];
 
         // show all
         var showButtons_all = {
@@ -378,6 +379,16 @@ mainControllers.controller('MainController',[
             // );
         };
 
+        $scope.setColorToSelected = function() {
+            // console.log("setColorToSelected");
+            // console.log("$scope.itemsSelected", $scope.itemsSelected);
+            angular.forEach($scope.itemsSelected, function(item_s, key) {
+                // console.log("item_s", item_s);
+                item_s.color.red = $scope.itemActive.color.red;
+                item_s.color.green = $scope.itemActive.color.green;
+                item_s.color.blue = $scope.itemActive.color.blue;
+            });
+        };
 
         //////////////////////////////////////////
     }

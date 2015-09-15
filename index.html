@@ -393,9 +393,9 @@ itemActive.id: {{itemActive.id}}
                     <button
                         class="button small inline"
                         title="test something"
-                        ng-click="setProperties()"
+                        ng-click="setColorToSelected()"
                     >
-                        set for all selected items
+                        set color to all selected
                     </button>
                 </section>
 
@@ -407,6 +407,7 @@ itemActive.id: {{itemActive.id}}
             items="data.shapepusher_items"
             settings="data.shapepusher_settings"
             item-active="itemActive"
+            items-selected="itemsSelected"
         >
         </div>
         <div

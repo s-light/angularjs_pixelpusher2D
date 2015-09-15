@@ -68,7 +68,7 @@ function(
         items: '=',
         settings: '=',
         itemActive: '=',
-        selected: '=',
+        itemsSelected: '=',
     },
     // template: '<ul class="tagslist"></ul>',
     // templateUrl: 'js/ShapePusher.html',
@@ -154,7 +154,7 @@ function(
             move: {
                 enabled: true,
                 snap: false,
-                selected: false,
+                itemsSelected: false,
             },
         };
 
@@ -902,7 +902,7 @@ function(
                     if (scope.settings.move.selected) {
                         var add_successfull_selected = false;
                         // do all the above for every selected item
-                        angular.forEach(scope.selected, function(s_item, key) {
+                        angular.forEach(scope.itemsSelected, function(s_item, key) {
                             add_successfull_selected |= item_moving_add(
                                 p_start,
                                 s_item,
@@ -1308,7 +1308,7 @@ function(
                     box_select_data.touch_id = touch.identifier;
 
                     // backup selected items before we start.
-                    box_select_data.start.selected = angular.copy(scope.selected);
+                    box_select_data.start.selected = angular.copy(scope.itemsSelected);
 
                     // create svg point with screen coordinates
                     var p_start = convert_xy_2_SVG_coordinate_point(
@@ -2113,8 +2113,8 @@ function(
             },
             function() {
                 // console.log("Taglist watch fired.");
-                // scope.selected = $filter('filter')(scope.settings.items, {selected:'true'});
-                scope.selected = $filter('filter')(scope.items, {selected:'1'});
+                // scope.itemsSelected = $filter('filter')(scope.settings.items, {selected:'true'});
+                scope.itemsSelected = $filter('filter')(scope.items, {selected:'1'});
             },
             true
         );
