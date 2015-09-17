@@ -6,6 +6,7 @@
 
 /***** app *****/
 
+
 /*.app > div {*/
 .app {
 	/* flex boxes :
@@ -69,7 +70,96 @@ footer {
 	font-size:				0.3em;
 }
 
+/***** Tabbed Content *****/
 
+sl-pane > div > .colorSlidersSection {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			1 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					1 1 auto;
+    align-self: 			auto;
+}
+
+/*RGB slider*/
+.colorSlidersGroup {
+	position: 				relative;
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: row;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			row;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+.colorSlidersGroup > label {
+	/* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order:					0;
+	flex: 					0 1 auto;
+	align-self: 			auto;
+
+	margin:					0.1em;
+}
+
+.sliderGroup {
+	position: 				relative;
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: column;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	center;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			center;
+}
+
+.sliderGroup > * {
+	/* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order:					0;
+	flex: 					0 1 auto;
+	align-self: 			auto;
+
+	margin:					0.1em;
+}
+
+.sliderGroup > input[type="number"],
+.sliderGroup > input[type="range"] {
+	width: 					3em;
+}
+
+.sliderGroup > input[type="range"] {
+	-webkit-flex: 			1 1 auto;
+	flex: 					1 1 auto;
+
+	min-height:				5em;
+	/*height: 				12em;*/
+	height: 				100%;
+
+}
 
 /***** general *****/
 

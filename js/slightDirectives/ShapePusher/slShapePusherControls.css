@@ -20,12 +20,12 @@ div[sl-shape-pusher-controls] {
 
 div[sl-shape-pusher-controls] .flex_container {
 	/* for safari: */
-	display: 						-webkit-flex;
-    -webkit-flex-direction: 		row;
-	-webkit-flex-wrap:				nowrap;
-	-webkit-justify-content:		flex-start;
-	-webkit-align-content:			center;
-	-webkit-align-items:			stretch;
+	display: 					-webkit-flex;
+    -webkit-flex-direction: 	row;
+	-webkit-flex-wrap:			nowrap;
+	-webkit-justify-content:	flex-start;
+	-webkit-align-content:		center;
+	-webkit-align-items:		center;
 	/* for all others ;-) */
 	display:				flex;
 	flex-direction:			column;
@@ -42,9 +42,9 @@ div[sl-shape-pusher-controls] .flex_container {
 
 div[sl-shape-pusher-controls] section {
 	/* for safari: */
-	-webkit-order:					0;
-	-webkit-flex: 					0 1 auto;
-	-webkit-align-self: 			auto;
+	-webkit-order:			s0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
 	/* for all others ;-) */
 	order: 					0;
     flex: 					0 1 auto;

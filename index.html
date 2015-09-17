@@ -272,7 +272,7 @@ itemActive.id: {{itemActive.id}}
     		</sl-pane><!-- debugView end -->
 
             <sl-pane title="properties">
-                itemActive.id: {{itemActive.id}}<br>
+                <span>itemActive.id: {{itemActive.id}}</span>
                 <section>
                     <label>position</label><br>
                     <label>
@@ -308,10 +308,10 @@ itemActive.id: {{itemActive.id}}
                         >
                     </label>
                 </section>
-                <section>
+                <section class="colorSlidersSection">
                     <label>color</label>
-                    <div class="flex horizontal">
-                        <label class="flex vertical end">
+                    <div class="colorSlidersGroup">
+                        <label class="sliderGroup">
                             <span class="label">red</span>
                             <input
                                 type="number"
@@ -337,7 +337,7 @@ itemActive.id: {{itemActive.id}}
                                 ng-model="itemActive.color.red"
                             >
                         </label>
-                        <label class="flex vertical end">
+                        <label class="sliderGroup">
                             <span class="label">green</span>
                             <input
                                 type="number"
@@ -363,7 +363,7 @@ itemActive.id: {{itemActive.id}}
                                 ng-model="itemActive.color.green"
                             >
                         </label>
-                        <label class="flex vertical end">
+                        <label class="sliderGroup">
                             <span class="label">blue</span>
                             <input
                                 type="number"
@@ -395,7 +395,7 @@ itemActive.id: {{itemActive.id}}
                         title="test something"
                         ng-click="setColorToSelected()"
                     >
-                        set color to all selected
+                        set to all selected
                     </button>
                 </section>
 

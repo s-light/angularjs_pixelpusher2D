@@ -7,6 +7,8 @@
 sl-tabbed-content {
     display:                block;
 
+    height:                 100%;
+
     border-radius:          0.5em;
     border-style:           none;
     border-width:           0.1em;
@@ -14,8 +16,44 @@ sl-tabbed-content {
     border-color:           rgba(0, 0, 0, 0.5);
 }
 
+sl-tabbed-content > .flexcontainer {
+    height:                 100%;
+
+    /* for safari: */
+	display: 					-webkit-flex;
+    -webkit-flex-direction: 	column;
+	-webkit-flex-wrap:			nowrap;
+	-webkit-justify-content:	flex-start;
+	-webkit-align-content:		center;
+	-webkit-align-items:		stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		flex-start;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+/*sl-tabbed-content > .flexcontainer > nav,
+sl-tabbed-content > .flexcontainer > .border-corners,
+sl-tabbed-content > .flexcontainer > .tabbed-content {*/
+sl-tabbed-content > .flexcontainer > * {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}
+
 sl-tabbed-content .tabbed-content{
     display:                block;
+
+    height:                 100%;
+    overflow-y:             scroll;
 
     padding:                0 0.5em 0.5em 0.5em;
 
@@ -28,9 +66,42 @@ sl-tabbed-content .tabbed-content{
 }
 
 
+sl-pane{
+    height:                 100%;
+}
+
 sl-pane > div {
     display:                block;
+    /*overflow-y:             scroll;*/
+
+    /* for safari: */
+	display: 					-webkit-flex;
+    -webkit-flex-direction: 	column;
+	-webkit-flex-wrap:			nowrap;
+	-webkit-justify-content:	flex-start;
+	-webkit-align-content:		center;
+	-webkit-align-items:		stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		flex-start;
+	align-content:			center;
+	align-items:			stretch;
 }
+
+
+sl-pane > div > * {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}
+
 
 
 nav.horizontal {
@@ -143,7 +214,7 @@ nav.horizontal > ul > li.active {
 
     width:                  0.5em;
     height:                 0.5em;
-    
+
     position:               relative;
     /* move border-width to top*/
     top:                    -0.05em;
