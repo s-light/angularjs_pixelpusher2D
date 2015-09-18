@@ -72,6 +72,14 @@ footer {
 
 /***** Tabbed Content *****/
 
+/* decrease font-size on small screens*/
+@media screen and (max-width: 800px) {
+	sl-tabbed-content {
+		font-size: 				0.5em;
+		line-height:			110%;
+	}
+}
+
 sl-pane > div > .colorSlidersSection {
     /* for safari: */
 	-webkit-order:			0;
@@ -81,6 +89,39 @@ sl-pane > div > .colorSlidersSection {
 	order: 					0;
     flex: 					1 1 auto;
     align-self: 			auto;
+}
+
+.colorSlidersSection {
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: column;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+.colorSlidersSection > * {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}
+
+.colorSlidersSection > .colorSlidersGroup {
+	-webkit-flex: 			1 1 auto;
+    flex: 					1 1 auto;
 }
 
 /*RGB slider*/
@@ -115,7 +156,7 @@ sl-pane > div > .colorSlidersSection {
 	margin:					0.1em;
 }
 
-.sliderGroup {
+.colorGroup {
 	position: 				relative;
 	/* for safari: */
 	display: 				-webkit-flex;
@@ -133,7 +174,7 @@ sl-pane > div > .colorSlidersSection {
 	align-items:			center;
 }
 
-.sliderGroup > * {
+.colorGroup > * {
 	/* for safari: */
 	-webkit-order:			0;
 	-webkit-flex: 			0 1 auto;
@@ -146,12 +187,12 @@ sl-pane > div > .colorSlidersSection {
 	margin:					0.1em;
 }
 
-.sliderGroup > input[type="number"],
-.sliderGroup > input[type="range"] {
+.colorGroup > input[type="number"],
+.colorGroup > input[type="range"] {
 	width: 					3em;
 }
 
-.sliderGroup > input[type="range"] {
+.colorGroup > input[type="range"] {
 	-webkit-flex: 			1 1 auto;
 	flex: 					1 1 auto;
 
